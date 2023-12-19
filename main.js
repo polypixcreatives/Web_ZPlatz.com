@@ -737,7 +737,8 @@ async function main() {
     const url = new URL(
         // "nike.splat",
         // location.href,
-        params.get("url") || "garden.splat",
+        // garden.splat
+        params.get("url") || "Hallway.splat",
         "https://huggingface.co/Miggydewz/ZPlatzData/resolve/main/",
     );
     const req = await fetch(url, {
