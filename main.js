@@ -722,13 +722,10 @@ void main () {
 
 `.trim();
 
-let defaultViewMatrix = [
-    0.47, 0.04, 0.88, 0, -0.11, 0.99, 0.02, 0, -0.88, -0.11, 0.47, 0, 0.07,
-    0.03, 6.55, 1,
-];
+let defaultViewMatrix = [-0.18,0.31,0.93,0,0.06,0.95,-0.3,0,-0.98,0,-0.2,0,-0.9,0.76,5.92,1];
 let viewMatrix = defaultViewMatrix;
 async function main() {
-    let carousel = true;
+    let carousel = false;
     const params = new URLSearchParams(location.search);
     try {
         viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
@@ -737,7 +734,6 @@ async function main() {
     const url = new URL(
         // "nike.splat",
         // location.href,
-        // garden.splat
         params.get("url") || "Hallway.splat",
         "https://huggingface.co/Miggydewz/ZPlatzData/resolve/main/",
     );
@@ -922,7 +918,7 @@ async function main() {
                     viewMatrix.map((k) => Math.round(k * 100) / 100),
                 );
         } else if (e.code === "KeyP") {
-            carousel = true;
+            carousel = false;
         }
     });
     window.addEventListener("keyup", (e) => {
@@ -1283,9 +1279,9 @@ async function main() {
         if (carousel) {
             let inv = invert4(defaultViewMatrix);
 
-            const t = Math.sin((Date.now() - start) / 5000);
-            inv = translate4(inv, 2.5 * t, 0, 6 * (1 - Math.cos(t)));
-            inv = rotate4(inv, -0.6 * t, 0, 1, 0);
+            const t = Math.sin((Date.now() - start) / 7000);
+            inv = translate4(inv, -0.6 * t, 0, 1 * (1 - Math.cos(t)));
+            inv = rotate4(inv, 1 * t, 0, 40, 0);
 
             viewMatrix = invert4(inv);
         }
