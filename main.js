@@ -722,7 +722,7 @@ void main () {
 
 `.trim();
 
-let defaultViewMatrix = [-0.09,0.3,0.95,0,0.03,0.95,-0.29,0,-1,0,-0.1,0,-0.6,0.74,5.81,1];
+let defaultViewMatrix = [-0.36,0.11,0.93,0,0,0.99,-0.1,0,-0.94,-0.04,-0.36,0,-0.87,-0.55,7,1];
 let viewMatrix = defaultViewMatrix;
 async function main() {
     let carousel = false;
@@ -734,7 +734,7 @@ async function main() {
     const url = new URL(
         // "nike.splat",
         // location.href,
-        params.get("url") || "Hallway.splat",
+        params.get("url") || "Fatima_3rd.splat",
         "https://huggingface.co/Miggydewz/ZPlatzData/resolve/main/",
     );
     const req = await fetch(url, {
