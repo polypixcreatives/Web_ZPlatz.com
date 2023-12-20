@@ -722,7 +722,7 @@ void main () {
 
 `.trim();
 
-let defaultViewMatrix = [-0.18,0.31,0.93,0,0.06,0.95,-0.3,0,-0.98,0,-0.2,0,-0.9,0.76,5.92,1];
+let defaultViewMatrix = [-0.09,0.3,0.95,0,0.03,0.95,-0.29,0,-1,0,-0.1,0,-0.6,0.74,5.81,1];
 let viewMatrix = defaultViewMatrix;
 async function main() {
     let carousel = false;
