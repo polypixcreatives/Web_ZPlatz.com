@@ -141,10 +141,18 @@
 
 			.logo img{
 				width: 200px;
-				float: left;
+				float: right;
 				padding-top: 0%;
 			}
-
+			.canvascontainer {
+				width: 80;
+				margin: 0 auto;
+			}
+			.canvas-border-box {
+				border: 2px;
+				padding: 20px;
+				margin-left: 10px;
+			}
 			#progress {
 				position: absolute;
 				top: 0;
@@ -163,19 +171,13 @@
 
 			#canvas {
 				display: block;
-				position: absolute;
-				top: 0;
-				left: 0.1;
-				right: 0;
-				bottom: 0;
-				margin:auto;
-				
-				height: 95vh;
-				width: 155vh;
-				border-radius: 60px;
-				align-items: center;
-				justify-content: center;
-				touch-action: none;
+                position: absolute;
+                top: 20px; 
+                right: 40px; 
+                width: 80%; 
+                height: 90%; 
+                touch-action: none;
+                border-radius: 60px;
 			
 			}
 
@@ -277,7 +279,10 @@ other
 				</div>
 			</div>
 		</div>
-		<canvas id="canvas"></canvas>
+            <div class="canvascontainer">
+			    </div class="canvas-border-box">
+		            <p><canvas id="canvas"></canvas></p>
+					</div>
 
 		<div id="quality">
 			<span id="fps"></span>
