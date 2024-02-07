@@ -927,7 +927,6 @@ async function main() {
     window.addEventListener("blur", () => {
         activeKeys = [];
     });
-
     window.addEventListener(
         "wheel",
         (e) => {
@@ -949,24 +948,25 @@ async function main() {
                     0,
                 );
             } else if (e.ctrlKey || e.metaKey) {
-                // inv = rotate4(inv,  (e.deltaX * scale) / innerWidth,  0, 0, 1);
-                // inv = translate4(inv,  0, (e.deltaY * scale) / innerHeight, 0);
-                // let preY = inv[13];
+                // Zoom In/Out
+                let zoomAmount = (e.deltaY * scale) / innerHeight;
                 inv = translate4(
                     inv,
                     0,
                     0,
-                    (-10 * (e.deltaY * scale)) / innerHeight,
+                    zoomAmount * 10 // Adjust the zoom speed as needed
                 );
-                // inv[13] = preY;
             } else {
-                let d = 4;
-                inv = translate4(inv, 0, 0, d);
-                inv = rotate4(inv, -(e.deltaX * scale) / innerWidth, 0, 1, 0);
-                inv = rotate4(inv, (e.deltaY * scale) / innerHeight, 1, 0, 0);
-                inv = translate4(inv, 0, 0, -d);
+                // Zoom In/Out based on scroll direction
+                let zoomAmount = -(e.deltaY * scale) / innerHeight; // Invert here
+                inv = translate4(
+                    inv,
+                    0,
+                    0,
+                    zoomAmount * 10 // Adjust the zoom speed as needed
+                );
             }
-
+    
             viewMatrix = invert4(inv);
         },
         { passive: false },
@@ -1031,104 +1031,7 @@ async function main() {
         startY = 0;
     });
 
-    let altX = 0,
-        altY = 0;
-    canvas.addEventListener(
-        "touchstart",
-        (e) => {
-            e.preventDefault();
-            if (e.touches.length === 1) {
-                carousel = false;
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-                down = 1;
-            } else if (e.touches.length === 2) {
-                // console.log('beep')
-                carousel = false;
-                startX = e.touches[0].clientX;
-                altX = e.touches[1].clientX;
-                startY = e.touches[0].clientY;
-                altY = e.touches[1].clientY;
-                down = 1;
-            }
-        },
-        { passive: false },
-    );
-    canvas.addEventListener(
-        "touchmove",
-        (e) => {
-            e.preventDefault();
-            if (e.touches.length === 1 && down) {
-                let inv = invert4(viewMatrix);
-                let dx = (4 * (e.touches[0].clientX - startX)) / innerWidth;
-                let dy = (4 * (e.touches[0].clientY - startY)) / innerHeight;
-
-                let d = 4;
-                inv = translate4(inv, 0, 0, d);
-                // inv = translate4(inv,  -x, -y, -z);
-                // inv = translate4(inv,  x, y, z);
-                inv = rotate4(inv, dx, 0, 1, 0);
-                inv = rotate4(inv, -dy, 1, 0, 0);
-                inv = translate4(inv, 0, 0, -d);
-
-                viewMatrix = invert4(inv);
-
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-            } else if (e.touches.length === 2) {
-                // alert('beep')
-                const dtheta =
-                    Math.atan2(startY - altY, startX - altX) -
-                    Math.atan2(
-                        e.touches[0].clientY - e.touches[1].clientY,
-                        e.touches[0].clientX - e.touches[1].clientX,
-                    );
-                const dscale =
-                    Math.hypot(startX - altX, startY - altY) /
-                    Math.hypot(
-                        e.touches[0].clientX - e.touches[1].clientX,
-                        e.touches[0].clientY - e.touches[1].clientY,
-                    );
-                const dx =
-                    (e.touches[0].clientX +
-                        e.touches[1].clientX -
-                        (startX + altX)) /
-                    2;
-                const dy =
-                    (e.touches[0].clientY +
-                        e.touches[1].clientY -
-                        (startY + altY)) /
-                    2;
-                let inv = invert4(viewMatrix);
-                // inv = translate4(inv,  0, 0, d);
-                inv = rotate4(inv, dtheta, 0, 0, 1);
-
-                inv = translate4(inv, -dx / innerWidth, -dy / innerHeight, 0);
-
-                // let preY = inv[13];
-                inv = translate4(inv, 0, 0, 3 * (1 - dscale));
-                // inv[13] = preY;
-
-                viewMatrix = invert4(inv);
-
-                startX = e.touches[0].clientX;
-                altX = e.touches[1].clientX;
-                startY = e.touches[0].clientY;
-                altY = e.touches[1].clientY;
-            }
-        },
-        { passive: false },
-    );
-    canvas.addEventListener(
-        "touchend",
-        (e) => {
-            e.preventDefault();
-            down = false;
-            startX = 0;
-            startY = 0;
-        },
-        { passive: false },
-    );
+   
 
     let jumpDelta = 0;
     let vertexCount = 0;
@@ -1181,7 +1084,7 @@ async function main() {
         if (activeKeys.includes("KeyS")) inv = rotate4(inv, -0.005, 1, 0, 0);
 
         const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
-      
+        let isJumping = activeKeys.includes("Space");
         for (let gamepad of gamepads) {
             if (!gamepad) continue;
 
@@ -1235,7 +1138,10 @@ async function main() {
             }
             leftGamepadTrigger = gamepad.buttons[4].pressed;
             rightGamepadTrigger = gamepad.buttons[5].pressed;
-       
+            if (gamepad.buttons[0].pressed) {
+                isJumping = true;
+                carousel = false;
+            }
             if(gamepad.buttons[3].pressed){
                 carousel = true;
             }
@@ -1254,7 +1160,11 @@ async function main() {
             viewMatrix = invert4(inv);
         }
 
-       
+        if (isJumping) {
+            jumpDelta = Math.min(1, jumpDelta + 0.05);
+        } else {
+            jumpDelta = Math.max(0, jumpDelta - 0.05);
+        }
 
         let inv2 = invert4(viewMatrix);
         inv2 = translate4(inv2, 0, -jumpDelta, 0);
