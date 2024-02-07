@@ -16,26 +16,27 @@
         }
     </style>
     <link rel="icon" type="image/png" href="images/Zplatzlogo.png">
+    <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body class="bg-black text-white">
     <header class="px-8 py-4 flex justify-between items-center">
         <div class="flex items-center space-x-4 flex-grow">
             <div class="flex items-center">
-                <img alt="Company logo" class="h-10" height="50" src="images/Zplatzlogo.png" width="100" />
+                <img alt="Company logo" class="h-10" height="50" src="images/Zplatzlogo.png" width="110" />
                 <nav class="hidden md:flex space-x-6 ml-6">
-                    <a class="hover:text-white text-gray-400 relative" href="#">
+                    <a class="hover:text-white transition duration-500 text-gray-400 relative" href="#">
                         Find a Home
                         <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
                     </a>
-                    <a class="hover:text-white text-gray-400 relative" href="#">
+                    <a class="hover:text-white transition duration-500 text-gray-400 relative" href="#">
                         About Us
                         <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
                     </a>
-                    <a class="hover:text-white text-gray-400 relative" href="#">
+                    <a class="hover:text-white transition duration-500 text-gray-400 relative" href="#">
                         Meet a Realtor
                         <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
                     </a>
-                    <a class="hover:text-white text-gray-400 relative" href="#">
+                    <a class="hover:text-white transition duration-500 text-gray-400 relative" href="#">
                         Inquiry
                         <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
                     </a>
@@ -45,7 +46,7 @@
                 <button class="absolute left-3 top-0 mt-3 ml-3" type="submit">
                     <i class="fas fa-search text-gray-400"></i>
                 </button>
-                <input class="hover:border-white hover:text-white h-10 pl-10 pr-10 rounded-full text-sm border border-gray-400 border-solid border-2 focus:outline-none flex-grow bg-transparent" placeholder="Search" type="text" />
+                <input class="hover:border-gray-100 transition duration-500 h-10 pl-10 pr-10 rounded-full text-sm border border-gray-400 border-solid border-2 focus:outline-none flex-grow bg-transparent" placeholder="Search" type="text" />
             </div>
         </div>
         <div class="flex items-center space-x-4 ml-4">
@@ -60,48 +61,72 @@
     <main class="px-8 py-4">
         <section class="mb-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-gray-800 rounded-lg overflow-hidden">
-                    <img alt="Assassin's Creed Nexus VR featured image" class="w-full h-40 object-cover" height="150" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-sSsOulEoQY3dXtF2RiaK66Ja/user-XZ7Av8ZH1bvGvI0GdH7WwbAs/img-hRRx5ScvORPgnZKzkhSM48O8.png?st=2024-02-07T05%3A16%3A51Z&amp;se=2024-02-07T07%3A16%3A51Z&amp;sp=r&amp;sv=2021-08-06&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-02-07T00%3A13%3A31Z&amp;ske=2024-02-08T00%3A13%3A31Z&amp;sks=b&amp;skv=2021-08-06&amp;sig=clRza8EUxW02lgrpwHzzR/VWnp4ovy3OE8kY5NuNtVI%3D" width="300" />
+                <div class="bg-gray-800 rounded-lg overflow-hidden relative">
+                    <img alt="Property-1" class="w-full h-40 object-cover" height="150" src="assets/images/property-1.jpg" width="300" />
                     <div class="p-4">
                         <h3 class="text-lg font-semibold">
-                            Assassin's Creed Nexus VR
+                            Mediterranean Style
                         </h3>
-                        <p class="text-gray-400 text-sm">
-                            Ubisoft Art Blast
+                        <p class="text-gray-400 text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
+                            </svg>
+                            Talisay City, Cebu, Philippines
                         </p>
+                        <div class="absolute top-3 left-3 bg-green-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded">
+                            For Rent
+                        </div>
                     </div>
                 </div>
-                <div class="bg-gray-700 rounded-lg overflow-hidden">
-                    <img alt="EVERSPACE 2 featured image" class="w-full h-40 object-cover" height="150" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-sSsOulEoQY3dXtF2RiaK66Ja/user-XZ7Av8ZH1bvGvI0GdH7WwbAs/img-qdKPPVLStlUbCw4mulx7f32d.png?st=2024-02-07T05%3A16%3A53Z&amp;se=2024-02-07T07%3A16%3A53Z&amp;sp=r&amp;sv=2021-08-06&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-02-06T08%3A08%3A08Z&amp;ske=2024-02-07T08%3A08%3A08Z&amp;sks=b&amp;skv=2021-08-06&amp;sig=4QdyS3wOSQsV7O9cvJtEtHtbkt%2BU7YNv%2Bm8oejQfnA0%3D" width="300" />
+                <div class="bg-gray-800 rounded-lg overflow-hidden relative">
+                    <img alt="Property-2" class="w-full h-40 object-cover" height="150" src="assets/images/property-2.jpg" width="300" />
                     <div class="p-4">
                         <h3 class="text-lg font-semibold">
-                            EVERSPACE 2
+                            Townhouse in Deca Homes
                         </h3>
-                        <p class="text-gray-400 text-sm">
-                            ROCKFISH Games Art Blast
+                        <p class="text-gray-400 text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
+                            </svg>
+                            Cebu City, Cebu, Philippines
                         </p>
+                        <div class="absolute top-3 left-3 bg-red-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded">
+                            For Sale
+                        </div>
                     </div>
                 </div>
-                <div class="bg-gray-700 rounded-lg overflow-hidden">
-                    <img alt="Alan Wake 2 featured image" class="w-full h-40 object-cover" height="150" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-sSsOulEoQY3dXtF2RiaK66Ja/user-XZ7Av8ZH1bvGvI0GdH7WwbAs/img-RchMFbceYY4WBnT9wD8nLRfv.png?st=2024-02-07T05%3A16%3A57Z&amp;se=2024-02-07T07%3A16%3A57Z&amp;sp=r&amp;sv=2021-08-06&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-02-06T21%3A29%3A52Z&amp;ske=2024-02-07T21%3A29%3A52Z&amp;sks=b&amp;skv=2021-08-06&amp;sig=Fwjmh7fyVXxzu0OvT93ztZq16pqpHYVj%2Bk3M05OCt1g%3D" width="300" />
+                <div class="bg-gray-800 rounded-lg overflow-hidden relative">
+                    <img alt="Property-3" class="w-full h-40 object-cover" height="150" src="assets/images/property-3.jpg" width="300" />
                     <div class="p-4">
                         <h3 class="text-lg font-semibold">
-                            Alan Wake 2
+                            Modern Homes
                         </h3>
-                        <p class="text-gray-400 text-sm">
-                            Remedy Entertainment Art Blast
+                        <p class="text-gray-400 text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
+                            </svg>
+                            Consolacion, Cebu, Philippines
                         </p>
+                        <div class="absolute top-3 left-3 bg-green-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded">
+                            For Rent
+                        </div>
                     </div>
                 </div>
-                <div class="bg-gray-700 rounded-lg overflow-hidden">
-                    <img alt="Horizon Call of the Mountain featured image" class="w-full h-40 object-cover" height="150" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-sSsOulEoQY3dXtF2RiaK66Ja/user-XZ7Av8ZH1bvGvI0GdH7WwbAs/img-SxeR63TxiSSq68CqfbM9fUX3.png?st=2024-02-07T05%3A16%3A52Z&amp;se=2024-02-07T07%3A16%3A52Z&amp;sp=r&amp;sv=2021-08-06&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-02-07T03%3A16%3A48Z&amp;ske=2024-02-08T03%3A16%3A48Z&amp;sks=b&amp;skv=2021-08-06&amp;sig=CDa6YuluN1UxY7ozOud/oiD0rCiFqeCw13Av/aTwXIk%3D" width="300" />
+                <div class="bg-gray-800 rounded-lg overflow-hidden relative">
+                    <img alt="Property-4" class="w-full h-40 object-cover" height="150" src="assets/images/property-4.jpg" width="300" />
                     <div class="p-4">
                         <h3 class="text-lg font-semibold">
-                            Horizon Call of the Mountain
+                            Corona Del Mar
                         </h3>
-                        <p class="text-gray-400 text-sm">
-                            Guerrilla Art Blast
+                        <p class="text-gray-400 text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
+                            </svg>
+                            Talisay City, Cebu, Philippines
                         </p>
+                        <div class="absolute top-3 left-3 bg-red-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded">
+                            For Sale
+                        </div>
                     </div>
                 </div>
             </div>
