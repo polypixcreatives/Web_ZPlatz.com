@@ -1382,3 +1382,27 @@ main().catch((err) => {
     document.getElementById("spinner").style.display = "none";
     document.getElementById("message").innerText = err.toString();
 });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    var toggleButton = document.getElementById('toggleButton');
+    var cardContainer = document.getElementById('cardContainer');
+    var canvas = document.getElementById('canvas');
+
+    toggleButton.addEventListener('click', function() {
+        if (cardContainer.classList.contains('collapsed') && canvas.classList.contains('expanded')) {
+            cardContainer.classList.remove('collapsed');
+            cardContainer.style.width = '300px';
+            toggleButton.style.transform = 'rotate(180deg)';
+            canvas.classList.remove('expanded');
+        } else {
+            cardContainer.classList.add('collapsed');
+            cardContainer.style.width = ''; 
+            toggleButton.style.transform = 'rotate(0deg)';
+            canvas.classList.add('expanded');
+        }
+    });
+});
+
+
+

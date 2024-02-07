@@ -7,6 +7,8 @@
 			name="viewport"
 			content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"
 		/>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta
 			name="apple-mobile-web-app-status-bar-style"
@@ -28,8 +30,10 @@
 			#info {
 				z-index: 100;
 				position: absolute;
+				float: right;
 				top: 10px;
-				left: 15px;
+				right: 15px;
+				width: 15%;
 			}
 			h3 {
 				margin: 5px 0;
@@ -138,15 +142,25 @@
 				font-size: small;
 
 			}
+			.logo {
+				/* display: flex;
+				justify-content: center;
+				align-items: center; */
+				display: block;
+				position: absolute;
+				top: 30px; 
+				left: 60px; 
+			}
 
 			.logo img{
-				width: 200px;
-				float: right;
-				padding-top: 0%;
+				align-items: center;
+				width: 150px;
 			}
 			.canvascontainer {
 				width: 80;
 				margin: 0 auto;
+				transition: width 0.3s ease;
+
 			}
 			.canvas-border-box {
 				border: 2px;
@@ -166,102 +180,139 @@
 				position: absolute;
 				bottom: 10px;
 				z-index: 999;
-				right: 10px;
+				left: 30px;
 			}
 
 			#canvas {
 				display: block;
                 position: absolute;
                 top: 20px; 
-                right: 40px; 
-                width: 85%; 
+                left: 40px; 
+                width: 80%; 
                 height: 95%; 
                 touch-action: none;
                 border-radius: 60px;
 			
 			}
-
-			#instructions {
-				background: rgba(0,0,0,0.6);
-				white-space: pre-wrap;
-				padding: 10px;
-				border-radius: 10px;
-				font-size: x-small;
-			}
-			body.nohf .nohf {
-				display: none;
+			#canvas.expanded {
+				width: 90%;
 			}
 			body.nohf #progress, body.nohf .cube-face {
 				background: #ff9d0d;
 			}
+			.sideBar {
+				height: 100vh;
+				/* background-color: rgb(151, 0, 0); */
+				width: 16%;
+				float: right;
+				right: 15px;
+			}
+			.card-title {
+				position: absolute;
+				top: 20px;
+				right: 15px;
+			}
+			.card-container {
+				height: 85vh;
+				/* background-color: rgb(79, 78, 78); */
+				text-align: center;
+				padding: 10px;
+				overflow-y: scroll;
+                border: none;
+				position: absolute;
+				top: 50px; 
+				left: 0;
+				right: 0;
+				width: 100%;
+			}
+			#cardContainer.collapsed {
+				display: none;
+			}
+			.card-container::-webkit-scrollbar {
+				width: 5px;
+			}
+			.card-container::-webkit-scrollbar-track {
+				background: #888; 
+			}
+
+			.card-container::-webkit-scrollbar-thumb {
+				background: #f1f1f1; 
+			}
+			.card-container::-webkit-scrollbar-thumb:hover {
+				background: #c3c3c3;
+			}
+			.material-icons {
+				left: 10px;
+			}
+			.outercard {
+				padding: 10px;
+				height: 18vh;
+			}
+			.card{
+				height: 15vh;
+				background-color: white;
+				text-align: center;
+				border-radius: 20px;
+				border: 2px solid rgb(33, 43, 220);
+			}
+			.title-text {
+				font-size: 18px;
+				color: black;
+				text-align: left;
+				padding-top: 100px;
+				padding-left: 15px;
+			}
 		</style>
 	</head>
-	<body>
-         <div class="frame">
-		 </div>
-				
-		<script>
+	<body>		
+		<!-- <script>
 			if(location.host.includes('hf.space')) document.body.classList.add('nohf');
-		</script>
-		<div id="info">
-			<a id="#" class="wrapper">
-				<div class="logo">
-					<img src="images/Zplatzlogo.png" alt="Logo">
-				</div></a>
-
-			<h3 class="nohf">MVP 3DGS Viewer</h3>
-			<p>
-			<small class="nohf">
-				By <a href="https://zplatz.com/">Miguel A. Dumaraos</a>.
-				Developed by:
-				<a href="https://polypixstudios.com/">Polypix Studios</a
-				>.
-			</small>
-		</p>
-
-			<details>
-			<summary>Use mouse or arrow keys to navigate.</summary>
-
-<div id="instructions">movement (arrow keys)
-- left/right arrow keys to strafe side to side
-- up/down arrow keys to move forward/back
-- space to jump
-
-camera angle (wasd)
-- a/d to turn camera left/right
-- w/s to tilt camera up/down
-- q/e to roll camera counterclockwise/clockwise
-- i/k and j/l to orbit
-
-trackpad
-- scroll up/down/left/right to orbit
-- pinch to move forward/back
-- ctrl key + scroll to move forward/back
-- shift + scroll to move up/down or strafe
-
-mouse
-- click and drag to orbit
-- right click (or ctrl/cmd key) and drag up/down to move
-
-touch (mobile)
-- one finger to orbit
-- two finger pinch to move forward/back
-- two finger rotate to rotate camera clockwise/counterclockwise
-- two finger pan to move side-to-side and up-down
-
-gamepad
-- if you have a game controller connected it should work
-
-other
-- press 0-9 to switch to one of the pre-loaded camera views
-- press p to resume default animation
-- drag and drop .ply file to convert to .splat
-</div>
-
-		</details>
-			
+		</script> -->
+		<div class="sideBar">
+			<div class="card-title">
+				<button><i class="material-icons" id="toggleButton">chevron_right</i></button>
+			</div>
+			<div id="cardContainer">
+				<div id="info">
+					<a id="#" class="wrapper"></a>
+					<div class="card-container">
+						<h2 class="title-card">Views</h2>
+		
+						<div class="outercard">
+							<div class="card">
+								<p class="title-text">Viewer 1</p>
+							</div>
+						</div>
+						<div class="outercard">
+							<div class="card">
+								<p class="title-text">Viewer 2</p>
+							</div>
+						</div>
+						<div class="outercard">
+							<div class="card">
+								<p class="title-text">Viewer 3</p>
+							</div>
+						</div>
+						<div class="outercard">
+							<div class="card">
+								<p class="title-text">Viewer 4</p>
+							</div>
+						</div>
+						<div class="outercard">
+							<div class="card">
+								<p class="title-text">Viewer 5</p>
+							</div>
+						</div>
+						<div class="outercard">
+							<div class="card">
+								<p class="title-text">Viewer 6</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-
+		
 		<div id="progress"></div>
 
 		<div id="message"></div>
@@ -279,10 +330,13 @@ other
 				</div>
 			</div>
 		</div>
-            <div class="canvascontainer">
-			    </div class="canvas-border-box">
-		            <p><canvas id="canvas"></canvas></p>
+            <div class="canvascontainer" id="canvasContainer">
+			    <div class="canvas-border-box">
+					<p><canvas id="canvas"></canvas></p>
+					<div class="logo">
+						<img src="images/Zplatzlogo.png" alt="Logo">
 					</div>
+				</div>
 
 		<div id="quality">
 			<span id="fps"></span>
