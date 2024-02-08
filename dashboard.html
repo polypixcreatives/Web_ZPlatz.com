@@ -22,188 +22,479 @@
     <header class="px-8 py-4 flex justify-between items-center">
         <div class="flex items-center space-x-4 flex-grow">
             <div class="flex items-center">
-                <img alt="Company logo" class="h-10" height="50" src="images/Zplatzlogo.png" width="110" />
+                <img alt="Company logo" class="h-10" src="images/Zplatzlogo.png" />
                 <nav class="hidden md:flex space-x-6 ml-6">
-                    <a class="hover:text-white transition duration-500 text-gray-400 relative" href="#">
+                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
                         Find a Home
                         <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
                     </a>
-                    <a class="hover:text-white transition duration-500 text-gray-400 relative" href="#">
-                        About Us
-                        <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
-                    </a>
-                    <a class="hover:text-white transition duration-500 text-gray-400 relative" href="#">
+                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
                         Meet a Realtor
                         <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
                     </a>
-                    <a class="hover:text-white transition duration-500 text-gray-400 relative" href="#">
+                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
                         Inquiry
+                        <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
+                    </a>
+                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
+                        About Us
                         <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
                     </a>
                 </nav>
             </div>
             <div class="flex items-center space-x-2 relative flex-grow mr-4">
                 <button class="absolute left-3 top-0 mt-3 ml-3" type="submit">
-                    <i class="fas fa-search text-gray-400"></i>
+                    <i class="fas fa-search text-gray-500"></i>
                 </button>
-                <input class="hover:border-gray-100 transition duration-500 h-10 pl-10 pr-10 rounded-full text-sm border border-gray-400 border-solid border-2 focus:outline-none flex-grow bg-transparent" placeholder="Search" type="text" />
+                <input class="hover:border-gray-400 transition duration-500 h-10 pl-10 pr-10 rounded-full text-sm border border-gray-500 border-solid border-2 focus:outline-none flex-grow bg-transparent" placeholder="Search" type="text" />
             </div>
         </div>
         <div class="flex items-center space-x-4 ml-4">
-            <a class="relative hover:bg-gray-700 bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-medium" href="#">
+            <button class="relative hover:bg-gray-700 upload-listing-btn text-white px-4 py-2 rounded-md text-sm font-medium" onclick="openModal()">
                 <i class="fas fa-plus mr-2"></i> Upload Listing
-            </a>
-            <a class="relative hover:bg-blue-700 bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium" href="#">
+            </button>
+            <button class="relative sign-in-btn bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium" href="#">
                 <i class="fas fa-sign-in-alt mr-2"></i> Sign In
-            </a>
+            </button>
         </div>
-    </header>
+
+        <div id="uploadModal" class="modal">
+            <div class="modal-content">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center">
+                        <img alt="ZPlatz logo placeholder" class="mr-2" height="50" src="images/Zplatzlogo.png" />
+                    </div>
+                    <span class="close" onclick="closeModal()">&times;</span>
+                </div>
+                <h2>Upload a SPLAT file</h2>
+                <input type="file" id="splatFileInput">
+                <button id="uploadButton" onclick="openModal()" class="bg-white text-gray-700 font-semibold py-2 px-4 rounded-full mb-3 w-full flex items-center justify-center">
+                    Upload
+                </button>
+            </div>
+        </div>
+
+</header>
     <main class="px-8 py-4">
-        <section class="mb-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-gray-800 rounded-lg overflow-hidden relative">
-                    <img alt="Property-1" class="w-full h-40 object-cover" height="150" src="assets/images/property-1.jpg" width="300" />
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold">
+        <style>
+            .properties-container {
+                overflow-x: hidden;
+            }
+
+            .scroll-button {
+                width: 30px;
+                height: 30px;
+                border-radius: 100%;
+                background-color: #000000;
+                opacity: 25%;
+                border: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+            }
+
+            .scroll-button-category {
+                width: 30px;
+                height: 30px;
+                border-radius: 100%;
+                background-color: #808080;
+                opacity: 25%;
+                border: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+            }
+
+            .font-custom-black {
+                font-weight: 900;
+            }
+
+            .custom-button-category {
+                background-color: #202024;
+            }
+
+            .custom-buttom-category-icon {
+                background-color: #303034;
+            }
+
+            .custom-size-listing {
+                height: 204.5px;
+                width: 204.5px;
+            }
+
+            .upload-listing-btn {
+                background-color: #404044;
+            }
+
+            .sign-in-btn {
+                background-color: #0074E1;
+            }
+
+            .slide-in-text {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .custom-size-listing:hover .slide-in-text {
+                transform: translateX(0);
+            }
+
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0,0,0,0.4);
+            }
+
+            .modal-content {
+                background-color: #202024;
+                color: white;
+                margin: 15% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%;
+                max-width: 400px;
+                position: relative;
+                border-radius: 20px;
+                border: none;
+            }
+
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+                .close:hover,
+                .close:focus {
+                    color: black;
+                    text-decoration: none;
+                    cursor: pointer;
+                }
+        </style>
+        <section class="mb-8 relative">
+            <div class="flex gap-3 overflow-x-auto properties-container">
+                <div class="bg-gray-800 rounded-lg overflow-hidden relative" style="min-width: 340px; height: 200px;">
+                    <img alt="Property-1" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/property-1.jpg" />
+                    <div class="absolute top-3 left-3 bg-green-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded-full">
+                        For Rent
+                    </div>
+                    <div class="p-4 absolute bottom-0 left-0 w-full">
+                        <h3 class="text-lg font-semibold text-white">
                             Mediterranean Style
                         </h3>
-                        <p class="text-gray-400 text-sm flex items-center">
-                            <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <p class="text-white text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
                             </svg>
                             Talisay City, Cebu, Philippines
                         </p>
-                        <div class="absolute top-3 left-3 bg-green-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded">
-                            For Rent
-                        </div>
                     </div>
                 </div>
-                <div class="bg-gray-800 rounded-lg overflow-hidden relative">
-                    <img alt="Property-2" class="w-full h-40 object-cover" height="150" src="assets/images/property-2.jpg" width="300" />
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold">
+                <div class="bg-gray-800 rounded-lg overflow-hidden relative" style="min-width: 340px; height: 200px; ">
+                    <img alt="Property-2" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/property-2.jpg" />
+                    <div class="absolute top-3 left-3 bg-red-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded-full">
+                        For Sale
+                    </div>
+                    <div class="p-4 absolute bottom-0 left-0 w-full">
+                        <h3 class="text-lg font-semibold text-white">
                             Townhouse in Deca Homes
                         </h3>
-                        <p class="text-gray-400 text-sm flex items-center">
-                            <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <p class="text-white text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
                             </svg>
                             Cebu City, Cebu, Philippines
                         </p>
-                        <div class="absolute top-3 left-3 bg-red-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded">
-                            For Sale
-                        </div>
                     </div>
                 </div>
-                <div class="bg-gray-800 rounded-lg overflow-hidden relative">
-                    <img alt="Property-3" class="w-full h-40 object-cover" height="150" src="assets/images/property-3.jpg" width="300" />
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold">
+                <div class="bg-gray-800 rounded-lg overflow-hidden relative" style="min-width: 340px; height: 200px; ">
+                    <img alt="Property-3" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/property-3.jpg" />
+                    <div class="absolute top-3 left-3 bg-green-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded-full">
+                        For Rent
+                    </div>
+                    <div class="p-4 absolute bottom-0 left-0 w-full">
+                        <h3 class="text-lg font-semibold text-white">
                             Modern Homes
                         </h3>
-                        <p class="text-gray-400 text-sm flex items-center">
-                            <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <p class="text-white text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
                             </svg>
                             Consolacion, Cebu, Philippines
                         </p>
-                        <div class="absolute top-3 left-3 bg-green-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded">
-                            For Rent
-                        </div>
                     </div>
                 </div>
-                <div class="bg-gray-800 rounded-lg overflow-hidden relative">
-                    <img alt="Property-4" class="w-full h-40 object-cover" height="150" src="assets/images/property-4.jpg" width="300" />
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold">
+                <div class="bg-gray-800 rounded-lg overflow-hidden relative" style="min-width: 340px; height: 200px;">
+                    <img alt="Property-4" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/property-4.jpg" />
+                    <div class="absolute top-3 left-3 bg-red-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded-full">
+                        For Sale
+                    </div>
+                    <div class="p-4 absolute bottom-0 left-0 w-full">
+                        <h3 class="text-lg font-semibold text-white">
                             Corona Del Mar
                         </h3>
-                        <p class="text-gray-400 text-sm flex items-center">
-                            <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <p class="text-white text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
                             </svg>
                             Talisay City, Cebu, Philippines
                         </p>
-                        <div class="absolute top-3 left-3 bg-red-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded">
-                            For Sale
-                        </div>
                     </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg overflow-hidden relative" style="min-width: 340px; height: 200px;">
+                    <img alt="Property-5" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/property-5.jpg" />
+                    <div class="absolute top-3 left-3 bg-red-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded-full">
+                        For Sale
+                    </div>
+                    <div class="p-4 absolute bottom-0 left-0 w-full">
+                        <h3 class="text-lg font-semibold text-white">
+                            Bungalow Houses
+                        </h3>
+                        <p class="text-white text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
+                            </svg>
+                            City of Carcar, Cebu, Philippines
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <button class="scroll-button absolute top-1/2 left-0 transform -translate-y-1/2" onclick="scrollProperties('left')">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="scroll-button absolute top-1/2 right-0 transform -translate-y-1/2" onclick="scrollProperties('right')">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </section>
+        <section>
+            <div class="flex items-center space-x-4 overflow-x-auto mb-8 relative">
+                <div class="flex items-center space-x-6">
+                    <button class="custom-buttom-category-icon text-white rounded-lg p-2" style="width: 48px; height: 48px;">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                    <button class="rounded-lg p-2 inline-flex items-center custom-font custom-button-category" style="height: 64px;">
+                        <div class="flex items-center justify-center custom-buttom-category-icon text-white rounded-lg p-2 mr-2" style="width: 48px; height: 48px;">
+                            <i class='fas fa-map'></i>
+                        </div>
+                        <span class="font-medium mr-2">All Locations</span>
+                    </button>
+                </div>
+                <div class="flex space-x-4 items-center">
+                    <button class="scroll-button-category" onclick="scrollPlaces('left')">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="flex space-x-4 items-center">
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Bohol" src="assets/images/places-bohol.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Bohol</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Boracay" src="assets/images/places-boracay.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Boracay</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Cebu" src="assets/images/places-cebu.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Cebu</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Bohol" src="assets/images/places-bohol.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Bohol</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Boracay" src="assets/images/places-boracay.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Boracay</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Cebu" src="assets/images/places-cebu.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Cebu</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Bohol" src="assets/images/places-bohol.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Bohol</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Boracay" src="assets/images/places-boracay.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Boracay</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Cebu" src="assets/images/places-cebu.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Cebu</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Bohol" src="assets/images/places-bohol.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Bohol</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Boracay" src="assets/images/places-boracay.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Boracay</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Cebu" src="assets/images/places-cebu.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Cebu</span>
+                        </button>
+                    </div>
+                    <button class="scroll-button-category" onclick="scrollProperties('right')">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
         </section>
         <section>
-            <h2 class="text-2xl font-bold mb-4">
+            <h2 class="text-3xl font-custom-black mb-4">
                 All Listings
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-gray-700 rounded-lg overflow-hidden">
-                    <img alt="Industrial environment art channel image" class="w-full h-40 object-cover" height="150" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-sSsOulEoQY3dXtF2RiaK66Ja/user-XZ7Av8ZH1bvGvI0GdH7WwbAs/img-sqWF1OwXlxAsdKsP4JGgqE9j.png?st=2024-02-07T05%3A13%3A39Z&amp;se=2024-02-07T07%3A13%3A39Z&amp;sp=r&amp;sv=2021-08-06&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-02-07T03%3A10%3A27Z&amp;ske=2024-02-08T03%3A10%3A27Z&amp;sks=b&amp;skv=2021-08-06&amp;sig=wjVdwtI7pA2g4py6YoSPFTs0/qKBdQQXhWnDXUsuT4A%3D" width="300" />
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold">
-                            Unreal Engine
+            <ul class="flex flex-wrap gap-1">
+                <li class="relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 1" class="w-full h-full object-cover" src="assets/images/property-1.jpg" />
+                    <div class="absolute bottom-0 left-0 w-full p-1 slide-in-text">
+                        <h3 class="text-lg font-semibold text-white ml-1">
+                            Mediterranean Style
                         </h3>
-                        <p class="text-gray-400 text-sm">
-                            Game Art
+                        <p class="text-white text-sm flex items-center ml-1">
+                            Ella Venice Punay
                         </p>
                     </div>
-                </div>
-                <div class="bg-gray-700 rounded-lg overflow-hidden">
-                    <img alt="Tank model art channel image" class="w-full h-40 object-cover" height="150" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-sSsOulEoQY3dXtF2RiaK66Ja/user-XZ7Av8ZH1bvGvI0GdH7WwbAs/img-p3xTdjU1e4O2jrWZm0GJUgQW.png?st=2024-02-07T05%3A16%3A52Z&amp;se=2024-02-07T07%3A16%3A52Z&amp;sp=r&amp;sv=2021-08-06&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-02-07T04%3A08%3A53Z&amp;ske=2024-02-08T04%3A08%3A53Z&amp;sks=b&amp;skv=2021-08-06&amp;sig=b2WDJtQKotuoqkrXZbcOmWznAN/ZlyP2g3zWqHsk5PQ%3D" width="300" />
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold">
-                            Game Art
-                        </h3>
-                        <p class="text-gray-400 text-sm">
-                            Storyboards
-                        </p>
-                    </div>
-                </div>
-                <div class="bg-gray-700 rounded-lg overflow-hidden">
-                    <img alt="Architectural visualization art channel image" class="w-full h-40 object-cover" height="150" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-sSsOulEoQY3dXtF2RiaK66Ja/user-XZ7Av8ZH1bvGvI0GdH7WwbAs/img-j7fxfgFTxakS7PsZvZVdjnHP.png?st=2024-02-07T05%3A16%3A54Z&amp;se=2024-02-07T07%3A16%3A54Z&amp;sp=r&amp;sv=2021-08-06&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-02-06T15%3A29%3A22Z&amp;ske=2024-02-07T15%3A29%3A22Z&amp;sks=b&amp;skv=2021-08-06&amp;sig=GnbfzbZfYuKQfN5xluhtxg/HpuuHBXI2oxPJYnpW6tY%3D" width="300" />
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold">
-                            Architectural Visualization
-                        </h3>
-                        <p class="text-gray-400 text-sm">
-                            Comic Art
-                        </p>
-                    </div>
-                </div>
-                <div class="bg-gray-700 rounded-lg overflow-hidden">
-                    <img alt="Character animation art channel image" class="w-full h-40 object-cover" height="150" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-sSsOulEoQY3dXtF2RiaK66Ja/user-XZ7Av8ZH1bvGvI0GdH7WwbAs/img-lOApVYUPvLHSQSLKgdYWg8kp.png?st=2024-02-07T05%3A16%3A57Z&amp;se=2024-02-07T07%3A16%3A57Z&amp;sp=r&amp;sv=2021-08-06&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-02-06T16%3A59%3A22Z&amp;ske=2024-02-07T16%3A59%3A22Z&amp;sks=b&amp;skv=2021-08-06&amp;sig=vHq3BVJhkuRbdzQsfNEdFg9ForXC3zpeswi3TusHsDs%3D" width="300" />
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold">
-                            Character Animation
-                        </h3>
-                        <p class="text-gray-400 text-sm">
-                            Character Modeling
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 2" class="w-full h-full object-cover" src="assets/images/property-2.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 3" class="w-full h-full object-cover" src="assets/images/property-3.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 4" class="w-full h-full object-cover" src="assets/images/property-4.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Bohol" class="w-full h-full object-cover" src="assets/images/places-bohol.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Boracay" class="w-full h-full object-cover" src="assets/images/places-boracay.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Cebu" class="w-full h-full object-cover" src="assets/images/places-cebu.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 2" class="w-full h-full object-cover" src="assets/images/property-2.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 3" class="w-full h-full object-cover" src="assets/images/property-3.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 4" class="w-full h-full object-cover" src="assets/images/property-4.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Bohol" class="w-full h-full object-cover" src="assets/images/places-bohol.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Boracay" class="w-full h-full object-cover" src="assets/images/places-boracay.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Cebu" class="w-full h-full object-cover" src="assets/images/places-cebu.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Bohol" class="w-full h-full object-cover" src="assets/images/places-bohol.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Boracay" class="w-full h-full object-cover" src="assets/images/places-boracay.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Cebu" class="w-full h-full object-cover" src="assets/images/places-cebu.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 2" class="w-full h-full object-cover" src="assets/images/property-2.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 3" class="w-full h-full object-cover" src="assets/images/property-3.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 4" class="w-full h-full object-cover" src="assets/images/property-4.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 1" class="w-full h-full object-cover" src="assets/images/property-1.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Cebu" class="w-full h-full object-cover" src="assets/images/places-cebu.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Bohol" class="w-full h-full object-cover" src="assets/images/places-bohol.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Boracay" class="w-full h-full object-cover" src="assets/images/places-boracay.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Cebu" class="w-full h-full object-cover" src="assets/images/places-cebu.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 2" class="w-full h-full object-cover" src="assets/images/property-2.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 3" class="w-full h-full object-cover" src="assets/images/property-3.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 4" class="w-full h-full object-cover" src="assets/images/property-4.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 1" class="w-full h-full object-cover" src="assets/images/property-1.jpg" />
+                </li>
+            </ul>
+        </section>   
     </main>
-    <footer class="fixed bottom-0 w-full bg-gray-700 p-4">
-        <div class="flex justify-between items-center">
-            <button class="text-gray-400 hover:text-white">
-                <i class="fas fa-th-large">
-                </i>
-            </button>
-            <div class="flex space-x-4">
-                <button class="text-gray-400 hover:text-white">
+    <footer class="fixed bottom-0 w-full p-4">
+        <div class="px-4 py-3 flex justify-between items-center">
+            <div class="flex space-x-1 rounded-full bg-white text-black px-5 py-5">
+                <button class="text-black">
+                    <i class="fas fa-th-large fa-1x"></i>
+                </button>
+            </div>
+            <div class="flex space-x-1 rounded-full bg-white text-black px-1 py-1">
+                <button id="communityBtn" class="rounded-full px-5 py-3">
                     Community
                 </button>
-                <button class="text-gray-400 hover:text-white">
+                <button id="trendingBtn" class="rounded-full px-5 py-3">
                     Trending
                 </button>
-                <button class="text-gray-400 hover:text-white">
+                <button id="latestBtn" class="rounded-full px-5 py-3">
                     Latest
                 </button>
             </div>
-            <button class="text-gray-400 hover:text-white">
-                <i class="fas fa-ellipsis-h">
-                </i>
-            </button>
+            <div class="flex space-x-1 rounded-full bg-white text-black px-5 py-5">
+                <button class="text-black">
+                    <i class="fas fa-ellipsis-h"></i>
+                </button>
+            </div>
         </div>
     </footer>
 </body>
@@ -221,4 +512,100 @@
             link.querySelector('span').classList.add('scale-x-0');
         });
     });
+
+    function scrollProperties(direction) {
+    const container = document.querySelector('.properties-container');
+    const scrollAmount = 300;
+
+        if (direction === 'left') {
+            container.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth'
+            });
+        } else if (direction === 'right') {
+            container.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    }
+
+    function scrollPlaces(direction) {
+        const container = document.querySelector('.properties-container');
+        const scrollAmount = 300;
+
+        if (direction === 'left') {
+            container.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth'
+            });
+        } else if (direction === 'right') {
+            container.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    }
+
+    const communityBtn = document.getElementById('communityBtn');
+    const trendingBtn = document.getElementById('trendingBtn');
+    const latestBtn = document.getElementById('latestBtn');
+
+    communityBtn.classList.add('bg-black', 'text-white');
+
+    communityBtn.addEventListener('click', () => {
+        communityBtn.classList.add('bg-black', 'text-white');
+        trendingBtn.classList.remove('bg-black', 'text-white');
+        latestBtn.classList.remove('bg-black', 'text-white');
+    });
+
+    trendingBtn.addEventListener('click', () => {
+        communityBtn.classList.remove('bg-black', 'text-white');
+        trendingBtn.classList.add('bg-black', 'text-white');
+        latestBtn.classList.remove('bg-black', 'text-white');
+    });
+
+    latestBtn.addEventListener('click', () => {
+        communityBtn.classList.remove('bg-black', 'text-white');
+        trendingBtn.classList.remove('bg-black', 'text-white');
+        latestBtn.classList.add('bg-black', 'text-white');
+    });
+
+    function openModal() {
+        document.getElementById("uploadModal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("uploadModal").style.display = "none";
+    }
+
 </script>
+
+<script>
+    document.getElementById('uploadButton').addEventListener('click', function() {
+        var input = document.getElementById('splatFileInput');
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                var listItem = document.createElement('li');
+                listItem.className = 'bg-gray-700 rounded-lg overflow-hidden custom-size-listing';
+
+                var img = document.createElement('img');
+                img.className = 'w-full h-full object-cover';
+                img.src = e.target.result; 
+                img.alt = 'Uploaded Property Image';
+
+                listItem.appendChild(img);
+
+                var listings = document.querySelector('.flex.flex-wrap.gap-1');
+
+                listings.insertBefore(listItem, listings.firstChild);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    });
+</script>
+<script src="main.js"></script>
