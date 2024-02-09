@@ -111,6 +111,10 @@
                 font-weight: 900;
             }
 
+            .places-container {
+                overflow:hidden;
+            }
+
             .custom-button-category {
                 background-color: #202024;
             }
@@ -288,7 +292,7 @@
                         <span class="font-medium mr-2">All Locations</span>
                     </button>
                 </div>
-                <div class="flex space-x-4 items-center">
+                <div class="flex space-x-4 items-center places-container"">
                     <button class="scroll-button-category" onclick="scrollPlaces('left')">
                         <i class="fas fa-chevron-left"></i>
                     </button>
@@ -377,25 +381,49 @@
                 All Listings
             </h2>
             <ul class="flex flex-wrap gap-1">
-                <li class="relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
-                    <img alt="Property 1" class="w-full h-full object-cover" src="assets/images/property-1.jpg" />
+                <li class="relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing" id="listingItem">
+                    <img alt="Property 1" class="w-full h-full object-cover" src="assets/images/Fatima Subdivision.png" />
                     <div class="absolute bottom-0 left-0 w-full p-1 slide-in-text">
                         <h3 class="text-lg font-semibold text-white ml-1">
-                            Mediterranean Style
+                            Fatima Subdivision
                         </h3>
                         <p class="text-white text-sm flex items-center ml-1">
-                            Ella Venice Punay
+                            Cebu City, Cebu
                         </p>
                     </div>
                 </li>
-                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                <li class="relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
                     <img alt="Property 2" class="w-full h-full object-cover" src="assets/images/property-2.jpg" />
+                    <div class="absolute bottom-0 left-0 w-full p-1 slide-in-text">
+                        <h3 class="text-lg font-semibold text-white ml-1">
+                            Deca Homes
+                        </h3>
+                        <p class="text-white text-sm flex items-center ml-1">
+                            Lapu-Lapu City, Cebu
+                        </p>
+                    </div>
                 </li>
-                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                <li class="relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
                     <img alt="Property 3" class="w-full h-full object-cover" src="assets/images/property-3.jpg" />
+                    <div class="absolute bottom-0 left-0 w-full p-1 slide-in-text">
+                        <h3 class="text-lg font-semibold text-white ml-1">
+                            Golden Valley
+                        </h3>
+                        <p class="text-white text-sm flex items-center ml-1">
+                            Consolacion, Cebu
+                        </p>
+                    </div>
                 </li>
-                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                <li class="relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
                     <img alt="Property 4" class="w-full h-full object-cover" src="assets/images/property-4.jpg" />
+                    <div class="absolute bottom-0 left-0 w-full p-1 slide-in-text">
+                        <h3 class="text-lg font-semibold text-white ml-1">
+                            Beverly Hills
+                        </h3>
+                        <p class="text-white text-sm flex items-center ml-1">
+                            Cebu City, Cebu
+                        </p>
+                    </div>
                 </li>
                 <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
                     <img alt="Places-Bohol" class="w-full h-full object-cover" src="assets/images/places-bohol.jpg" />
@@ -585,6 +613,18 @@
     function closeModal() {
         document.getElementById("uploadModal").style.display = "none";
     }
+</script>
+
+// View Listing Item
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const listingItem = document.getElementById('listingItem');
+        if (listingItem) {
+            listingItem.addEventListener('click', function () {
+                window.location.href = 'index.html';
+            });
+        }
+    });
 </script>
 
 // Upload Listing
