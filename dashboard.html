@@ -54,43 +54,36 @@
             <button class="relative hover:bg-gray-700 upload-listing-btn text-white px-4 py-2 rounded-md text-sm font-medium" onclick="openModal()">
                 <i class="fas fa-plus mr-2"></i> Upload Listing
             </button>
-            <button class="relative sign-in-btn bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium" href="#">
+            <button class="relative sign-in-btn text-white px-4 py-2 rounded-md text-sm font-medium" href="#">
                 <i class="fas fa-sign-in-alt mr-2"></i> Sign In
             </button>
         </div>
 
         <div id="uploadModal" class="modal">
             <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
                 <div class="flex justify-between items-center mb-6">
                     <div class="flex items-center">
                         <img alt="ZPlatz logo placeholder" class="mr-2" height="50" src="images/Zplatzlogo.png" />
                     </div>
-                    <span class="close" onclick="closeModal()">&times;</span>
                 </div>
-                <h2>Upload an image file</h2>
-                <label>Property Name</label><input type="text" id="namebox"> <label id="extlab"></label><br><br>
-                <input type="file" id="coverImageFileInput">
-                <button id="uploadButton" class="bg-white text-gray-700 font-semibold py-2 px-4 rounded-full mb-3 w-full flex items-center justify-center">
-                    Upload Cover Photo
-                </button>
+                <div>
+                    <div class="imageUpload">
+                        <input type="file" class="inp" onchange="getImageData(event)" />
+                        <button onclick="selectCoverPhoto()" class="selectImage">Select Cover Photo</button>
+                        <span class="filedata">No Cover Photo selected</span>
+                        <div class="progressBar">
+                            <div class="progress"></div>
+                        </div>
+                        <button onclick="uploadCoverPhoto()" class="upload">Upload</button>
+                        <span class="loading"></span>
+                        <img class="img" />
+                    </div>
+                </div>
             </div>
         </div>
-
-        <script type="module">
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-
-            const firebaseConfig = {
-                apiKey: "AIzaSyBIAg_71Rq-Ma6BZBlaqjZhW4uPfZ254tY",
-                authDomain: "zplatz-database.firebaseapp.com",
-                projectId: "zplatz-database",
-                storageBucket: "zplatz-database.appspot.com",
-                messagingSenderId: "371563563136",
-                appId: "1:371563563136:web:21dab9cd363a2d055dbe65",
-                measurementId: "G-P33J1TQJS3"
-            };
-        </script>
     </header>
+
     <main class="px-8 py-4">
         <style>
             .properties-container {
@@ -161,6 +154,7 @@
                 transform: translateX(0);
             }
 
+            /* Upload Modal */
             .modal {
                 display: none;
                 position: fixed;
@@ -178,27 +172,76 @@
                 color: white;
                 margin: 15% auto;
                 padding: 20px;
-                border: 1px solid #888;
+                border-radius: 20px;
                 width: 80%;
                 max-width: 400px;
                 position: relative;
-                border-radius: 20px;
-                border: none;
             }
 
             .close {
-                color: #aaa;
-                float: right;
-                font-size: 28px;
-                font-weight: bold;
+                width: 30px;
+                height: 30px;
+                border-radius: 100%;
+                background-color: #000000;
+                opacity: 25%;
+                border: none;
+                color: white;
+                font-size: 20px;
+                line-height: 30px;
+                text-align: center;
+                cursor: pointer;
+                position: absolute;
+                top: 10px;
+                right: 10px;
             }
 
-                .close:hover,
-                .close:focus {
-                    color: black;
-                    text-decoration: none;
-                    cursor: pointer;
+                .close:hover {
+                    opacity: 50%;
                 }
+
+            .selectImage {
+                background-color: #0074E1;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+                margin-bottom: 10px;
+                display: block;
+            }
+
+            .upload {
+                background-color: #0074E1;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+                margin: 20px auto 0;
+                display: block;
+                text-align: center;
+                width: 100%;
+            }
+
+            .bar {
+                height: 50px;
+                width: 500px;
+                background: gray;
+                margin-bottom: 10px;
+            }
+
+            .progress {
+                background: linear-gradient(12deg, red, blue);
+                height: 25px;
+                width: 0%;
+            }
+
+            .uploadPercentage {
+                font-size: 25px;
+            }
+
         </style>
         <section class="mb-8 relative">
             <div class="flex gap-3 overflow-x-auto properties-container">
@@ -541,135 +584,12 @@
             </div>
         </div>
     </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="zplatz_firebase.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
-
-// Scroll and Mouse Effects
-<script>
-    const links = document.querySelectorAll('nav a');
-
-    links.forEach(link => {
-        link.addEventListener('mouseenter', () => {
-            link.querySelector('span').classList.remove('scale-x-0');
-        });
-
-        link.addEventListener('mouseleave', () => {
-            link.querySelector('span').classList.add('scale-x-0');
-        });
-    });
-
-    function scrollProperties(direction) {
-        const container = document.querySelector('.properties-container');
-        const scrollAmount = 300;
-
-        if (direction === 'left') {
-            container.scrollBy({
-                left: -scrollAmount,
-                behavior: 'smooth'
-            });
-        } else if (direction === 'right') {
-            container.scrollBy({
-                left: scrollAmount,
-                behavior: 'smooth'
-            });
-        }
-    }
-
-    function scrollPlaces(direction) {
-        const container = document.querySelector('.properties-container');
-        const scrollAmount = 300;
-
-        if (direction === 'left') {
-            container.scrollBy({
-                left: -scrollAmount,
-                behavior: 'smooth'
-            });
-        } else if (direction === 'right') {
-            container.scrollBy({
-                left: scrollAmount,
-                behavior: 'smooth'
-            });
-        }
-    }
-</script>
-
-// Buttons
-<script>
-    const communityBtn = document.getElementById('communityBtn');
-    const trendingBtn = document.getElementById('trendingBtn');
-    const latestBtn = document.getElementById('latestBtn');
-
-    communityBtn.classList.add('bg-black', 'text-white');
-
-    communityBtn.addEventListener('click', () => {
-        communityBtn.classList.add('bg-black', 'text-white');
-        trendingBtn.classList.remove('bg-black', 'text-white');
-        latestBtn.classList.remove('bg-black', 'text-white');
-    });
-
-    trendingBtn.addEventListener('click', () => {
-        communityBtn.classList.remove('bg-black', 'text-white');
-        trendingBtn.classList.add('bg-black', 'text-white');
-        latestBtn.classList.remove('bg-black', 'text-white');
-    });
-
-    latestBtn.addEventListener('click', () => {
-        communityBtn.classList.remove('bg-black', 'text-white');
-        trendingBtn.classList.remove('bg-black', 'text-white');
-        latestBtn.classList.add('bg-black', 'text-white');
-    });
-</script>
-
-// Modals
-<script>
-    function openModal() {
-        document.getElementById("uploadModal").style.display = "block";
-    }
-
-    function closeModal() {
-        document.getElementById("uploadModal").style.display = "none";
-    }
-</script>
-
-// View Listing Item
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const listingItem = document.getElementById('listingItem');
-        if (listingItem) {
-            listingItem.addEventListener('click', function () {
-                window.location.href = 'index.html';
-            });
-        }
-    });
-</script>
-
-// Upload Listing
-<script>
-    document.getElementById('uploadButton').addEventListener('click', function () {
-        var input = document.getElementById('coverImageFileInput');
-
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                var listItem = document.createElement('li');
-                listItem.className = 'bg-gray-700 rounded-lg overflow-hidden custom-size-listing';
-
-                var img = document.createElement('img');
-                img.className = 'w-full h-full object-cover';
-                img.src = e.target.result;
-                img.alt = 'Uploaded Property Image';
-
-                listItem.appendChild(img);
-
-                var listings = document.querySelector('.flex.flex-wrap.gap-1');
-
-                listings.insertBefore(listItem, listings.firstChild);
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    });
-</script>
-
-<script src="main.js"></script>
