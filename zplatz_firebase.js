@@ -29,7 +29,7 @@ const selectCoverPhoto = () => {
 
 const getImageData = (e) => {
     file = e.target.files[0];
-    fileName = Math.round(Math.random() * 9999) + file.name;
+    fileName = file.name;
     if (fileName) {
         fileData.style.display = "block";
     }

@@ -69,7 +69,7 @@
                 </div>
                 <div>
                     <div class="imageUpload">
-                        <input type="file" class="inp" onchange="getImageData(event)" />
+                        <input type="file" class="inp hide-input" onchange="getImageData(event)" />
                         <button onclick="selectCoverPhoto()" class="selectImage">Select Cover Photo</button>
                         <span class="filedata">No Cover Photo selected</span>
                         <div class="progressBar">
@@ -198,6 +198,10 @@
                 .close:hover {
                     opacity: 50%;
                 }
+
+            .hide-input {
+                display: none;
+            }
 
             .selectImage {
                 background-color: #0074E1;
