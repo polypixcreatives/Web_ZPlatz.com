@@ -80,15 +80,12 @@ function closeModal() {
     document.getElementById("uploadModal").style.display = "none";
 }
 
-
-
-
 // View Listing Item
 document.addEventListener("DOMContentLoaded", function () {
     const listingItem = document.getElementById('listingItem');
     if (listingItem) {
         listingItem.addEventListener('click', function () {
-            window.location.href = 'index.html';
+            window.location.href = 'viewer.html';
         });
     }
 });
