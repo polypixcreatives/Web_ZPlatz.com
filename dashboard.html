@@ -21,70 +21,6 @@
 </head>
 <body class="bg-black text-white">
     <header class="px-8 py-4 flex justify-between items-center">
-        <div class="flex items-center space-x-4 flex-grow">
-            <div class="flex items-center">
-                <img alt="Company logo" class="h-10" src="images/Zplatzlogo.png" />
-                <nav class="hidden md:flex space-x-6 ml-6">
-                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
-                        Find a Home
-                        <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
-                    </a>
-                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
-                        Meet a Realtor
-                        <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
-                    </a>
-                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
-                        Inquiry
-                        <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
-                    </a>
-                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
-                        About Us
-                        <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
-                    </a>
-                </nav>
-            </div>
-            <div class="flex items-center space-x-2 relative flex-grow mr-4">
-                <button class="absolute left-3 top-0 mt-3 ml-3" type="submit">
-                    <i class="fas fa-search text-gray-500"></i>
-                </button>
-                <input class="hover:border-gray-400 transition duration-500 h-10 pl-10 pr-10 rounded-full text-sm border border-gray-500 border-solid border-2 focus:outline-none flex-grow bg-transparent" placeholder="Search" type="text" />
-            </div>
-        </div>
-        <div class="flex items-center space-x-4 ml-4">
-            <button class="relative hover:bg-gray-700 upload-listing-btn text-white px-4 py-2 rounded-md text-sm font-medium" onclick="openModal()">
-                <i class="fas fa-plus mr-2"></i> Upload Listing
-            </button>
-            <button class="relative sign-in-btn text-white px-4 py-2 rounded-md text-sm font-medium" href="#">
-                <i class="fas fa-sign-in-alt mr-2"></i> Sign In
-            </button>
-        </div>
-
-        <div id="uploadModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal()">&times;</span>
-                <div class="flex justify-between items-center mb-6">
-                    <div class="flex items-center">
-                        <img alt="ZPlatz logo placeholder" class="mr-2" height="50" src="images/Zplatzlogo.png" />
-                    </div>
-                </div>
-                <div>
-                    <div class="imageUpload">
-                        <input type="file" class="inp hide-input" onchange="getImageData(event)" />
-                        <button onclick="selectCoverPhoto()" class="selectImage">Select Cover Photo</button>
-                        <span class="filedata">No Cover Photo selected</span>
-                        <div class="progressBar">
-                            <div class="progress"></div>
-                        </div>
-                        <button onclick="uploadCoverPhoto()" class="upload">Upload</button>
-                        <span class="loading"></span>
-                        <img class="img" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main class="px-8 py-4">
         <style>
             .properties-container {
                 overflow-x: hidden;
@@ -182,21 +118,22 @@
                 width: 30px;
                 height: 30px;
                 border-radius: 100%;
-                background-color: #000000;
-                opacity: 25%;
+                background-color: rgba(0, 0, 0, -0.1);
                 border: none;
                 color: white;
                 font-size: 20px;
                 line-height: 30px;
                 text-align: center;
                 cursor: pointer;
-                position: absolute;
-                top: 10px;
-                right: 10px;
+                transition: background-color 0.3s ease;
             }
 
                 .close:hover {
-                    opacity: 50%;
+                    background-color: rgba(0, 0, 0, 0.2);
+                }
+
+                .close:focus {
+                    outline: none;
                 }
 
             .hide-input {
@@ -247,6 +184,68 @@
             }
 
         </style>
+        <div class="flex items-center space-x-4 flex-grow">
+            <div class="flex items-center">
+                <img alt="Company logo" class="h-10" src="images/Zplatzlogo.png" />
+                <nav class="hidden md:flex space-x-6 ml-6">
+                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
+                        Find a Home
+                        <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
+                    </a>
+                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
+                        Meet a Realtor
+                        <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
+                    </a>
+                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
+                        Inquiry
+                        <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
+                    </a>
+                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
+                        About Us
+                        <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
+                    </a>
+                </nav>
+            </div>
+            <div class="flex items-center space-x-2 relative flex-grow mr-4">
+                <button class="absolute left-3 top-0 mt-3 ml-3" type="submit">
+                    <i class="fas fa-search text-gray-500"></i>
+                </button>
+                <input class="hover:border-gray-400 transition duration-500 h-10 pl-10 pr-10 rounded-full text-sm border border-gray-500 border-solid border-2 focus:outline-none flex-grow bg-transparent" placeholder="Search" type="text" />
+            </div>
+        </div>
+        <div class="flex items-center space-x-4 ml-4">
+            <button class="relative hover:bg-gray-700 upload-listing-btn text-white px-4 py-2 rounded-md text-sm font-medium" onclick="openModal()">
+                <i class="fas fa-plus mr-2"></i> Upload Listing
+            </button>
+            <button class="relative sign-in-btn text-white px-4 py-2 rounded-md text-sm font-medium" href="#">
+                <i class="fas fa-sign-in-alt mr-2"></i> Sign In
+            </button>
+        </div>
+
+        <div id="uploadModal" class="modal">
+            <div class="modal-content">
+                <div class="flex justify-between items-center mb-5">
+                    <h1 class="text-gray-300 text-lg font-semibold">Upload and Attach Files</h1>
+                    <span class="close" onclick="closeModal()">&times;</span>
+                </div>
+                <div>
+                    <div class="imageUpload">
+                        <input type="file" class="inp hide-input" onchange="getImageData(event)" />
+                        <button onclick="selectCoverPhoto()" class="selectImage">Select Cover Photo</button>
+                        <span class="filedata">No Cover Photo selected</span>
+                        <div class="progressBar">
+                            <div class="progress"></div>
+                        </div>
+                        <button onclick="uploadCoverPhoto()" class="upload">Upload</button>
+                        <span class="loading"></span>
+                        <img class="img" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="px-8 py-4">
         <section class="mb-8 relative">
             <div class="flex gap-3 overflow-x-auto properties-container">
                 <div class="bg-gray-800 rounded-lg overflow-hidden relative" style="min-width: 340px; height: 200px;">
