@@ -70,15 +70,10 @@ latestBtn.addEventListener('click', () => {
     latestBtn.classList.add('bg-black', 'text-white');
 });
 
-
-// Modals
-function openModal() {
-    document.getElementById("uploadModal").style.display = "block";
-}
-
-function closeModal() {
-    document.getElementById("uploadModal").style.display = "none";
-}
+// Upload Listing button navigate to the upload_listing.html
+const navigateToUploadPage = () => {
+    window.location.href = 'upload_listing.html';
+};
 
 // View Listing Item
 document.addEventListener("DOMContentLoaded", function () {
