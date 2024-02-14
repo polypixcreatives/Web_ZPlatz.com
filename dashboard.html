@@ -38,100 +38,6 @@
             .custom-size-listing:hover .slide-in-text {
                 transform: translateX(0);
             }
-
-            /* Upload Modal */
-            .modal {
-                display: none;
-                position: fixed;
-                z-index: 1;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                overflow: auto;
-                background-color: rgba(0,0,0,0.4);
-            }
-
-            .modal-content {
-                background-color: #202024;
-                color: white;
-                margin: 15% auto;
-                padding: 20px;
-                border-radius: 20px;
-                width: 80%;
-                max-width: 400px;
-                position: relative;
-            }
-
-            .close {
-                width: 30px;
-                height: 30px;
-                border-radius: 100%;
-                background-color: rgba(0, 0, 0, -0.1);
-                border: none;
-                color: white;
-                font-size: 20px;
-                line-height: 30px;
-                text-align: center;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-            }
-
-                .close:hover {
-                    background-color: rgba(0, 0, 0, 0.2);
-                }
-
-                .close:focus {
-                    outline: none;
-                }
-
-            .hide-input {
-                display: none;
-            }
-
-            .selectImage {
-                background-color: #0074E1;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 14px;
-                margin-bottom: 10px;
-                display: block;
-            }
-
-            .upload {
-                background-color: #0074E1;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 14px;
-                margin: 20px auto 0;
-                display: block;
-                text-align: center;
-                width: 100%;
-            }
-
-            .bar {
-                height: 50px;
-                width: 500px;
-                background: gray;
-                margin-bottom: 10px;
-            }
-
-            .progress {
-                background: linear-gradient(12deg, red, blue);
-                height: 25px;
-                width: 0%;
-            }
-
-            .uploadPercentage {
-                font-size: 25px;
-            }
-
         </style>
         <div class="flex items-center space-x-4 flex-grow">
             <div class="flex items-center">
@@ -163,34 +69,12 @@
             </div>
         </div>
         <div class="flex items-center space-x-4 ml-4">
-            <button class="relative hover:bg-gray-700 upload-listing-btn text-white px-4 py-2 rounded-md text-sm font-medium" onclick="openModal()">
+            <button class="relative hover:bg-gray-700 upload-listing-btn text-white px-4 py-2 rounded-md text-sm font-medium" onclick="navigateToUploadPage()">
                 <i class="fas fa-plus mr-2"></i> Upload Listing
             </button>
             <button class="relative sign-in-btn text-white px-4 py-2 rounded-md text-sm font-medium" href="#">
                 <i class="fas fa-sign-in-alt mr-2"></i> Sign In
             </button>
-        </div>
-
-        <div id="uploadModal" class="modal">
-            <div class="modal-content">
-                <div class="flex justify-between items-center mb-5">
-                    <h1 class="text-gray-300 text-lg font-semibold">Upload and Attach Files</h1>
-                    <span class="close" onclick="closeModal()">&times;</span>
-                </div>
-                <div>
-                    <div class="imageUpload">
-                        <input type="file" class="inp hide-input" onchange="getImageData(event)" />
-                        <button onclick="selectCoverPhoto()" class="selectImage">Select Cover Photo</button>
-                        <span class="filedata">No Cover Photo selected</span>
-                        <div class="progressBar">
-                            <div class="progress"></div>
-                        </div>
-                        <button onclick="uploadCoverPhoto()" class="upload">Upload</button>
-                        <span class="loading"></span>
-                        <img class="img" />
-                    </div>
-                </div>
-            </div>
         </div>
     </header>
 
