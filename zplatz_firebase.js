@@ -12,9 +12,10 @@ const app = firebase.initializeApp(firebaseConfig);
 
 const storage = firebase.storage();
 
+// Upload Cover Photo
+
 const inp = document.querySelector(".inp");
 const progressbar = document.querySelector(".progress");
-const img = document.querySelector(".img");
 const fileData = document.querySelector(".filedata");
 const loading = document.querySelector(".loading");
 let file;
@@ -109,4 +110,66 @@ const clearInputFields = () => {
 
     // Reset progress text percentage to '0%'
     progressBar.innerHTML = '';
+};
+
+// Upload SPLAT File
+const inpSplat = document.querySelector(".inp-splat");
+const progressbarSplat = document.querySelector(".progress-splat");
+const fileDataSplat = document.querySelector(".filedata-splat");
+const loadingSplat = document.querySelector(".loading-splat");
+let fileSplat;
+let fileNameSplat;
+let progressSplat;
+let isLoadingSplat = false;
+let uploadedFileNameSplat;
+
+const selectSplatfile = () => {
+    inpSplat.click();
+};
+
+const getSplatData = (e) => {
+    fileSplat = e.target.files[0];
+    fileNameSplat = fileSplat.name;
+    if (fileNameSplat) {
+        fileDataSplat.style.display = "block";
+    }
+    fileDataSplat.innerHTML = fileNameSplat;
+    console.log(fileSplat, fileNameSplat);
+};
+
+// Upload the SPLAT file
+const uploadSplatFile = () => {
+    loadingSplat.style.display = "block";
+    const storageRefSplat = storage.ref().child("SPLAT Files");
+    const folderRefSplat = storageRefSplat.child(fileNameSplat);
+    const uploadtaskSplat = folderRefSplat.put(fileSplat);
+    uploadtaskSplat.on(
+        "state_changed",
+        (snapshot) => {
+            console.log("Snapshot", snapshot.ref.name);
+            progressSplat = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            progressSplat = Math.round(progressSplat);
+            progressbarSplat.style.width = progressSplat + "%";
+            progressbarSplat.innerHTML = progressSplat + "%";
+            uploadedFileNameSplat = snapshot.ref.name;
+        },
+        (error) => {
+            console.log(error);
+        },
+        () => {
+            storage
+                .ref("SPLAT Files")
+                .child(uploadedFileNameSplat)
+                .getDownloadURL()
+                .then((url) => {
+                    console.log("URL", url);
+                    if (!url) {
+                        // Handle if no URL is returned
+                    } else {
+                        // Handle if URL is returned
+                    }
+                });
+            console.log("File Uploaded Successfully");
+        }
+    );
 };

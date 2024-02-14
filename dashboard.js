@@ -45,7 +45,7 @@ function scrollPlaces(direction) {
     }
 }
 
-// Buttons
+// Navigation Bar Buttons
 const communityBtn = document.getElementById('communityBtn');
 const trendingBtn = document.getElementById('trendingBtn');
 const latestBtn = document.getElementById('latestBtn');

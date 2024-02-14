@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta hhtp-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>
+        Upload Listing - ZPlatz.com
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="images/Zplatzlogo.png">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+</head>
+<body class="bg-black text-white">
+    <style>
+
+
+        .hide-input {
+            display: none;
+        }
+
+        .selectImage{
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: block;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 6px;
+            margin-bottom: 10px;
+            width: 50%;
+        }
+
+        .selectSplat {
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: block;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 6px;
+            margin-bottom: 10px;
+            width: 50%;
+        }
+
+        .upload {
+            background-color: #0074E1;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 20px auto 0;
+            display: block;
+            text-align: center;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .progress {
+            background: linear-gradient(12deg, red, blue);
+            height: 25px;
+            width: 0%;
+        }
+
+        .progress-splat {
+            background: linear-gradient(12deg, red, blue);
+            height: 25px;
+            width: 0%;
+        }
+
+
+    </style>
+
+    <header class="px-8 py-4 flex justify-between items-center">
+        <!-- Logo on the left -->
+        <div>
+            <img alt="Company logo" class="h-10" src="images/Zplatzlogo.png" />
+        </div>
+
+        <!-- Search in the center of the screen -->
+        <div class="flex items-center justify-center flex-grow">
+            <div class="relative">
+                <div class="absolute inset-y-0 left-2 flex items-center pl-3 pointer-events-none">
+                    <i class="fas fa-search text-gray-500"></i>
+                </div>
+                <input class="hover:border-gray-400 transition duration-500 h-10 pl-11 pr-10 rounded-full text-sm border border-gray-500 border-solid border-2 focus:outline-none bg-transparent w-72 md:w-96" placeholder="Search across your listings" type="text" />
+            </div>
+        </div>
+
+        <!-- Profile Picture on the right -->
+        <div class="flex items-center">
+            <img src="assets/images/users/Punay, Ella Venice C 2x2 ID Picture.png" alt="Profile Picture" class="h-10 w-10 rounded-full">
+        </div>
+    </header>
+
+    <main>
+        <style>
+            /* Slide in Text for 'Your Other Listing' */
+            .slide-in-text {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .custom-size-listing:hover .slide-in-text {
+                transform: translateX(0);
+            }
+        </style>
+        <div class="flex-1 p-8">
+            <div class="grid grid-cols-10 gap-8">
+                <!-- Left Column -->
+                <div class="col-span-7">
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-8">
+                            <div class="text-2xl font-semibold">
+                                Listing details
+                            </div>
+                            <div>
+                                <button class="text-blue-600 mr-4">
+                                    UNDO CHANGES
+                                </button>
+                                <button class="bg-blue-600 px-4 py-2 rounded">
+                                    SAVE
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block mb-2">
+                            Property Name (required)
+                        </label>
+                        <input class="w-full bg-gray-800 p-2 rounded" type="text" />
+                    </div>
+                    <div class="mb-6">
+                        <!-- Address Section -->
+                        <label class="block mb-2">
+                            Address
+                        </label>
+                        <div class="mb-6 grid grid-cols-3 gap-4">
+                            <!-- Municipality/City Dropdown -->
+                            <div class="relative">
+                                <label class="block mb-2">Municipality/City</label>
+                                <select class="w-full bg-gray-800 p-2 rounded appearance-none">
+                                    <option value="" disabled selected>Select Municipality/City</option>
+                                    <option value="Consolacion">Consolacion</option>
+                                    <option value="Minglanilla">Minglanilla</option>
+                                    <option value="Talisay City">Talisay City</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 top-8 flex items-center px-2 text-gray-300">
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                            </div>
+                            <!-- Province Dropdown -->
+                            <div class="relative col-span-1">
+                                <label class="block mb-2">Province</label>
+                                <select class="w-full bg-gray-800 p-2 rounded appearance-none">
+                                    <option value="" disabled selected>Select Province</option>
+                                    <option value="Bohol">Bohol</option>
+                                    <option value="Boracay">Boracay</option>
+                                    <option value="Cebu">Cebu</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 top-8 flex items-center px-2 text-gray-300">
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                            </div>
+                            <!-- Country Dropdown -->
+                            <div class="relative col-span-1">
+                                <label class="block mb-2">Country</label>
+                                <select class="w-full bg-gray-800 p-2 rounded appearance-none">
+                                    <option value="" disabled selected>Select Country</option>
+                                    <option value="PH">Philippines</option>
+                                    <option value="US">United States</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="UK">United Kingdom</option>
+                                    <option value="JP">Japan</option>
+                                    <option value="AU">Australia</option>
+                                    <option value="DE">Germany</option>
+                                    <option value="FR">France</option>
+                                    <option value="KR">South Korea</option>
+                                    <option value="CN">China</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 top-8 flex items-center px-2 text-gray-300">
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <input type="checkbox" id="customAddressCheckbox">
+                        <label for="customAddressCheckbox">Check the box for Custom Address</label>
+                    </div>
+
+                    <!-- Input field for custom address -->
+                    <div class="mb-6" id="customAddressInput" style="display: none;">
+                        <label class="block mb-2">
+                            Custom Address
+                        </label>
+                        <input class="w-full bg-gray-800 p-2 rounded" type="text" placeholder="Enter your custom address">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block mb-2">
+                            Description
+                        </label>
+                        <textarea class="w-full bg-gray-800 p-2 rounded h-32"></textarea>
+                    </div>
+                    <div class="mb-6 grid grid-cols-2 gap-4">
+                        <!-- First column -->
+                        <div>
+                            <label class="block">
+                                Cover Photo
+                            </label>
+                            <label class="text-xs text-gray-300">
+                                Select or upload a cover photo that shows what's in your listing.
+                            </label>
+                            <div class="mt-2">
+                                <div class="imageUpload">
+                                    <input type="file" class="inp hide-input" onchange="getImageData(event)" />
+                                    <button onclick="selectCoverPhoto()" class="selectImage">
+                                        <div class="flex items-center justify-center">
+                                            <i class="fas fa-file-upload text-gray-300 text-4xl"></i>
+                                        </div>
+                                        Upload Cover Photo
+                                    </button>
+                                    <span class="filedata">No Cover Photo selected</span>
+                                    <div class="progressBar">
+                                        <div class="progress"></div>
+                                    </div>
+                                    <span class="loading"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Second column -->
+                        <div>
+                            <label class="block">
+                                SPLAT file
+                            </label>
+                            <label class="text-xs text-gray-300">
+                                Select or upload a SPLAT file that shows your listing.
+                            </label>
+                            <div class="mt-2">
+                                <div class="imageUpload">
+                                    <input type="file" class="inp-splat hide-input" onchange="getSplatData(event)" />
+                                    <button onclick="selectSplatfile()" class="selectSplat">
+                                        <div class="flex items-center justify-center">
+                                            <i class="fas fa-file-upload text-gray-300 text-4xl"></i>
+                                        </div>
+                                        Upload SPLAT file
+                                    </button>
+                                    <span class="filedata-splat">No SPLAT file selected</span>
+                                    <div class="progressBar">
+                                        <div class="progress-splat"></div>
+                                    </div>
+                                    <span class="loading-splat"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button onclick="uploadListingFiles()" class="upload">Upload</button>
+                    </div>
+                </div>
+                <!-- Right Column -->
+                <div class="col-span-3">
+                    <div class="text-2xl font-semibold mb-8">
+                        Your Other Listings
+                    </div>
+                    <div class="relative mb-6">
+                        <div class="bg-gray-800 rounded-lg overflow-hidden relative h-56">
+                            <img alt="Placeholder image" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/places-boracay.jpg" />
+                            <div class="p-4 absolute bottom-0 left-0 w-full">
+                                <h3 class="text-lg font-semibold text-white">
+                                    Puka Beach Resort
+                                </h3>
+                                <p class="text-white text-sm flex items-center">
+                                    <svg class="w-4 h-4 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
+                                    </svg>
+                                    Bohol, Philippines
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative mb-6">
+                        <div class="bg-gray-800 rounded-lg overflow-hidden relative h-56">
+                            <img alt="Placeholder image" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/places-bohol.jpg" />
+                            <div class="p-4 absolute bottom-0 left-0 w-full">
+                                <h3 class="text-lg font-semibold text-white">
+                                    Chocolate Hills
+                                </h3>
+                                <p class="text-white text-sm flex items-center">
+                                    <svg class="w-4 h-4 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
+                                    </svg>
+                                    Carmen, Bohol, Philippines
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative mb-6">
+                        <div class="bg-gray-800 rounded-lg overflow-hidden relative h-56">
+                            <img alt="Placeholder image" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/places-cebu.jpg" />
+                            <div class="p-4 absolute bottom-0 left-0 w-full">
+                                <h3 class="text-lg font-semibold text-white">
+                                    Basilica Minore del Sto. Nino de Cebu
+                                </h3>
+                                <p class="text-white text-sm flex items-center">
+                                    <svg class="w-4 h-4 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
+                                    </svg>
+                                    Cebu City, Cebu, Philippines
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative mb-6">
+                        <div class="bg-gray-800 rounded-lg overflow-hidden relative h-56">
+                            <img alt="Placeholder image" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/property-4.jpg" />
+                            <div class="p-4 absolute bottom-0 left-0 w-full">
+                                <h3 class="text-lg font-semibold text-white">
+                                    Corona del Mar Homes
+                                </h3>
+                                <p class="text-white text-sm flex items-center">
+                                    <svg class="w-4 h-4 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
+                                    </svg>
+                                    Talisay City, Cebu, Philippines
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="zplatz_firebase.js"></script>
+    <script src="upload_listing.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
