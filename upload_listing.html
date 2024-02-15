@@ -113,15 +113,70 @@
 
     <main>
         <style>
-            /* Slide in Text for 'Your Other Listing' */
-            .slide-in-text {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
+            /* Back to Dashboard */
+            .back-dashboard-btn {
+                display: flex;
+                align-items: center;
+                transition: all 0.5s ease;
+                position: relative;
             }
 
-            .custom-size-listing:hover .slide-in-text {
-                transform: translateX(0);
+                .back-dashboard-btn:hover {
+                    padding-left: 30px;
+                    padding-right: 25px;
+                }
+
+                    .back-dashboard-btn:hover .text-2xl {
+                        transform: translateX(-5px);
+                    }
+
+                    .back-dashboard-btn:hover:before {
+                        content: "";
+                        position: absolute;
+                    }
+
+                    .back-dashboard-btn:hover i {
+                        transform: translateX(-4px);
+                    }
+
+                    .back-dashboard-btn:hover .hidden {
+                        display: inline-block;
+                    }
+            
+                    /* Dropdown list */
+            .custom-dropdown {
+                position: relative;
             }
+
+            .dropdown-list {
+                position: absolute;
+                top: calc(100% + 5px);
+                left: 0;
+                z-index: 10;
+                background-color: #374151;
+                border-radius: 0.5rem;
+                padding: 0.5rem;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                border: 1px solid #4b5563;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: none;
+                width: 100%;
+                max-height: 300px;
+                overflow-y: auto;
+            }
+
+                .dropdown-list li {
+                    color: #d1d5db;
+                    padding: 0.5rem;
+                    cursor: pointer;
+                }
+
+                    .dropdown-list li:hover {
+                        background-color: #4b5563;
+                    }
+
         </style>
         <div class="flex-1 p-8">
             <div class="grid grid-cols-10 gap-8">
@@ -129,14 +184,18 @@
                 <div class="col-span-7">
                     <div class="mb-6">
                         <div class="flex justify-between items-center mb-8">
-                            <div class="text-2xl font-semibold">
-                                Listing details
+                            <div class="flex items-center">
+                                <button class="back-dashboard-btn bg-blue-600 px-3 py-1 rounded" onclick="backToDashboard()">
+                                    <i class="fas fa-chevron-left mr-1"></i>
+                                    <span class="hidden">Back to Dashboard</span>
+                                </button>
+                                <label class="text-2xl font-semibold ml-2">Listing details</label>
                             </div>
                             <div>
-                                <button class="text-blue-600 mr-4">
+                                <button class="text-blue-600 mr-2">
                                     UNDO CHANGES
                                 </button>
-                                <button class="bg-blue-600 px-4 py-2 rounded">
+                                <button class="bg-blue-600 px-3 py-1 rounded">
                                     SAVE
                                 </button>
                             </div>
@@ -155,49 +214,57 @@
                         </label>
                         <div class="mb-6 grid grid-cols-3 gap-4">
                             <!-- Municipality/City Dropdown -->
-                            <div class="relative">
+                            <div class="relative col-span-1 municipality-dropdown">
                                 <label class="block mb-2">Municipality/City</label>
-                                <select class="w-full bg-gray-800 p-2 rounded appearance-none">
-                                    <option value="" disabled selected>Select Municipality/City</option>
-                                    <option value="Consolacion">Consolacion</option>
-                                    <option value="Minglanilla">Minglanilla</option>
-                                    <option value="Talisay City">Talisay City</option>
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 top-8 flex items-center px-2 text-gray-300">
-                                    <i class="fas fa-chevron-down"></i>
+                                <div class="custom-dropdown">
+                                    <input type="text" class="w-full bg-gray-800 p-2 rounded appearance-none" placeholder="Select Municipality/City" oninput="filterDropdown(event)">
+                                    <ul class="dropdown-list">
+                                        <li>Consolacion</li>
+                                        <li>Minglanilla</li>
+                                        <li>Talisay City</li>
+                                    </ul>
+                                    <div class="pointer-events-none absolute inset-y-0 right-2 top-1 flex items-center px-2 text-gray-300">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
                                 </div>
                             </div>
+
                             <!-- Province Dropdown -->
-                            <div class="relative col-span-1">
+                            <div class="relative col-span-1 province-dropdown">
                                 <label class="block mb-2">Province</label>
-                                <select class="w-full bg-gray-800 p-2 rounded appearance-none">
-                                    <option value="" disabled selected>Select Province</option>
-                                    <option value="Bohol">Bohol</option>
-                                    <option value="Boracay">Boracay</option>
-                                    <option value="Cebu">Cebu</option>
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 top-8 flex items-center px-2 text-gray-300">
-                                    <i class="fas fa-chevron-down"></i>
+                                <div class="custom-dropdown">
+                                    <input type="text" class="w-full bg-gray-800 p-2 rounded appearance-none" placeholder="Select Province" oninput="filterDropdown(event)">
+                                    <ul class="dropdown-list">
+                                        <li>Bohol</li>
+                                        <li>Boracay</li>
+                                        <li>Cebu</li>
+                                    </ul>
+                                    <div class="pointer-events-none absolute inset-y-0 right-2 top-1 flex items-center px-2 text-gray-300">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
                                 </div>
                             </div>
+
                             <!-- Country Dropdown -->
-                            <div class="relative col-span-1">
+                            <div class="relative col-span-1 country-dropdown">
                                 <label class="block mb-2">Country</label>
-                                <select class="w-full bg-gray-800 p-2 rounded appearance-none">
-                                    <option value="" disabled selected>Select Country</option>
-                                    <option value="PH">Philippines</option>
-                                    <option value="US">United States</option>
-                                    <option value="CA">Canada</option>
-                                    <option value="UK">United Kingdom</option>
-                                    <option value="JP">Japan</option>
-                                    <option value="AU">Australia</option>
-                                    <option value="DE">Germany</option>
-                                    <option value="FR">France</option>
-                                    <option value="KR">South Korea</option>
-                                    <option value="CN">China</option>
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 top-8 flex items-center px-2 text-gray-300">
-                                    <i class="fas fa-chevron-down"></i>
+                                <div class="custom-dropdown">
+                                    <input type="text" class="w-full bg-gray-800 p-2 rounded appearance-none" placeholder="Select Country" oninput="filterDropdown(event)">
+                                    <ul class="dropdown-list">
+                                        <li>Philippines</li>
+                                        <li>United States</li>
+                                        <li>Canada</li>
+                                        <li>United Kingdom</li>
+                                        <li>Japan</li>
+                                        <li>Australia</li>
+                                        <li>Germany</li>
+                                        <li>France</li>
+                                        <li>South Korea</li>
+                                        <li>China</li>
+                                    </ul>
+                                    <div class="pointer-events-none absolute inset-y-0 right-2 top-1 flex items-center px-2 text-gray-300">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
