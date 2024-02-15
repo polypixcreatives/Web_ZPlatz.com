@@ -2,6 +2,8 @@
 const backToDashboard = () => {
     window.location.href = 'dashboard.html';
 };
+
+//Dropdown button and list
 document.addEventListener('DOMContentLoaded', function () {
     const municipalityInput = document.querySelector('.municipality-dropdown input');
     const municipalityDropdownList = document.querySelector('.municipality-dropdown .dropdown-list');
@@ -86,15 +88,15 @@ function filterDropdown(event) {
     }
 }
 
-
+// Custom Address
 const customAddressCheckbox = document.getElementById('customAddressCheckbox');
 const customAddressInput = document.getElementById('customAddressInput');
 
 customAddressCheckbox.addEventListener('change', () => {
     if (customAddressCheckbox.checked) {
-    customAddressInput.style.display = 'block';
+        customAddressInput.style.display = 'block';
     } else {
-    customAddressInput.style.display = 'none';
+        customAddressInput.style.display = 'none';
     }
 });
 

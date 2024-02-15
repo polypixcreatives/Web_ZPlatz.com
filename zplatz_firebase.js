@@ -9,11 +9,10 @@ const firebaseConfig = {
 };
 
 const app = firebase.initializeApp(firebaseConfig);
-
 const storage = firebase.storage();
+const db = firebase.firestore();
 
 // Upload Cover Photo
-
 const inp = document.querySelector(".inp");
 const progressbar = document.querySelector(".progress");
 const fileData = document.querySelector(".filedata");
@@ -21,7 +20,6 @@ const loading = document.querySelector(".loading");
 let file;
 let fileName;
 let progress;
-let isLoading = false;
 let uploadedFileName;
 
 const selectCoverPhoto = () => {
@@ -38,9 +36,25 @@ const getImageData = (e) => {
     console.log(file, fileName);
 };
 
+// Save URL to Firestore
+async function saveURLtoFirestore(url, fileName) {
+    try {
+        const collectionRef = db.collection("cover_photos");
+        await collectionRef.add({
+            ImageName: fileName,
+            ImageURL: url
+        });
+        console.log("URL saved to Firestore successfully:", url);
+    } catch (error) {
+        console.error("Error saving URL to Firestore:", error);
+    }
+}
+
 // Upload the image to the listing
 const uploadCoverPhoto = () => {
+    console.log("Uploading cover photo...");
     loading.style.display = "block";
+
     const storageRef = storage.ref().child("Cover Photos");
     const folderRef = storageRef.child(fileName);
     const uploadtask = folderRef.put(file);
@@ -55,41 +69,37 @@ const uploadCoverPhoto = () => {
             uploadedFileName = snapshot.ref.name;
         },
         (error) => {
-            console.log(error);
+            console.error("Error uploading file:", error);
         },
-        () => {
-            storage
-                .ref("Cover Photos")
-                .child(uploadedFileName)
-                .getDownloadURL()
-                .then((url) => {
-                    console.log("URL", url);
-                    if (!url) {
-                        img.style.display = "none";
-                    } else {
-                        img.style.display = "block";
-                        loading.style.display = "none";
+        async () => {
+            try {
+                const downloadURL = await storageRef.child(uploadedFileName).getDownloadURL();
+                console.log("URL", downloadURL);
+                if (!downloadURL) {
+                    // Handle no URL case
+                } else {
+                    /*loading.style.display = "none";
 
-                        // Insert the image into the listings
-                        var listItem = document.createElement('li');
-                        listItem.className = 'bg-gray-700 rounded-lg overflow-hidden custom-size-listing';
+                    // Insert the image into the listings
+                    var listItem = document.createElement('li');
+                    listItem.className = 'bg-gray-700 rounded-lg overflow-hidden custom-size-listing';
 
-                        var imgElement = document.createElement('img');
-                        imgElement.className = 'w-full h-full object-cover';
-                        imgElement.src = url;
-                        imgElement.alt = 'Uploaded Property Image';
+                    var imgElement = document.createElement('img');
+                    imgElement.className = 'w-full h-full object-cover';
+                    imgElement.src = downloadURL;
+                    imgElement.alt = 'Uploaded Property Image';
 
-                        listItem.appendChild(imgElement);
+                    listItem.appendChild(imgElement);
 
-                        var listings = document.querySelector('.flex.flex-wrap.gap-1');
-                        listings.insertBefore(listItem, listings.firstChild);
+                    var listings = document.querySelector('.flex.flex-wrap.gap-1');
+                    listings.insertBefore(listItem, listings.firstChild);*/
 
-                        closeModal();
-                        clearInputFields();
-                        
-                    }
-                });
-            console.log("File Uploaded Successfully");
+                    // Save URL to Firestore
+                    await saveURLtoFirestore(downloadURL, uploadedFileName); // Pass the fileName to the function
+                }
+            } catch (error) {
+                console.error("Error uploading file:", error);
+            }
         }
     );
 };
