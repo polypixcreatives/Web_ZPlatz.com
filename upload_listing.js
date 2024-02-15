@@ -2,6 +2,8 @@
 const backToDashboard = () => {
     window.location.href = 'dashboard.html';
 };
+
+//Dropdown button and list
 document.addEventListener('DOMContentLoaded', function () {
     const municipalityInput = document.querySelector('.municipality-dropdown input');
     const municipalityDropdownList = document.querySelector('.municipality-dropdown .dropdown-list');
@@ -86,7 +88,7 @@ function filterDropdown(event) {
     }
 }
 
-
+// Custom Address
 const customAddressCheckbox = document.getElementById('customAddressCheckbox');
 const customAddressInput = document.getElementById('customAddressInput');
 
