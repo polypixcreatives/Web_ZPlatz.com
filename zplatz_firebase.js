@@ -94,24 +94,6 @@ const uploadCoverPhoto = () => {
     );
 };
 
-// Clearing Input Fields
-const clearInputFields = () => {
-    // Clear file input value
-    const fileInput = document.querySelector('.inp');
-    fileInput.value = '';
-
-    // Reset file data display
-    const fileData = document.querySelector('.filedata');
-    fileData.textContent = '';
-
-    // Reset progress bar
-    const progressBar = document.querySelector('.progress');
-    progressBar.style.width = '0%';
-
-    // Reset progress text percentage to '0%'
-    progressBar.innerHTML = '';
-};
-
 // Upload SPLAT File
 const inpSplat = document.querySelector(".inp-splat");
 const progressbarSplat = document.querySelector(".progress-splat");
@@ -166,10 +148,24 @@ const uploadSplatFile = () => {
                     if (!url) {
                         // Handle if no URL is returned
                     } else {
-                        // Handle if URL is returned
+                        // Call the function to display the uploaded SPLAT file
+                        displayUploadedSplatFile(url);
                     }
                 });
             console.log("File Uploaded Successfully");
         }
     );
+};
+
+// Function to display the uploaded SPLAT file
+const displayUploadedSplatFile = (url) => {
+    // Create an anchor element
+    const downloadLink = document.createElement('a');
+    downloadLink.href = url;
+    downloadLink.textContent = 'Download SPLAT File';
+    downloadLink.setAttribute('download', fileNameSplat);
+
+    // Append the anchor element to the container
+    const container = document.getElementById('canvasContainer');
+    container.appendChild(downloadLink);
 };
