@@ -50,6 +50,8 @@ const communityBtn = document.getElementById('communityBtn');
 const trendingBtn = document.getElementById('trendingBtn');
 const latestBtn = document.getElementById('latestBtn');
 
+communityBtn.classList.add('bg-black', 'text-white');
+
 communityBtn.addEventListener('click', () => {
     communityBtn.classList.add('bg-black', 'text-white');
     trendingBtn.classList.remove('bg-black', 'text-white');

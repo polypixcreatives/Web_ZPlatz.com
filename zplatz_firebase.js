@@ -42,7 +42,8 @@ async function saveURLtoFirestore(url, fileName) {
         const collectionRef = db.collection("cover_photos");
         await collectionRef.add({
             ImageName: fileName,
-            ImageURL: url
+            ImageURL: url,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
         console.log("URL saved to Firestore successfully:", url);
     } catch (error) {
@@ -78,22 +79,6 @@ const uploadCoverPhoto = () => {
                 if (!downloadURL) {
                     // Handle no URL case
                 } else {
-                    /*loading.style.display = "none";
-
-                    // Insert the image into the listings
-                    var listItem = document.createElement('li');
-                    listItem.className = 'bg-gray-700 rounded-lg overflow-hidden custom-size-listing';
-
-                    var imgElement = document.createElement('img');
-                    imgElement.className = 'w-full h-full object-cover';
-                    imgElement.src = downloadURL;
-                    imgElement.alt = 'Uploaded Property Image';
-
-                    listItem.appendChild(imgElement);
-
-                    var listings = document.querySelector('.flex.flex-wrap.gap-1');
-                    listings.insertBefore(listItem, listings.firstChild);*/
-
                     // Save URL to Firestore
                     await saveURLtoFirestore(downloadURL, uploadedFileName); // Pass the fileName to the function
                 }
@@ -103,6 +88,56 @@ const uploadCoverPhoto = () => {
         }
     );
 };
+
+// Function to get cover photos from Firestore
+const getCoverPhotosFromFirestore = async () => {
+    try {
+        const coverPhotosList = document.querySelector('.flex.flex-wrap.gap-1');
+
+        // Get snapshot of the cover_photos collection
+        const snapshot = await db.collection('cover_photos').orderBy('timestamp', 'asc').get();
+
+        // Iterate over each document in the collection
+        snapshot.forEach(doc => {
+            // Get data from each document
+            const data = doc.data();
+
+            // Create list item for each cover photo
+            const listItem = document.createElement('li');
+            listItem.className = 'relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing';
+
+            const imgElement = document.createElement('img');
+            imgElement.className = 'w-full h-full object-cover';
+            imgElement.src = data.ImageURL;
+            imgElement.alt = 'Uploaded Cover Photo';
+
+            const textContainer = document.createElement('div');
+            textContainer.className = 'absolute bottom-0 left-0 w-full p-1 slide-in-text';
+
+            const heading = document.createElement('h3');
+            heading.className = 'text-lg font-semibold text-white ml-1';
+            heading.textContent = data.ImageName;
+
+            const paragraph = document.createElement('p');
+            paragraph.className = 'text-white text-sm flex items-center ml-1';
+            paragraph.textContent = 'Location Info'; // Add location info if available
+
+            textContainer.appendChild(heading);
+            textContainer.appendChild(paragraph);
+            listItem.appendChild(imgElement);
+            listItem.appendChild(textContainer);
+
+            // Append list item before the first listing
+            const firstListing = coverPhotosList.firstChild;
+            coverPhotosList.insertBefore(listItem, firstListing);
+        });
+    } catch (error) {
+        console.error('Error fetching cover photos from Firestore:', error);
+    }
+};
+
+// Call the function to get cover photos when the page loads
+document.addEventListener('DOMContentLoaded', getCoverPhotosFromFirestore);
 
 // Upload SPLAT File
 const inpSplat = document.querySelector(".inp-splat");
