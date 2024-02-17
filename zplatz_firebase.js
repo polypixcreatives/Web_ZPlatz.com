@@ -37,12 +37,13 @@ const getImageData = (e) => {
 };
 
 // Save URL to Firestore
-async function saveURLtoFirestore(url, fileName) {
+async function saveURLtoFirestore(url, fileName, customAddress) {
     try {
         const collectionRef = db.collection("cover_photos");
         await collectionRef.add({
             ImageName: fileName,
             ImageURL: url,
+            CustomAddress: customAddress,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
         console.log("URL saved to Firestore successfully:", url);
@@ -55,6 +56,9 @@ async function saveURLtoFirestore(url, fileName) {
 const uploadCoverPhoto = () => {
     console.log("Uploading cover photo...");
     loading.style.display = "block";
+
+    const customAddressInput = document.getElementById('customAddressInput').querySelector('input');
+    const customAddress = customAddressInput.value; // Get custom address value
 
     const storageRef = storage.ref().child("Cover Photos");
     const folderRef = storageRef.child(fileName);
@@ -80,7 +84,7 @@ const uploadCoverPhoto = () => {
                     // Handle no URL case
                 } else {
                     // Save URL to Firestore
-                    await saveURLtoFirestore(downloadURL, uploadedFileName); // Pass the fileName to the function
+                    await saveURLtoFirestore(downloadURL, uploadedFileName, customAddress); // Pass the fileName to the function
                 }
             } catch (error) {
                 console.error("Error uploading file:", error);
@@ -120,7 +124,7 @@ const getCoverPhotosFromFirestore = async () => {
 
             const paragraph = document.createElement('p');
             paragraph.className = 'text-white text-sm flex items-center ml-1';
-            paragraph.textContent = 'Location Info'; // Add location info if available
+            paragraph.textContent = `${data.CustomAddress}`; //
 
             textContainer.appendChild(heading);
             textContainer.appendChild(paragraph);
