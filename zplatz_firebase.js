@@ -172,16 +172,41 @@ const getSplatData = (e) => {
     console.log(fileSplat, fileNameSplat);
 };
 
-// Upload the SPLAT file
+// Save URL to Firestore
+async function saveSplatURLtoFirestore(url, fileNameSplat, propertyName, customAddress) {
+    try {
+        const collectionRef = db.collection("splat_files");
+        await collectionRef.add({
+            'File Name': fileNameSplat,
+            'File URL': url,
+            'Timestamp': firebase.firestore.FieldValue.serverTimestamp(),
+            'Property Name': propertyName,
+            'Custom Address': customAddress
+        });
+        console.log("Splat file URL saved to Firestore successfully:", url);
+    } catch (error) {
+        console.error("Error saving splat file URL to Firestore:", error);
+    }
+}
+
+// Upload the splat file
 const uploadSplatFile = () => {
+    console.log("Uploading splat file...");
     loadingSplat.style.display = "block";
+
+    const customAddressInput = document.getElementById('customAddressInput').querySelector('input');
+    const customAddress = customAddressInput.value; // Get custom address value
+
+    const propertyNameInput = document.getElementById('propertyNameInput');
+    const propertyName = propertyNameInput.value;
+
     const storageRefSplat = storage.ref().child("SPLAT Files");
     const folderRefSplat = storageRefSplat.child(fileNameSplat);
     const uploadtaskSplat = folderRefSplat.put(fileSplat);
     uploadtaskSplat.on(
         "state_changed",
         (snapshot) => {
-            console.log("Snapshot", snapshot.ref.name);
+            console.log("Splat file Snapshot", snapshot.ref.name);
             progressSplat = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             progressSplat = Math.round(progressSplat);
             progressbarSplat.style.width = progressSplat + "%";
@@ -189,28 +214,26 @@ const uploadSplatFile = () => {
             uploadedFileNameSplat = snapshot.ref.name;
         },
         (error) => {
-            console.log(error);
+            console.error("Error uploading splat file:", error);
         },
-        () => {
-            storage
-                .ref("SPLAT Files")
-                .child(uploadedFileNameSplat)
-                .getDownloadURL()
-                .then((url) => {
-                    console.log("URL", url);
-                    if (!url) {
-                        // Handle if no URL is returned
-                    } else {
-                        // Call the function to display the uploaded SPLAT file
-                        displayUploadedSplatFile(url);
-                    }
-                });
-            console.log("File Uploaded Successfully");
+        async () => {
+            try {
+                const downloadSplatURL = await storageRefSplat.child(uploadedFileNameSplat).getDownloadURL();
+                console.log("Splat file URL", downloadSplatURL);
+                if (!downloadSplatURL) {
+                    // Handle no URL case
+                } else {
+                    // Save URL to Firestore
+                    await saveSplatURLtoFirestore(downloadSplatURL, uploadedFileNameSplat, propertyName, customAddress);
+                }
+            } catch (error) {
+                console.error("Error uploading splat file:", error);
+            }
         }
     );
 };
 
-// Function to display the uploaded SPLAT file
+/*// Function to display the uploaded SPLAT file
 const displayUploadedSplatFile = (url) => {
     // Create an anchor element
     const downloadLink = document.createElement('a');
@@ -221,4 +244,4 @@ const displayUploadedSplatFile = (url) => {
     // Append the anchor element to the container
     const container = document.getElementById('canvasContainer');
     container.appendChild(downloadLink);
-};
+};*/
