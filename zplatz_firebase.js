@@ -37,12 +37,15 @@ const getImageData = (e) => {
 };
 
 // Save URL to Firestore
-async function saveURLtoFirestore(url, fileName) {
+async function saveURLtoFirestore(url, fileName, propertyName, customAddress) {
     try {
         const collectionRef = db.collection("cover_photos");
         await collectionRef.add({
-            ImageName: fileName,
-            ImageURL: url
+            'Image Name': fileName,
+            'Image URL': url,
+            'Timestamp': firebase.firestore.FieldValue.serverTimestamp(),
+            'Property Name': propertyName,
+            'Custom Address': customAddress
         });
         console.log("URL saved to Firestore successfully:", url);
     } catch (error) {
@@ -54,6 +57,12 @@ async function saveURLtoFirestore(url, fileName) {
 const uploadCoverPhoto = () => {
     console.log("Uploading cover photo...");
     loading.style.display = "block";
+
+    const customAddressInput = document.getElementById('customAddressInput').querySelector('input');
+    const customAddress = customAddressInput.value; 
+
+    const propertyNameInput = document.getElementById('propertyNameInput');
+    const propertyName = propertyNameInput.value;
 
     const storageRef = storage.ref().child("Cover Photos");
     const folderRef = storageRef.child(fileName);
@@ -78,24 +87,8 @@ const uploadCoverPhoto = () => {
                 if (!downloadURL) {
                     // Handle no URL case
                 } else {
-                    /*loading.style.display = "none";
-
-                    // Insert the image into the listings
-                    var listItem = document.createElement('li');
-                    listItem.className = 'bg-gray-700 rounded-lg overflow-hidden custom-size-listing';
-
-                    var imgElement = document.createElement('img');
-                    imgElement.className = 'w-full h-full object-cover';
-                    imgElement.src = downloadURL;
-                    imgElement.alt = 'Uploaded Property Image';
-
-                    listItem.appendChild(imgElement);
-
-                    var listings = document.querySelector('.flex.flex-wrap.gap-1');
-                    listings.insertBefore(listItem, listings.firstChild);*/
-
                     // Save URL to Firestore
-                    await saveURLtoFirestore(downloadURL, uploadedFileName); // Pass the fileName to the function
+                    await saveURLtoFirestore(downloadURL, uploadedFileName, propertyName, customAddress);
                 }
             } catch (error) {
                 console.error("Error uploading file:", error);
@@ -103,6 +96,56 @@ const uploadCoverPhoto = () => {
         }
     );
 };
+
+// Function to get cover photos from Firestore
+const getCoverPhotosFromFirestore = async () => {
+    try {
+        const coverPhotosList = document.querySelector('.flex.flex-wrap.gap-1');
+
+        // Get snapshot of the cover_photos collection
+        const snapshot = await db.collection('cover_photos').orderBy('Timestamp', 'asc').get();
+
+        // Iterate over each document in the collection
+        snapshot.forEach(doc => {
+            // Get data from each document
+            const data = doc.data();
+
+            // Create list item for each cover photo
+            const listItem = document.createElement('li');
+            listItem.className = 'relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing';
+
+            const imgElement = document.createElement('img');
+            imgElement.className = 'w-full h-full object-cover';
+            imgElement.src = data['Image URL']; 
+            imgElement.alt = 'Uploaded Cover Photo';
+
+            const textContainer = document.createElement('div');
+            textContainer.className = 'absolute bottom-0 left-0 w-full p-1 slide-in-text';
+
+            const heading = document.createElement('h3');
+            heading.className = 'text-lg font-semibold text-white ml-1';
+            heading.textContent = `${data['Property Name']}`; 
+
+            const paragraph = document.createElement('p');
+            paragraph.className = 'text-white text-sm flex items-center ml-1';
+            paragraph.textContent = `${data['Custom Address']}`; 
+
+            textContainer.appendChild(heading);
+            textContainer.appendChild(paragraph);
+            listItem.appendChild(imgElement);
+            listItem.appendChild(textContainer);
+
+            // Append list item before the first listing
+            const firstListing = coverPhotosList.firstChild;
+            coverPhotosList.insertBefore(listItem, firstListing);
+        });
+    } catch (error) {
+        console.error('Error fetching cover photos from Firestore:', error);
+    }
+};
+
+// Call the function to get cover photos when the page loads
+document.addEventListener('DOMContentLoaded', getCoverPhotosFromFirestore);
 
 // Upload SPLAT File
 const inpSplat = document.querySelector(".inp-splat");
@@ -129,16 +172,41 @@ const getSplatData = (e) => {
     console.log(fileSplat, fileNameSplat);
 };
 
-// Upload the SPLAT file
+// Save URL to Firestore
+async function saveSplatURLtoFirestore(url, fileNameSplat, propertyName, customAddress) {
+    try {
+        const collectionRef = db.collection("splat_files");
+        await collectionRef.add({
+            'File Name': fileNameSplat,
+            'File URL': url,
+            'Timestamp': firebase.firestore.FieldValue.serverTimestamp(),
+            'Property Name': propertyName,
+            'Custom Address': customAddress
+        });
+        console.log("Splat file URL saved to Firestore successfully:", url);
+    } catch (error) {
+        console.error("Error saving splat file URL to Firestore:", error);
+    }
+}
+
+// Upload the splat file
 const uploadSplatFile = () => {
+    console.log("Uploading splat file...");
     loadingSplat.style.display = "block";
+
+    const customAddressInput = document.getElementById('customAddressInput').querySelector('input');
+    const customAddress = customAddressInput.value; // Get custom address value
+
+    const propertyNameInput = document.getElementById('propertyNameInput');
+    const propertyName = propertyNameInput.value;
+
     const storageRefSplat = storage.ref().child("SPLAT Files");
     const folderRefSplat = storageRefSplat.child(fileNameSplat);
     const uploadtaskSplat = folderRefSplat.put(fileSplat);
     uploadtaskSplat.on(
         "state_changed",
         (snapshot) => {
-            console.log("Snapshot", snapshot.ref.name);
+            console.log("Splat file Snapshot", snapshot.ref.name);
             progressSplat = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             progressSplat = Math.round(progressSplat);
             progressbarSplat.style.width = progressSplat + "%";
@@ -146,28 +214,26 @@ const uploadSplatFile = () => {
             uploadedFileNameSplat = snapshot.ref.name;
         },
         (error) => {
-            console.log(error);
+            console.error("Error uploading splat file:", error);
         },
-        () => {
-            storage
-                .ref("SPLAT Files")
-                .child(uploadedFileNameSplat)
-                .getDownloadURL()
-                .then((url) => {
-                    console.log("URL", url);
-                    if (!url) {
-                        // Handle if no URL is returned
-                    } else {
-                        // Call the function to display the uploaded SPLAT file
-                        displayUploadedSplatFile(url);
-                    }
-                });
-            console.log("File Uploaded Successfully");
+        async () => {
+            try {
+                const downloadSplatURL = await storageRefSplat.child(uploadedFileNameSplat).getDownloadURL();
+                console.log("Splat file URL", downloadSplatURL);
+                if (!downloadSplatURL) {
+                    // Handle no URL case
+                } else {
+                    // Save URL to Firestore
+                    await saveSplatURLtoFirestore(downloadSplatURL, uploadedFileNameSplat, propertyName, customAddress);
+                }
+            } catch (error) {
+                console.error("Error uploading splat file:", error);
+            }
         }
     );
 };
 
-// Function to display the uploaded SPLAT file
+/*// Function to display the uploaded SPLAT file
 const displayUploadedSplatFile = (url) => {
     // Create an anchor element
     const downloadLink = document.createElement('a');
@@ -178,4 +244,4 @@ const displayUploadedSplatFile = (url) => {
     // Append the anchor element to the container
     const container = document.getElementById('canvasContainer');
     container.appendChild(downloadLink);
-};
+};*/

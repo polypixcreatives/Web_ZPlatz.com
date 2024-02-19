@@ -16,7 +16,7 @@
             font-family: 'Inter', sans-serif;
         }
     </style>
-    <link rel="icon" type="image/png" href="images/Zplatzlogo.png">
+    <link rel="icon" type="image/png" href="assets/images/logo/Zplatzlogo.png">
     <link rel="stylesheet" href="./assets/css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
@@ -90,7 +90,7 @@
     <header class="px-8 py-4 flex justify-between items-center">
         <!-- Logo on the left -->
         <div>
-            <img alt="Company logo" class="h-10" src="images/Zplatzlogo.png" />
+            <img alt="Company logo" class="h-10" src="assets/images/logo/Zplatzlogo.png" />
         </div>
 
         <!-- Search in the center of the screen -->
@@ -202,7 +202,7 @@
                         <label class="block mb-2">
                             Property Name (required)
                         </label>
-                        <input class="w-full bg-gray-800 p-2 rounded" type="text" />
+                        <input id="propertyNameInput" class="w-full bg-gray-800 p-2 rounded" type="text" placeholder="Enter property name">
                     </div>
                     <div class="mb-6">
                         <!-- Address Section -->
@@ -278,6 +278,8 @@
                         </label>
                         <input class="w-full bg-gray-800 p-2 rounded" type="text" placeholder="Enter your custom address">
                     </div>
+
+                    <!-- Input field for description -->
                     <div class="mb-6">
                         <label class="block mb-2">
                             Description
