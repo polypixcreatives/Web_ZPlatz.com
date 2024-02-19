@@ -37,14 +37,15 @@ const getImageData = (e) => {
 };
 
 // Save URL to Firestore
-async function saveURLtoFirestore(url, fileName, customAddress) {
+async function saveURLtoFirestore(url, fileName, propertyName, customAddress) {
     try {
         const collectionRef = db.collection("cover_photos");
         await collectionRef.add({
-            ImageName: fileName,
-            ImageURL: url,
-            CustomAddress: customAddress,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            'Image Name': fileName,
+            'Image URL': url,
+            'Timestamp': firebase.firestore.FieldValue.serverTimestamp(),
+            'Property Name': propertyName,
+            'Custom Address': customAddress
         });
         console.log("URL saved to Firestore successfully:", url);
     } catch (error) {
@@ -58,7 +59,10 @@ const uploadCoverPhoto = () => {
     loading.style.display = "block";
 
     const customAddressInput = document.getElementById('customAddressInput').querySelector('input');
-    const customAddress = customAddressInput.value; // Get custom address value
+    const customAddress = customAddressInput.value; 
+
+    const propertyNameInput = document.getElementById('propertyNameInput');
+    const propertyName = propertyNameInput.value;
 
     const storageRef = storage.ref().child("Cover Photos");
     const folderRef = storageRef.child(fileName);
@@ -84,7 +88,7 @@ const uploadCoverPhoto = () => {
                     // Handle no URL case
                 } else {
                     // Save URL to Firestore
-                    await saveURLtoFirestore(downloadURL, uploadedFileName, customAddress); // Pass the fileName to the function
+                    await saveURLtoFirestore(downloadURL, uploadedFileName, propertyName, customAddress);
                 }
             } catch (error) {
                 console.error("Error uploading file:", error);
@@ -99,7 +103,7 @@ const getCoverPhotosFromFirestore = async () => {
         const coverPhotosList = document.querySelector('.flex.flex-wrap.gap-1');
 
         // Get snapshot of the cover_photos collection
-        const snapshot = await db.collection('cover_photos').orderBy('timestamp', 'asc').get();
+        const snapshot = await db.collection('cover_photos').orderBy('Timestamp', 'asc').get();
 
         // Iterate over each document in the collection
         snapshot.forEach(doc => {
@@ -112,7 +116,7 @@ const getCoverPhotosFromFirestore = async () => {
 
             const imgElement = document.createElement('img');
             imgElement.className = 'w-full h-full object-cover';
-            imgElement.src = data.ImageURL;
+            imgElement.src = data['Image URL']; 
             imgElement.alt = 'Uploaded Cover Photo';
 
             const textContainer = document.createElement('div');
@@ -120,11 +124,11 @@ const getCoverPhotosFromFirestore = async () => {
 
             const heading = document.createElement('h3');
             heading.className = 'text-lg font-semibold text-white ml-1';
-            heading.textContent = data.ImageName;
+            heading.textContent = `${data['Property Name']}`; 
 
             const paragraph = document.createElement('p');
             paragraph.className = 'text-white text-sm flex items-center ml-1';
-            paragraph.textContent = `${data.CustomAddress}`; //
+            paragraph.textContent = `${data['Custom Address']}`; 
 
             textContainer.appendChild(heading);
             textContainer.appendChild(paragraph);
