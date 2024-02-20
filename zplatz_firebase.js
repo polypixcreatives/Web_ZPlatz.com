@@ -59,7 +59,7 @@ const uploadCoverPhoto = () => {
     loading.style.display = "block";
 
     const customAddressInput = document.getElementById('customAddressInput').querySelector('input');
-    const customAddress = customAddressInput.value; 
+    const customAddress = customAddressInput.value;
 
     const propertyNameInput = document.getElementById('propertyNameInput');
     const propertyName = propertyNameInput.value;
@@ -114,9 +114,12 @@ const getCoverPhotosFromFirestore = async () => {
             const listItem = document.createElement('li');
             listItem.className = 'relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing';
 
+            // Add click event listener to the list item
+            listItem.addEventListener('click', handleListingClick);
+
             const imgElement = document.createElement('img');
             imgElement.className = 'w-full h-full object-cover';
-            imgElement.src = data['Image URL']; 
+            imgElement.src = data['Image URL'];
             imgElement.alt = 'Uploaded Cover Photo';
 
             const textContainer = document.createElement('div');
@@ -124,11 +127,11 @@ const getCoverPhotosFromFirestore = async () => {
 
             const heading = document.createElement('h3');
             heading.className = 'text-lg font-semibold text-white ml-1';
-            heading.textContent = `${data['Property Name']}`; 
+            heading.textContent = `${data['Property Name']}`;
 
             const paragraph = document.createElement('p');
             paragraph.className = 'text-white text-sm flex items-center ml-1';
-            paragraph.textContent = `${data['Custom Address']}`; 
+            paragraph.textContent = `${data['Custom Address']}`;
 
             textContainer.appendChild(heading);
             textContainer.appendChild(paragraph);
@@ -146,6 +149,12 @@ const getCoverPhotosFromFirestore = async () => {
 
 // Call the function to get cover photos when the page loads
 document.addEventListener('DOMContentLoaded', getCoverPhotosFromFirestore);
+
+const handleListingClick = (propertyName) => {
+    // Navigate to viewer page with the property name as a query parameter
+    window.location.href = `viewer.html?propertyName=${encodeURIComponent(propertyName)}`;
+};
+
 
 // Upload SPLAT File
 const inpSplat = document.querySelector(".inp-splat");

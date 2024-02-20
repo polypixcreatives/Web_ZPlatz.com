@@ -732,8 +732,6 @@ async function main() {
         carousel = false;
     } catch (err) {}
     const url = new URL(
-        // "nike.splat",
-        // location.href,
         params.get("url") || "Fatima_3rd.splat",
         "https://huggingface.co/Miggydewz/ZPlatzData/resolve/main/",
     );
