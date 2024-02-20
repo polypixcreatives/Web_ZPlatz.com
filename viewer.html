@@ -6,6 +6,16 @@
 	<meta name="viewport"
 		  content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<script src="https://cdn.tailwindcss.com"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+		body {
+			font-family: 'Inter', sans-serif;
+		}
+	</style>
+	<link rel="icon" type="image/png" href="assets/images/logo/Zplatzlogoicon.png">
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style"
 		  content="black-translucent" />
@@ -13,80 +23,76 @@
 	<style>
 	</style>
 </head>
-	<body>	
-		<div class="sideBar">
-			<div class="card-title">
-				<button><i class="material-icons" id="toggleButton">chevron_right</i></button>
-			</div>
-			<div id="cardContainer">
-				<div id="info">
-					<a id="#" class="wrapper"></a>
-					<div class="card-container">
-						<h2 class="title-card">Views</h2>
-		
-						<div class="outercard">
+<body>
+	<div class="sideBar">
+		<button class="other-views px-3 py-1 rounded" id="toggleButton">
+			<i class="fas fa-chevron-left mr-1"></i>
+			<span class="hidden">View Other Listings</span>
+		</button>
+
+		<div id="cardContainer">
+			<div id="info">
+				<a id="#" class="wrapper"></a>
+				<div class="card-container">
+					<h2 class="title-card">Other Listing Views</h2>
+					<ul>
+						<li class="outercard">
 							<div class="card">
 								<p class="title-text">Viewer 1</p>
 							</div>
-						</div>
-						<div class="outercard">
+						</li>
+						<li class="outercard">
 							<div class="card">
 								<p class="title-text">Viewer 2</p>
 							</div>
-						</div>
-						<div class="outercard">
+						</li>
+						<li class="outercard">
 							<div class="card">
 								<p class="title-text">Viewer 3</p>
 							</div>
-						</div>
-						<div class="outercard">
+						</li>
+						<li class="outercard">
 							<div class="card">
 								<p class="title-text">Viewer 4</p>
 							</div>
-						</div>
-						<div class="outercard">
+						</li>
+						<li class="outercard">
 							<div class="card">
 								<p class="title-text">Viewer 5</p>
 							</div>
-						</div>
-						<div class="outercard">
+						</li>
+						<li class="outercard">
 							<div class="card">
 								<p class="title-text">Viewer 6</p>
 							</div>
-						</div>
-					</div>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
-		
-		<div id="progress"></div>
+	</div>
 
-		<div id="message"></div>
-		<div class="scene" id="spinner">
-			<div class="cube-wrapper">
-				<div class="cube">
-					<div class="cube-faces">
-						<div class="cube-face bottom"></div>
-						<div class="cube-face top"></div>
-						<div class="cube-face left"></div>
-						<div class="cube-face right"></div>
-						<div class="cube-face back"></div>
-						<div class="cube-face front"></div>
-					</div>
-				</div>
+	<div id="progress"></div>
+	<div id="message"></div>
+	<div class="scene" id="spinner">
+		<div class="logo-wrapper">
+			<img src="assets/images/logo/Zplatz - Loading Logo.png" alt="Zplatz Loading Logo" class="loading-logo">
+		</div>
+	</div>
+
+	<div class="canvascontainer" id="canvasContainer">
+		<div class="canvas-border-box">
+			<p><canvas id="canvas"></canvas></p>
+			<div class="logo" onclick="backToDashboard()">
+				<img src="assets/images/logo/Zplatzlogo.png" alt="Logo">
 			</div>
 		</div>
-            <div class="canvascontainer" id="canvasContainer">
-			    <div class="canvas-border-box">
-					<p><canvas id="canvas"></canvas></p>
-					<div class="logo">
-						<img src="assets/images/logo/Zplatzlogo.png" alt="Logo">
-					</div>
-				</div>
-			</div>
-		<div id="quality">
-			<span id="fps"></span>
-		</div>
-		<script src="viewer.js"></script>
-	</body>
+	</div>
+
+	<div id="quality">
+		<span id="fps"></span>
+	</div>
+
+	<script src="viewer.js"></script>
+</body>
 </html>

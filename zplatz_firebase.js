@@ -232,16 +232,3 @@ const uploadSplatFile = () => {
         }
     );
 };
-
-/*// Function to display the uploaded SPLAT file
-const displayUploadedSplatFile = (url) => {
-    // Create an anchor element
-    const downloadLink = document.createElement('a');
-    downloadLink.href = url;
-    downloadLink.textContent = 'Download SPLAT File';
-    downloadLink.setAttribute('download', fileNameSplat);
-
-    // Append the anchor element to the container
-    const container = document.getElementById('canvasContainer');
-    container.appendChild(downloadLink);
-};*/

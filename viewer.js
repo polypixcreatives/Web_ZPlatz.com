@@ -1293,26 +1293,35 @@ main().catch((err) => {
     document.getElementById("message").innerText = err.toString();
 });
 
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     var toggleButton = document.getElementById('toggleButton');
     var cardContainer = document.getElementById('cardContainer');
     var canvas = document.getElementById('canvas');
 
-    toggleButton.addEventListener('click', function() {
-        if (cardContainer.classList.contains('collapsed') && canvas.classList.contains('expanded')) {
-            cardContainer.classList.remove('collapsed');
+    cardContainer.style.display = 'none';
+
+    toggleButton.addEventListener('click', function () {
+        if (cardContainer.style.display === 'none') {
+            cardContainer.style.display = 'block';
             cardContainer.style.width = '300px';
-            toggleButton.style.transform = 'rotate(180deg)';
-            canvas.classList.remove('expanded');
+            canvas.style.width = '';
+            toggleButton.querySelector('i').classList.remove('fa-chevron-left');
+            toggleButton.querySelector('i').classList.add('fa-chevron-right');
+            toggleButton.classList.remove('hover-effect');
+            toggleButton.querySelector('span').textContent = 'Full Screen View';
         } else {
-            cardContainer.classList.add('collapsed');
-            cardContainer.style.width = ''; 
-            toggleButton.style.transform = 'rotate(0deg)';
-            canvas.classList.add('expanded');
+            cardContainer.style.display = 'none';
+            cardContainer.style.width = '';
+            canvas.style.width = '';
+            toggleButton.querySelector('i').classList.remove('fa-chevron-right');
+            toggleButton.querySelector('i').classList.add('fa-chevron-left');
+            toggleButton.classList.add('hover-effect');
+            toggleButton.querySelector('span').textContent = 'View Other Listings';
         }
     });
 });
 
-
-
+// Back to Dashboard
+const backToDashboard = () => {
+    window.location.href = 'dashboard.html';
+};
