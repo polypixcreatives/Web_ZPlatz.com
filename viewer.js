@@ -730,13 +730,46 @@ async function main() {
     try {
         viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
         carousel = false;
-    } catch (err) {}
-    const url = new URL(
-        // "nike.splat",
-        // location.href,
-        params.get("url") || "Fatima_3rd.splat",
-        "https://huggingface.co/Miggydewz/ZPlatzData/resolve/main/",
-    );
+    } catch (err) { }
+
+    // Get the property name from the query parameter
+    const propertyName = params.get("propertyName");
+
+    // Add console.log to check if propertyName is extracted correctly
+    console.log("Property Name:", propertyName);
+
+    // Function to fetch the splat file URL from Firestore based on the property name
+    const getSplatFileUrl = async (propertyName) => {
+        try {
+            // Add console.log to indicate the start of the function
+            console.log("Fetching splat file URL for Property Name:", propertyName);
+
+            // Reference to the splat_files collection
+            const splatFilesRef = db.collection("splat_files");
+
+            // Query for documents with matching property name field
+            const querySnapshot = await splatFilesRef.where("Property Name", "==", propertyName).get();
+
+            // Check if any documents were found
+            if (!querySnapshot.empty) {
+                // Get the file URL from the first matching document
+                const splatFileData = querySnapshot.docs[0].data();
+                return splatFileData["File URL"];
+            } else {
+                console.error("No splat file found for the given property name:", propertyName);
+                return null;
+            }
+        } catch (error) {
+            console.error("Error fetching splat file URL from Firestore:", error);
+            return null;
+        }
+    };
+
+    // Construct the URL using the fetched file URL or a default value if not found
+    const splatFileUrl = await getSplatFileUrl(propertyName);
+
+    const url = new URL(params.get("url") || splatFileUrl);
+    
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
         credentials: "omit", // include, *same-origin, omit
@@ -1293,26 +1326,35 @@ main().catch((err) => {
     document.getElementById("message").innerText = err.toString();
 });
 
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     var toggleButton = document.getElementById('toggleButton');
     var cardContainer = document.getElementById('cardContainer');
     var canvas = document.getElementById('canvas');
 
-    toggleButton.addEventListener('click', function() {
-        if (cardContainer.classList.contains('collapsed') && canvas.classList.contains('expanded')) {
-            cardContainer.classList.remove('collapsed');
+    cardContainer.style.display = 'none';
+
+    toggleButton.addEventListener('click', function () {
+        if (cardContainer.style.display === 'none') {
+            cardContainer.style.display = 'block';
             cardContainer.style.width = '300px';
-            toggleButton.style.transform = 'rotate(180deg)';
-            canvas.classList.remove('expanded');
+            canvas.style.width = '';
+            toggleButton.querySelector('i').classList.remove('fa-chevron-left');
+            toggleButton.querySelector('i').classList.add('fa-chevron-right');
+            toggleButton.classList.remove('hover-effect');
+            toggleButton.querySelector('span').textContent = 'Full Screen View';
         } else {
-            cardContainer.classList.add('collapsed');
-            cardContainer.style.width = ''; 
-            toggleButton.style.transform = 'rotate(0deg)';
-            canvas.classList.add('expanded');
+            cardContainer.style.display = 'none';
+            cardContainer.style.width = '';
+            canvas.style.width = '';
+            toggleButton.querySelector('i').classList.remove('fa-chevron-right');
+            toggleButton.querySelector('i').classList.add('fa-chevron-left');
+            toggleButton.classList.add('hover-effect');
+            toggleButton.querySelector('span').textContent = 'View Other Listings';
         }
     });
 });
 
-
-
+// Back to Dashboard
+const backToDashboard = () => {
+    window.location.href = 'dashboard.html';
+};

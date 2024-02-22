@@ -1,11 +1,13 @@
 body {
     overflow: hidden;
     margin: 0;
+    padding: 0;
     height: 100vh;
     width: 100vw;
     font-family: sans-serif;
-    background: rgb(26, 26, 26);
+    background: black;
     text-shadow: 0 0 3px black;
+    position: relative;
 }
 
 a, body {
@@ -30,70 +32,36 @@ p {
     font-size: small;
 }
 
-.cube-wrapper {
-    transform-style: preserve-3d;
-}
-
-.cube {
-    transform-style: preserve-3d;
-    transform: rotateX(45deg) rotateZ(45deg);
-    animation: rotation 2s infinite;
-}
-
-.cube-faces {
-    transform-style: preserve-3d;
-    height: 80px;
-    width: 80px;
+/* Loading Logo */
+.logo-wrapper {
     position: relative;
-    transform-origin: 0 0;
-    transform: translateX(0) translateY(0) translateZ(-40px);
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
 }
 
-.cube-face {
+.loading-logo {
     position: absolute;
-    inset: 0;
-    background: #0084ff;
-    border: solid 10px #ffbb00;
+    height:  70px;
+    width: 70px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    animation: spin 5s ease-in-out infinite; /* Adjust animation duration */
 }
 
-    .cube-face.top {
-        transform: translateZ(80px);
+@keyframes spin {
+    0%, 100% {
+        transform: translate(-50%, -50%) rotate(0deg);
     }
 
-    .cube-face.front {
-        transform-origin: 0 50%;
-        transform: rotateY(-90deg);
+    25% {
+        transform: translate(-50%, -50%) rotate(180deg); /* Rotate slowly */
     }
 
-    .cube-face.back {
-        transform-origin: 0 50%;
-        transform: rotateY(-90deg) translateZ(-80px);
-    }
-
-    .cube-face.right {
-        transform-origin: 50% 0;
-        transform: rotateX(-90deg) translateY(-80px);
-    }
-
-    .cube-face.left {
-        transform-origin: 50% 0;
-        transform: rotateX(-90deg) translateY(-80px) translateZ(80px);
-    }
-
-@keyframes rotation {
-    0% {
-        transform: rotateX(45deg) rotateY(0) rotateZ(45deg);
-        animation-timing-function: cubic-bezier( 0.17, 0.84, 0.44, 1 );
-    }
-
-    50% {
-        transform: rotateX(45deg) rotateY(0) rotateZ(225deg);
-        animation-timing-function: cubic-bezier( 0.76, 0.05, 0.86, 0.06 );
-    }
-
-    100% {
-        transform: rotateX(45deg) rotateY(0) rotateZ(405deg);
-        animation-timing-function: cubic-bezier( 0.17, 0.84, 0.44, 1 );
+    75% {
+        transform: translate(-50%, -50%) rotate(540deg); /* Rotate quickly */
     }
 }
 
@@ -124,13 +92,10 @@ details {
 }
 
 .logo {
-    /* display: flex;
-				justify-content: center;
-				align-items: center; */
     display: block;
     position: absolute;
     top: 30px;
-    left: 60px;
+    left: 30px;
 }
 
     .logo img {
@@ -139,15 +104,19 @@ details {
     }
 
 .canvascontainer {
-    width: 80px;
-    margin: 0 auto;
     transition: width 0.3s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .canvas-border-box {
     border: 2px;
     padding: 20px;
     margin-left: 10px;
+    height: 100%; /* Fill the available height */
 }
 
 #progress {
@@ -161,25 +130,20 @@ details {
 
 #quality {
     position: absolute;
-    bottom: 10px;
-    z-index: 999;
+    bottom: 20px;
+    z-index: 1;
     left: 30px;
 }
 
 #canvas {
     display: block;
     position: absolute;
-    top: 20px;
-    left: 40px;
-    width: 80%;
-    height: 95%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     touch-action: none;
-    border-radius: 60px;
 }
-
-    #canvas.expanded {
-        width: 90%;
-    }
 
 body.nohf #progress, body.nohf .cube-face {
     background: #ff9d0d;
@@ -187,8 +151,6 @@ body.nohf #progress, body.nohf .cube-face {
 
 .sideBar {
     height: 100vh;
-    /* background-color: rgb(151, 0, 0); */
-    width: 16%;
     float: right;
     right: 15px;
 }
@@ -200,8 +162,7 @@ body.nohf #progress, body.nohf .cube-face {
 }
 
 .card-container {
-    height: 85vh;
-    /* background-color: rgb(79, 78, 78); */
+    height: calc(100vh - 50px);
     text-align: center;
     padding: 10px;
     overflow-y: scroll;
@@ -213,7 +174,7 @@ body.nohf #progress, body.nohf .cube-face {
     width: 100%;
 }
 
-#cardContainer.collapsed {
+#cardContainer {
     display: none;
 }
 
@@ -233,9 +194,65 @@ body.nohf #progress, body.nohf .cube-face {
         background: #c3c3c3;
     }
 
-.material-icons {
-    left: 10px;
+/* Toggle Button */
+.other-views {
+    position: absolute;
+    align-items: center;
+    transition: all 0.5s ease;
+    position: relative;
+    top: 20px;
+    right: 20px;
+    color: white;
+    background-color: #0074E1;
+    border-color: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1;
 }
+
+    .other-views:hover {
+        padding-left: 30px;
+        padding-right: 25px;
+    }
+
+        .other-views:hover .text-2xl {
+            transform: translateX(-5px);
+        }
+
+        .other-views:hover:before {
+            content: "";
+            position: absolute;
+        }
+
+        .other-views:hover i {
+            transform: translateX(-4px);
+        }
+
+        .other-views:hover .hidden {
+            display: inline-block;
+        }
+
+#toggleButton {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+}
+
+    #toggleButton i {
+        transition: transform 0.5s ease;
+    }
+
+    #toggleButton span {
+        transition: transform 0.5s ease;
+    }
+
+    #toggleButton:hover i {
+        transform: translateX(-4px);
+    }
+
+    #toggleButton:hover span {
+        transform: translateX(-5px);
+    }
 
 .outercard {
     padding: 10px;
