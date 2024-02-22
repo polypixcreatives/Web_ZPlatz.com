@@ -730,11 +730,46 @@ async function main() {
     try {
         viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
         carousel = false;
-    } catch (err) {}
-    const url = new URL(
-        params.get("url") || "Fatima_3rd.splat",
-        "https://huggingface.co/Miggydewz/ZPlatzData/resolve/main/",
-    );
+    } catch (err) { }
+
+    // Get the property name from the query parameter
+    const propertyName = params.get("propertyName");
+
+    // Add console.log to check if propertyName is extracted correctly
+    console.log("Property Name:", propertyName);
+
+    // Function to fetch the splat file URL from Firestore based on the property name
+    const getSplatFileUrl = async (propertyName) => {
+        try {
+            // Add console.log to indicate the start of the function
+            console.log("Fetching splat file URL for Property Name:", propertyName);
+
+            // Reference to the splat_files collection
+            const splatFilesRef = db.collection("splat_files");
+
+            // Query for documents with matching property name field
+            const querySnapshot = await splatFilesRef.where("Property Name", "==", propertyName).get();
+
+            // Check if any documents were found
+            if (!querySnapshot.empty) {
+                // Get the file URL from the first matching document
+                const splatFileData = querySnapshot.docs[0].data();
+                return splatFileData["File URL"];
+            } else {
+                console.error("No splat file found for the given property name:", propertyName);
+                return null;
+            }
+        } catch (error) {
+            console.error("Error fetching splat file URL from Firestore:", error);
+            return null;
+        }
+    };
+
+    // Construct the URL using the fetched file URL or a default value if not found
+    const splatFileUrl = await getSplatFileUrl(propertyName);
+
+    const url = new URL(params.get("url") || splatFileUrl);
+    
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
         credentials: "omit", // include, *same-origin, omit

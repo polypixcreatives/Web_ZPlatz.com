@@ -74,13 +74,3 @@ latestBtn.addEventListener('click', () => {
 const navigateToUploadPage = () => {
     window.location.href = 'upload_listing.html';
 };
-
-// View Listing Item
-document.addEventListener("DOMContentLoaded", function () {
-    const listingItem = document.getElementById('listingItem');
-    if (listingItem) {
-        listingItem.addEventListener('click', function () {
-            window.location.href = 'viewer.html';
-        });
-    }
-});
