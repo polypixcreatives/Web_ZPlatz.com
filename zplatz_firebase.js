@@ -115,7 +115,13 @@ const getCoverPhotosFromFirestore = async () => {
             listItem.className = 'relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing';
 
             // Add click event listener to the list item
-            listItem.addEventListener('click', handleListingClick);
+            listItem.addEventListener('click', (event) => {
+                // Extract the property name from the clicked element
+                const propertyName = data['Property Name'];
+
+                // Navigate to viewer page with the property name as a query parameter
+                window.location.href = `viewer.html?propertyName=${encodeURIComponent(propertyName)}`;
+            });
 
             const imgElement = document.createElement('img');
             imgElement.className = 'w-full h-full object-cover';
@@ -149,12 +155,6 @@ const getCoverPhotosFromFirestore = async () => {
 
 // Call the function to get cover photos when the page loads
 document.addEventListener('DOMContentLoaded', getCoverPhotosFromFirestore);
-
-const handleListingClick = (propertyName) => {
-    // Navigate to viewer page with the property name as a query parameter
-    window.location.href = `viewer.html?propertyName=${encodeURIComponent(propertyName)}`;
-};
-
 
 // Upload SPLAT File
 const inpSplat = document.querySelector(".inp-splat");
