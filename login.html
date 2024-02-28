@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - ZPlatz.com</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="assets/images/logo/Zplatzlogoicon.png">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+        <div class="flex justify-between items-center mb-6">
+            <img alt="Company logo" class="h-10" src="assets/images/logo/Zplatzlogo.png" />
+        </div>
+        <div class="mb-4">
+                <h2 class="text-lg font-semibold mb-2">Sign in</h2>
+        </div>
+        <div class="mb-4">
+            <input type="text" placeholder="Email or Phone" class="w-full p-3 border border-gray-300 rounded mb-2">
+            <div class="flex justify-between items-center border border-gray-300 rounded mb-2">
+                <input type="password" placeholder="Password" class="w-full p-3 rounded-l">
+            </div>
+            <a href="#" class="text-sm text-blue-600">Forgot password?</a>
+        </div>
+        <div class="mb-4">
+            <button class="w-full bg-blue-600 text-white p-3 rounded font-medium"  onclick="backToDashboard()">Sign in</button>
+        </div>
+        <div class="flex items-center justify-between mb-4">
+            <hr class="w-full bg-gray-300"> <span class="p-2 text-gray-400">or</span> <hr class="w-full bg-gray-300">
+        </div>
+        <div class="mb-6">
+            <button class="w-full border border-gray-300 p-3 rounded flex items-center justify-center">
+                <i class="fab fa-google mr-2"></i> Sign in with Google
+            </button>
+        </div>
+        <div class="text-center">
+            <p class="text-sm text-gray-600">New to ZPlatz? <a href="#" class="text-blue-600">Join now</a></p>
+        </div>
+    </div>
+    <footer class="absolute bottom-0 w-full text-center text-xs text-gray-600 p-4">
+        <span>Zplatz.com<span class="text-blue-600"></span> (C) 2023</span>
+        <a href="#" class="px-2">User Agreement</a>
+        <a href="#" class="px-2">Privacy Policy</a>
+        <a href="#" class="px-2">Community Guidelines</a>
+        <a href="#" class="px-2">Cookie Policy</a>
+        <a href="#" class="px-2">Copyright Policy</a>
+        <a href="#" class="px-2">Send Feedback</a>
+        <a href="#" class="px-2">Language <i class="fas fa-chevron-down"></i></a>
+    </footer>
+    <script>
+        function backToDashboard() {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>
