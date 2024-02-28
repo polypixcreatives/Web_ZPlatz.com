@@ -1064,7 +1064,104 @@ async function main() {
         startY = 0;
     });
 
-   
+    // Touch Screen Buttons
+    let lastPinchDistance = 0;
+    let lastSwipeX = 0;
+    let lastSwipeY = 0;
+    const rotationSensitivity = 0.002;
+
+    canvas.addEventListener("touchstart", (e) => {
+        if (e.touches.length === 2) {
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            lastPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+        } else if (e.touches.length === 1) {
+            lastSwipeX = e.touches[0].clientX;
+            lastSwipeY = e.touches[0].clientY;
+        }
+    });
+
+    canvas.addEventListener("touchmove", (e) => {
+        e.preventDefault();
+        if (e.touches.length === 2) {
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            const currentPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+
+            const scale = currentPinchDistance / lastPinchDistance;
+            let inv = invert4(viewMatrix);
+            let zoomAmount = scale > 1 ? 0.1 : -0.1;
+            inv = translate4(inv, 0, 0, zoomAmount);
+            viewMatrix = invert4(inv);
+
+            lastPinchDistance = currentPinchDistance;
+        } else if (e.touches.length === 1) {
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            const deltaX = -(currentX - lastSwipeX);
+            const deltaY = currentY - lastSwipeY;
+
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                // Swiping horizontally
+                // Rotate the viewMatrix around the Y-axis
+                const angleY = deltaX * rotationSensitivity;
+                viewMatrix = rotateY(viewMatrix, angleY);
+            } else {
+                // Swiping vertically
+                // Invert deltaY to reverse the direction of rotation around the X-axis
+                const angleX = -deltaY * rotationSensitivity;
+                viewMatrix = rotateX(viewMatrix, angleX);
+            }
+
+            lastSwipeX = currentX;
+            lastSwipeY = currentY;
+        }
+    });
+
+    // Function to rotate the viewMatrix around the Y-axis
+    function rotateY(matrix, angle) {
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+
+        const rotationMatrix = [
+            cos, 0, sin, 0,
+            0, 1, 0, 0,
+            -sin, 0, cos, 0,
+            0, 0, 0, 1
+        ];
+
+        return multiplyMatrices(matrix, rotationMatrix);
+    }
+
+    // Function to rotate the viewMatrix around the X-axis
+    function rotateX(matrix, angle) {
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+
+        const rotationMatrix = [
+            1, 0, 0, 0,
+            0, cos, -sin, 0,
+            0, sin, cos, 0,
+            0, 0, 0, 1
+        ];
+
+        return multiplyMatrices(matrix, rotationMatrix);
+    }
+
+    // Function to multiply two 4x4 matrices
+    function multiplyMatrices(m1, m2) {
+        const result = [];
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                let sum = 0;
+                for (let k = 0; k < 4; k++) {
+                    sum += m1[i * 4 + k] * m2[k * 4 + j];
+                }
+                result.push(sum);
+            }
+        }
+        return result;
+    }
 
     let jumpDelta = 0;
     let vertexCount = 0;
