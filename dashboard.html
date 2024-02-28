@@ -1,0 +1,483 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta hhtp-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>
+        Dashboard - ZPlatz.com
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="assets/images/logo/Zplatzlogoicon.png">
+</head>
+<body class="bg-black text-white">
+    <header class="px-8 py-4 flex justify-between items-center">
+        <style>
+            /* Navigation Bar and Buttons */
+            .upload-listing-btn {
+                background-color: #404044;
+            }
+
+            .sign-in-btn {
+                background-color: #0074E1;
+            }
+
+            .slide-in-text {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .custom-size-listing:hover .slide-in-text {
+                transform: translateX(0);
+            }
+        </style>
+        <div class="flex items-center space-x-4 flex-grow">
+            <div class="flex items-center">
+                <img alt="Company logo" class="h-10" src="assets/images/logo/Zplatzlogo.png" />
+                <nav class="hidden md:flex space-x-6 ml-6">
+                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
+                        Find a Home
+                        <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
+                    </a>
+                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
+                        Meet a Realtor
+                        <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
+                    </a>
+                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
+                        Inquiry
+                        <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
+                    </a>
+                    <a class="hover:text-white transition duration-500 text-gray-500 relative" href="#">
+                        About Us
+                        <span class="absolute left-0 top-7 w-full h-0.5 bg-blue-700 transition-transform origin-bottom transform scale-x-0"></span>
+                    </a>
+                </nav>
+            </div>
+            <div class="flex items-center space-x-2 relative flex-grow mr-4">
+                <button class="absolute left-3 top-0 mt-3 ml-3" type="submit">
+                    <i class="fas fa-search text-gray-500"></i>
+                </button>
+                <input class="hover:border-gray-400 transition duration-500 h-10 pl-10 pr-10 rounded-full text-sm border border-gray-500 border-solid border-2 focus:outline-none flex-grow bg-transparent" placeholder="Search" type="text" />
+            </div>
+        </div>
+        <div class="flex items-center space-x-4 ml-4">
+            <button class="relative hover:bg-gray-700 upload-listing-btn text-white px-4 py-2 rounded-md text-sm font-medium" onclick="navigateToUploadPage()">
+                <i class="fas fa-plus mr-2"></i> Upload Listing
+            </button>
+            <button class="relative sign-in-btn text-white px-4 py-2 rounded-md text-sm font-medium" onclick="navigateToLoginPage()">
+                <i class="fas fa-sign-in-alt mr-2"></i> Sign In
+            </button>
+        </div>
+    </header>
+
+    <main class="px-8 py-4">
+        <style>
+            .properties-container {
+                overflow-x: hidden;
+            }
+
+            .scroll-button {
+                width: 30px;
+                height: 30px;
+                border-radius: 100%;
+                background-color: #000000;
+                opacity: 25%;
+                border: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+            }
+
+            .scroll-button-category {
+                width: 30px;
+                height: 30px;
+                border-radius: 100%;
+                background-color: #808080;
+                opacity: 25%;
+                border: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+            }
+
+            .font-custom-black {
+                font-weight: 900;
+            }
+
+            .places-container {
+                overflow: hidden;
+            }
+
+            .custom-button-category {
+                background-color: #202024;
+            }
+
+            .custom-buttom-category-icon {
+                background-color: #303034;
+            }
+
+            .custom-size-listing {
+                height: 204.5px;
+                width: 204.5px;
+            }
+        </style>
+        <section class="mb-8 relative">
+            <div class="flex gap-3 overflow-x-auto properties-container">
+                <div class="bg-gray-800 rounded-lg overflow-hidden relative" style="min-width: 340px; height: 200px;">
+                    <img alt="Property-1" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/property-1.jpg" />
+                    <div class="absolute top-3 left-3 bg-green-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded-full">
+                        For Rent
+                    </div>
+                    <div class="p-4 absolute bottom-0 left-0 w-full">
+                        <h3 class="text-lg font-semibold text-white">
+                            Mediterranean Style
+                        </h3>
+                        <p class="text-white text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
+                            </svg>
+                            Talisay City, Cebu, Philippines
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg overflow-hidden relative" style="min-width: 340px; height: 200px; ">
+                    <img alt="Property-2" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/property-2.jpg" />
+                    <div class="absolute top-3 left-3 bg-red-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded-full">
+                        For Sale
+                    </div>
+                    <div class="p-4 absolute bottom-0 left-0 w-full">
+                        <h3 class="text-lg font-semibold text-white">
+                            Townhouse in Deca Homes
+                        </h3>
+                        <p class="text-white text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
+                            </svg>
+                            Cebu City, Cebu, Philippines
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg overflow-hidden relative" style="min-width: 340px; height: 200px; ">
+                    <img alt="Property-3" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/property-3.jpg" />
+                    <div class="absolute top-3 left-3 bg-green-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded-full">
+                        For Rent
+                    </div>
+                    <div class="p-4 absolute bottom-0 left-0 w-full">
+                        <h3 class="text-lg font-semibold text-white">
+                            Modern Homes
+                        </h3>
+                        <p class="text-white text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
+                            </svg>
+                            Consolacion, Cebu, Philippines
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg overflow-hidden relative" style="min-width: 340px; height: 200px;">
+                    <img alt="Property-4" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/property-4.jpg" />
+                    <div class="absolute top-3 left-3 bg-red-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded-full">
+                        For Sale
+                    </div>
+                    <div class="p-4 absolute bottom-0 left-0 w-full">
+                        <h3 class="text-lg font-semibold text-white">
+                            Corona Del Mar
+                        </h3>
+                        <p class="text-white text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
+                            </svg>
+                            Talisay City, Cebu, Philippines
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg overflow-hidden relative" style="min-width: 340px; height: 200px;">
+                    <img alt="Property-5" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/property-5.jpg" />
+                    <div class="absolute top-3 left-3 bg-red-500 text-white font-semibold text-xs uppercase px-2 py-1 rounded-full">
+                        For Sale
+                    </div>
+                    <div class="p-4 absolute bottom-0 left-0 w-full">
+                        <h3 class="text-lg font-semibold text-white">
+                            Bungalow Houses
+                        </h3>
+                        <p class="text-white text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9a2 2 0 100-4 2 2 0 000 4z"></path>
+                            </svg>
+                            City of Carcar, Cebu, Philippines
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <button class="scroll-button absolute top-1/2 left-0 transform -translate-y-1/2" onclick="scrollProperties('left')">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="scroll-button absolute top-1/2 right-0 transform -translate-y-1/2" onclick="scrollProperties('right')">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </section>
+        <section>
+            <div class="flex items-center space-x-4 overflow-x-auto mb-8 relative">
+                <div class="flex items-center space-x-6">
+                    <button class="custom-buttom-category-icon text-white rounded-lg p-2" style="width: 48px; height: 48px;">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                    <button class="rounded-lg p-2 inline-flex items-center custom-font custom-button-category" style="height: 64px;">
+                        <div class="flex items-center justify-center custom-buttom-category-icon text-white rounded-lg p-2 mr-2" style="width: 48px; height: 48px;">
+                            <i class='fas fa-map'></i>
+                        </div>
+                        <span class="font-medium mr-2">All Locations</span>
+                    </button>
+                </div>
+                <div class="flex space-x-4 items-center places-container">
+                    <button class="scroll-button-category" onclick="scrollPlaces('left')">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="flex space-x-4 items-center">
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Bohol" src="assets/images/places-bohol.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Bohol</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Boracay" src="assets/images/places-boracay.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Boracay</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Cebu" src="assets/images/places-cebu.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Cebu</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Bohol" src="assets/images/places-bohol.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Bohol</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Boracay" src="assets/images/places-boracay.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Boracay</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Cebu" src="assets/images/places-cebu.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Cebu</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Bohol" src="assets/images/places-bohol.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Bohol</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Boracay" src="assets/images/places-boracay.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Boracay</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Cebu" src="assets/images/places-cebu.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Cebu</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Bohol" src="assets/images/places-bohol.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Bohol</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Boracay" src="assets/images/places-boracay.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Boracay</span>
+                        </button>
+                        <button class="hover:bg-gray-800 rounded-lg p-2 inline-flex items-center custom-font" style="height: 64px;">
+                            <div class="flex items-center justify-center bg-white-700 text-white rounded-lg mr-2" style="width: 48px; height: 48px;">
+                                <img class="w-full h-full object-cover rounded-lg" alt="Places-Cebu" src="assets/images/places-cebu.jpg" />
+                            </div>
+                            <span class="text-white font-medium mr-2">Cebu</span>
+                        </button>
+                    </div>
+                    <button class="scroll-button-category" onclick="scrollProperties('right')">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+        <section>
+            <h2 class="text-3xl font-custom-black mb-4">
+                All Listings
+            </h2>
+            <ul class="flex flex-wrap gap-1">
+                <li class="relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing" id="listingItem">
+                    <img alt="Property 1" class="w-full h-full object-cover" src="assets/images/Fatima Subdivision.png" />
+                    <div class="absolute bottom-0 left-0 w-full p-1 slide-in-text">
+                        <h3 class="text-lg font-semibold text-white ml-1">
+                            Fatima Subdivision
+                        </h3>
+                        <p class="text-white text-sm flex items-center ml-1">
+                            Cebu City, Cebu
+                        </p>
+                    </div>
+                </li>
+                <li class="relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 2" class="w-full h-full object-cover" src="assets/images/property-2.jpg" />
+                    <div class="absolute bottom-0 left-0 w-full p-1 slide-in-text">
+                        <h3 class="text-lg font-semibold text-white ml-1">
+                            Deca Homes
+                        </h3>
+                        <p class="text-white text-sm flex items-center ml-1">
+                            Lapu-Lapu City, Cebu
+                        </p>
+                    </div>
+                </li>
+                <li class="relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 3" class="w-full h-full object-cover" src="assets/images/property-3.jpg" />
+                    <div class="absolute bottom-0 left-0 w-full p-1 slide-in-text">
+                        <h3 class="text-lg font-semibold text-white ml-1">
+                            Golden Valley
+                        </h3>
+                        <p class="text-white text-sm flex items-center ml-1">
+                            Consolacion, Cebu
+                        </p>
+                    </div>
+                </li>
+                <li class="relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 4" class="w-full h-full object-cover" src="assets/images/property-4.jpg" />
+                    <div class="absolute bottom-0 left-0 w-full p-1 slide-in-text">
+                        <h3 class="text-lg font-semibold text-white ml-1">
+                            Beverly Hills
+                        </h3>
+                        <p class="text-white text-sm flex items-center ml-1">
+                            Cebu City, Cebu
+                        </p>
+                    </div>
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Bohol" class="w-full h-full object-cover" src="assets/images/places-bohol.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Boracay" class="w-full h-full object-cover" src="assets/images/places-boracay.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Cebu" class="w-full h-full object-cover" src="assets/images/places-cebu.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 2" class="w-full h-full object-cover" src="assets/images/property-2.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 3" class="w-full h-full object-cover" src="assets/images/property-3.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 4" class="w-full h-full object-cover" src="assets/images/property-4.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Bohol" class="w-full h-full object-cover" src="assets/images/places-bohol.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Boracay" class="w-full h-full object-cover" src="assets/images/places-boracay.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Cebu" class="w-full h-full object-cover" src="assets/images/places-cebu.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Bohol" class="w-full h-full object-cover" src="assets/images/places-bohol.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Boracay" class="w-full h-full object-cover" src="assets/images/places-boracay.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Cebu" class="w-full h-full object-cover" src="assets/images/places-cebu.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 2" class="w-full h-full object-cover" src="assets/images/property-2.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 3" class="w-full h-full object-cover" src="assets/images/property-3.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 4" class="w-full h-full object-cover" src="assets/images/property-4.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 1" class="w-full h-full object-cover" src="assets/images/property-1.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Cebu" class="w-full h-full object-cover" src="assets/images/places-cebu.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Bohol" class="w-full h-full object-cover" src="assets/images/places-bohol.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Boracay" class="w-full h-full object-cover" src="assets/images/places-boracay.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Places-Cebu" class="w-full h-full object-cover" src="assets/images/places-cebu.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 2" class="w-full h-full object-cover" src="assets/images/property-2.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 3" class="w-full h-full object-cover" src="assets/images/property-3.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 4" class="w-full h-full object-cover" src="assets/images/property-4.jpg" />
+                </li>
+                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
+                    <img alt="Property 1" class="w-full h-full object-cover" src="assets/images/property-1.jpg" />
+                </li>
+            </ul>
+        </section>
+    </main>
+    <footer class="fixed bottom-0 w-full p-4">
+        <div class="px-4 py-3 flex justify-between items-center">
+            <div class="flex space-x-1 rounded-full bg-white text-black px-5 py-5">
+                <button class="text-black">
+                    <i class="fas fa-th-large fa-1x"></i>
+                </button>
+            </div>
+            <div class="flex space-x-1 rounded-full bg-white text-black px-1 py-1">
+                <button id="communityBtn" class="rounded-full px-5 py-3">
+                    Community
+                </button>
+                <button id="trendingBtn" class="rounded-full px-5 py-3">
+                    Trending
+                </button>
+                <button id="latestBtn" class="rounded-full px-5 py-3">
+                    Latest
+                </button>
+            </div>
+            <div class="flex space-x-1 rounded-full bg-white text-black px-5 py-5">
+                <button class="text-black">
+                    <i class="fas fa-ellipsis-h"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="login.js"></script>
+    <script src="zplatz_firebase.js"></script>
+</body>
+</html>

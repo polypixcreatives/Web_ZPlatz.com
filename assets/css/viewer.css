@@ -1,0 +1,276 @@
+body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    font-family: sans-serif;
+    background: black;
+    text-shadow: 0 0 3px black;
+    position: relative;
+}
+
+a, body {
+    color: white;
+}
+
+#info {
+    z-index: 100;
+    position: absolute;
+    float: right;
+    top: 10px;
+    right: 15px;
+    width: 15%;
+}
+
+h3 {
+    margin: 5px 0;
+}
+
+p {
+    margin: 5px 0;
+    font-size: small;
+}
+
+/* Loading Logo */
+.logo-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+}
+
+.loading-logo {
+    position: absolute;
+    height:  70px;
+    width: 70px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    animation: spin 5s ease-in-out infinite; /* Adjust animation duration */
+}
+
+@keyframes spin {
+    0%, 100% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    25% {
+        transform: translate(-50%, -50%) rotate(180deg); /* Rotate slowly */
+    }
+
+    75% {
+        transform: translate(-50%, -50%) rotate(540deg); /* Rotate quickly */
+    }
+}
+
+.scene,
+#message {
+    position: absolute;
+    display: flex;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+#message {
+    font-weight: bold;
+    font-size: large;
+    color: red;
+    pointer-events: none;
+}
+
+details {
+    font-size: small;
+}
+
+.logo {
+    display: block;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+}
+
+    .logo img {
+        align-items: center;
+        width: 150px;
+    }
+
+.canvascontainer {
+    transition: width 0.3s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.canvas-border-box {
+    border: 2px;
+    padding: 20px;
+    margin-left: 10px;
+    height: 100%; /* Fill the available height */
+}
+
+#progress {
+    position: absolute;
+    top: 0;
+    height: 10px;
+    background: rgb(255, 238, 0);
+    z-index: 99;
+    transition: width 0.1s ease-in-out;
+}
+
+#quality {
+    position: absolute;
+    bottom: 20px;
+    z-index: 1;
+    left: 30px;
+}
+
+#canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+}
+
+body.nohf #progress, body.nohf .cube-face {
+    background: #ff9d0d;
+}
+
+.sideBar {
+    height: 100vh;
+    float: right;
+    right: 15px;
+}
+
+.card-title {
+    position: absolute;
+    top: 20px;
+    right: 15px;
+}
+
+.card-container {
+    height: calc(100vh - 50px);
+    text-align: center;
+    padding: 10px;
+    overflow-y: scroll;
+    border: none;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    width: 100%;
+}
+
+#cardContainer {
+    display: none;
+}
+
+.card-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.card-container::-webkit-scrollbar-track {
+    background: #888;
+}
+
+.card-container::-webkit-scrollbar-thumb {
+    background: #f1f1f1;
+}
+
+    .card-container::-webkit-scrollbar-thumb:hover {
+        background: #c3c3c3;
+    }
+
+/* Toggle Button */
+.other-views {
+    position: absolute;
+    align-items: center;
+    transition: all 0.5s ease;
+    position: relative;
+    top: 20px;
+    right: 20px;
+    color: white;
+    background-color: #0074E1;
+    border-color: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+    .other-views:hover {
+        padding-left: 30px;
+        padding-right: 25px;
+    }
+
+        .other-views:hover .text-2xl {
+            transform: translateX(-5px);
+        }
+
+        .other-views:hover:before {
+            content: "";
+            position: absolute;
+        }
+
+        .other-views:hover i {
+            transform: translateX(-4px);
+        }
+
+        .other-views:hover .hidden {
+            display: inline-block;
+        }
+
+#toggleButton {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+}
+
+    #toggleButton i {
+        transition: transform 0.5s ease;
+    }
+
+    #toggleButton span {
+        transition: transform 0.5s ease;
+    }
+
+    #toggleButton:hover i {
+        transform: translateX(-4px);
+    }
+
+    #toggleButton:hover span {
+        transform: translateX(-5px);
+    }
+
+.outercard {
+    padding: 10px;
+    height: 18vh;
+}
+
+.card {
+    height: 15vh;
+    background-color: white;
+    text-align: center;
+    border-radius: 20px;
+    border: 2px solid rgb(33, 43, 220);
+}
+
+.title-text {
+    font-size: 18px;
+    color: black;
+    text-align: left;
+    padding-top: 100px;
+    padding-left: 15px;
+}

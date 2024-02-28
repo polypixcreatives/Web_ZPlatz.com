@@ -730,13 +730,46 @@ async function main() {
     try {
         viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
         carousel = false;
-    } catch (err) {}
-    const url = new URL(
-        // "nike.splat",
-        // location.href,
-        params.get("url") || "Fatima_3rd.splat",
-        "https://huggingface.co/Miggydewz/ZPlatzData/resolve/main/",
-    );
+    } catch (err) { }
+
+    // Get the property name from the query parameter
+    const propertyName = params.get("propertyName");
+
+    // Add console.log to check if propertyName is extracted correctly
+    console.log("Property Name:", propertyName);
+
+    // Function to fetch the splat file URL from Firestore based on the property name
+    const getSplatFileUrl = async (propertyName) => {
+        try {
+            // Add console.log to indicate the start of the function
+            console.log("Fetching splat file URL for Property Name:", propertyName);
+
+            // Reference to the splat_files collection
+            const splatFilesRef = db.collection("splat_files");
+
+            // Query for documents with matching property name field
+            const querySnapshot = await splatFilesRef.where("Property Name", "==", propertyName).get();
+
+            // Check if any documents were found
+            if (!querySnapshot.empty) {
+                // Get the file URL from the first matching document
+                const splatFileData = querySnapshot.docs[0].data();
+                return splatFileData["File URL"];
+            } else {
+                console.error("No splat file found for the given property name:", propertyName);
+                return null;
+            }
+        } catch (error) {
+            console.error("Error fetching splat file URL from Firestore:", error);
+            return null;
+        }
+    };
+
+    // Construct the URL using the fetched file URL or a default value if not found
+    const splatFileUrl = await getSplatFileUrl(propertyName);
+
+    const url = new URL(params.get("url") || splatFileUrl);
+    
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
         credentials: "omit", // include, *same-origin, omit
@@ -1031,7 +1064,104 @@ async function main() {
         startY = 0;
     });
 
-   
+    // Touch Screen Buttons
+    let lastPinchDistance = 0;
+    let lastSwipeX = 0;
+    let lastSwipeY = 0;
+    const rotationSensitivity = 0.002;
+
+    canvas.addEventListener("touchstart", (e) => {
+        if (e.touches.length === 2) {
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            lastPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+        } else if (e.touches.length === 1) {
+            lastSwipeX = e.touches[0].clientX;
+            lastSwipeY = e.touches[0].clientY;
+        }
+    });
+
+    canvas.addEventListener("touchmove", (e) => {
+        e.preventDefault();
+        if (e.touches.length === 2) {
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            const currentPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+
+            const scale = currentPinchDistance / lastPinchDistance;
+            let inv = invert4(viewMatrix);
+            let zoomAmount = scale > 1 ? 0.1 : -0.1;
+            inv = translate4(inv, 0, 0, zoomAmount);
+            viewMatrix = invert4(inv);
+
+            lastPinchDistance = currentPinchDistance;
+        } else if (e.touches.length === 1) {
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            const deltaX = -(currentX - lastSwipeX);
+            const deltaY = currentY - lastSwipeY;
+
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                // Swiping horizontally
+                // Rotate the viewMatrix around the Y-axis
+                const angleY = deltaX * rotationSensitivity;
+                viewMatrix = rotateY(viewMatrix, angleY);
+            } else {
+                // Swiping vertically
+                // Invert deltaY to reverse the direction of rotation around the X-axis
+                const angleX = -deltaY * rotationSensitivity;
+                viewMatrix = rotateX(viewMatrix, angleX);
+            }
+
+            lastSwipeX = currentX;
+            lastSwipeY = currentY;
+        }
+    });
+
+    // Function to rotate the viewMatrix around the Y-axis
+    function rotateY(matrix, angle) {
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+
+        const rotationMatrix = [
+            cos, 0, sin, 0,
+            0, 1, 0, 0,
+            -sin, 0, cos, 0,
+            0, 0, 0, 1
+        ];
+
+        return multiplyMatrices(matrix, rotationMatrix);
+    }
+
+    // Function to rotate the viewMatrix around the X-axis
+    function rotateX(matrix, angle) {
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+
+        const rotationMatrix = [
+            1, 0, 0, 0,
+            0, cos, -sin, 0,
+            0, sin, cos, 0,
+            0, 0, 0, 1
+        ];
+
+        return multiplyMatrices(matrix, rotationMatrix);
+    }
+
+    // Function to multiply two 4x4 matrices
+    function multiplyMatrices(m1, m2) {
+        const result = [];
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                let sum = 0;
+                for (let k = 0; k < 4; k++) {
+                    sum += m1[i * 4 + k] * m2[k * 4 + j];
+                }
+                result.push(sum);
+            }
+        }
+        return result;
+    }
 
     let jumpDelta = 0;
     let vertexCount = 0;
@@ -1293,26 +1423,35 @@ main().catch((err) => {
     document.getElementById("message").innerText = err.toString();
 });
 
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     var toggleButton = document.getElementById('toggleButton');
     var cardContainer = document.getElementById('cardContainer');
     var canvas = document.getElementById('canvas');
 
-    toggleButton.addEventListener('click', function() {
-        if (cardContainer.classList.contains('collapsed') && canvas.classList.contains('expanded')) {
-            cardContainer.classList.remove('collapsed');
+    cardContainer.style.display = 'none';
+
+    toggleButton.addEventListener('click', function () {
+        if (cardContainer.style.display === 'none') {
+            cardContainer.style.display = 'block';
             cardContainer.style.width = '300px';
-            toggleButton.style.transform = 'rotate(180deg)';
-            canvas.classList.remove('expanded');
+            canvas.style.width = '';
+            toggleButton.querySelector('i').classList.remove('fa-chevron-left');
+            toggleButton.querySelector('i').classList.add('fa-chevron-right');
+            toggleButton.classList.remove('hover-effect');
+            toggleButton.querySelector('span').textContent = 'Full Screen View';
         } else {
-            cardContainer.classList.add('collapsed');
-            cardContainer.style.width = ''; 
-            toggleButton.style.transform = 'rotate(0deg)';
-            canvas.classList.add('expanded');
+            cardContainer.style.display = 'none';
+            cardContainer.style.width = '';
+            canvas.style.width = '';
+            toggleButton.querySelector('i').classList.remove('fa-chevron-right');
+            toggleButton.querySelector('i').classList.add('fa-chevron-left');
+            toggleButton.classList.add('hover-effect');
+            toggleButton.querySelector('span').textContent = 'View Other Listings';
         }
     });
 });
 
-
-
+// Back to Dashboard
+const backToDashboard = () => {
+    window.location.href = 'dashboard.html';
+};
