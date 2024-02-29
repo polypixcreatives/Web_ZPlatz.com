@@ -1069,12 +1069,14 @@ async function main() {
     let lastSwipeX = 0;
     let lastSwipeY = 0;
     const rotationSensitivity = 0.002;
+    let lastRotationAngle = 0;
 
     canvas.addEventListener("touchstart", (e) => {
         if (e.touches.length === 2) {
             const touch1 = e.touches[0];
             const touch2 = e.touches[1];
             lastPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+            lastRotationAngle = Math.atan2(touch2.clientY - touch1.clientY, touch2.clientX - touch1.clientX);
         } else if (e.touches.length === 1) {
             lastSwipeX = e.touches[0].clientX;
             lastSwipeY = e.touches[0].clientY;
@@ -1091,11 +1093,16 @@ async function main() {
             const scale = currentPinchDistance / lastPinchDistance;
             let inv = invert4(viewMatrix);
             let zoomAmount = scale > 1 ? 0.2 : -0.2; // Adjust zoom speed here
-            zoomAmount *= 2; 
+            zoomAmount *= 2;
             inv = translate4(inv, 0, 0, zoomAmount);
             viewMatrix = invert4(inv);
 
+            const currentRotationAngle = Math.atan2(touch2.clientY - touch1.clientY, touch2.clientX - touch1.clientX);
+            const deltaRotationAngle = currentRotationAngle - lastRotationAngle;
+            viewMatrix = rotateZ(viewMatrix, deltaRotationAngle);
+
             lastPinchDistance = currentPinchDistance;
+            lastRotationAngle = currentRotationAngle;
         } else if (e.touches.length === 1) {
             const currentX = e.touches[0].clientX;
             const currentY = e.touches[0].clientY;
@@ -1149,6 +1156,21 @@ async function main() {
         return multiplyMatrices(matrix, rotationMatrix);
     }
 
+    // Function to rotate the viewMatrix around the Z-axis
+    function rotateZ(matrix, angle) {
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+
+        const rotationMatrix = [
+            cos, -sin, 0, 0,
+            sin, cos, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        ];
+
+        return multiplyMatrices(matrix, rotationMatrix);
+    }
+
     // Function to multiply two 4x4 matrices
     function multiplyMatrices(m1, m2) {
         const result = [];
@@ -1163,6 +1185,7 @@ async function main() {
         }
         return result;
     }
+
 
     let jumpDelta = 0;
     let vertexCount = 0;
