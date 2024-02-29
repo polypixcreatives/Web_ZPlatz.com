@@ -1090,7 +1090,8 @@ async function main() {
 
             const scale = currentPinchDistance / lastPinchDistance;
             let inv = invert4(viewMatrix);
-            let zoomAmount = scale > 1 ? 0.1 : -0.1;
+            let zoomAmount = scale > 1 ? 0.2 : -0.2; // Adjust zoom speed here
+            zoomAmount *= 2; 
             inv = translate4(inv, 0, 0, zoomAmount);
             viewMatrix = invert4(inv);
 
