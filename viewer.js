@@ -1068,13 +1068,23 @@ async function main() {
     let lastPinchDistance = 0;
     let lastSwipeX = 0;
     let lastSwipeY = 0;
-    const rotationSensitivity = 0.002;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    const sensitivity = 0.005;
+    const rotationSensitivity = 0.001;
+    let lastRotationAngle = 0;
 
     canvas.addEventListener("touchstart", (e) => {
         if (e.touches.length === 2) {
+            // Set the initial positions for potential dragging
+            isDragging = true;
             const touch1 = e.touches[0];
             const touch2 = e.touches[1];
+            dragStartX = (touch1.clientX + touch2.clientX) / 2;
+            dragStartY = (touch1.clientY + touch2.clientY) / 2;
             lastPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+            lastRotationAngle = Math.atan2(touch2.clientY - touch1.clientY, touch2.clientX - touch1.clientX);
         } else if (e.touches.length === 1) {
             lastSwipeX = e.touches[0].clientX;
             lastSwipeY = e.touches[0].clientY;
@@ -1083,21 +1093,42 @@ async function main() {
 
     canvas.addEventListener("touchmove", (e) => {
         e.preventDefault();
-        if (e.touches.length === 2) {
+        if (e.touches.length === 2 && isDragging) {
+            // Perform dragging behavior if two fingers are used
             const touch1 = e.touches[0];
             const touch2 = e.touches[1];
+            const currentX = (touch1.clientX + touch2.clientX) / 2;
+            const currentY = (touch1.clientY + touch2.clientY) / 2;
+            const deltaX = currentX - dragStartX;
+            const deltaY = currentY - dragStartY;
+
+            let inv = invert4(viewMatrix);
+            inv = translate4(inv, deltaX * sensitivity, -deltaY * sensitivity, 0); 
+            viewMatrix = invert4(inv);
+
+            dragStartX = currentX;
+            dragStartY = currentY;
+
             const currentPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
 
             const scale = currentPinchDistance / lastPinchDistance;
-            let inv = invert4(viewMatrix);
             let zoomAmount = scale > 1 ? 0.1 : -0.1;
+            zoomAmount *= 2;
             inv = translate4(inv, 0, 0, zoomAmount);
             viewMatrix = invert4(inv);
 
+            const currentRotationAngle = Math.atan2(touch2.clientY - touch1.clientY, touch2.clientX - touch1.clientX);
+            const deltaRotationAngle = currentRotationAngle - lastRotationAngle;
+            viewMatrix = rotateZ(viewMatrix, deltaRotationAngle);
+
             lastPinchDistance = currentPinchDistance;
+            lastRotationAngle = currentRotationAngle;
+        
         } else if (e.touches.length === 1) {
-            const currentX = e.touches[0].clientX;
-            const currentY = e.touches[0].clientY;
+            // Handle rotation
+            const touch = e.touches[0];
+            const currentX = touch.clientX;
+            const currentY = touch.clientY;
             const deltaX = -(currentX - lastSwipeX);
             const deltaY = currentY - lastSwipeY;
 
@@ -1116,6 +1147,11 @@ async function main() {
             lastSwipeX = currentX;
             lastSwipeY = currentY;
         }
+    });
+
+    canvas.addEventListener("touchend", (e) => {
+        // Reset dragging state
+        isDragging = false;
     });
 
     // Function to rotate the viewMatrix around the Y-axis
@@ -1148,6 +1184,21 @@ async function main() {
         return multiplyMatrices(matrix, rotationMatrix);
     }
 
+    // Function to rotate the viewMatrix around the Z-axis
+    function rotateZ(matrix, angle) {
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+
+        const rotationMatrix = [
+            cos, -sin, 0, 0,
+            sin, cos, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        ];
+
+        return multiplyMatrices(matrix, rotationMatrix);
+    }
+
     // Function to multiply two 4x4 matrices
     function multiplyMatrices(m1, m2) {
         const result = [];
@@ -1162,6 +1213,7 @@ async function main() {
         }
         return result;
     }
+
 
     let jumpDelta = 0;
     let vertexCount = 0;

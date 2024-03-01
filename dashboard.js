@@ -1,16 +1,3 @@
-// Scroll and Mouse Effects
-const links = document.querySelectorAll('nav a');
-
-links.forEach(link => {
-    link.addEventListener('mouseenter', () => {
-        link.querySelector('span').classList.remove('scale-x-0');
-    });
-
-    link.addEventListener('mouseleave', () => {
-        link.querySelector('span').classList.add('scale-x-0');
-    });
-});
-
 function scrollProperties(direction) {
     const container = document.querySelector('.properties-container');
     const scrollAmount = 300;
