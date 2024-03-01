@@ -1071,8 +1071,8 @@ async function main() {
     let isDragging = false;
     let dragStartX = 0;
     let dragStartY = 0;
-    const sensitivity = 0.01;
-    const rotationSensitivity = 0.002;
+    const sensitivity = 0.005;
+    const rotationSensitivity = 0.001;
     let lastRotationAngle = 0;
 
     canvas.addEventListener("touchstart", (e) => {
@@ -1103,7 +1103,7 @@ async function main() {
             const deltaY = currentY - dragStartY;
 
             let inv = invert4(viewMatrix);
-            inv = translate4(inv, deltaX * sensitivity, -deltaY * sensitivity, 0); // Adjust sensitivity here
+            inv = translate4(inv, deltaX * sensitivity, -deltaY * sensitivity, 0); 
             viewMatrix = invert4(inv);
 
             dragStartX = currentX;
@@ -1112,7 +1112,7 @@ async function main() {
             const currentPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
 
             const scale = currentPinchDistance / lastPinchDistance;
-            let zoomAmount = scale > 1 ? 0.2 : -0.2; // Adjust zoom speed here
+            let zoomAmount = scale > 1 ? 0.1 : -0.1;
             zoomAmount *= 2;
             inv = translate4(inv, 0, 0, zoomAmount);
             viewMatrix = invert4(inv);
@@ -1123,25 +1123,7 @@ async function main() {
 
             lastPinchDistance = currentPinchDistance;
             lastRotationAngle = currentRotationAngle;
-        } else if (e.touches.length === 2) {
-            // Handle pinch/zoom
-            const touch1 = e.touches[0];
-            const touch2 = e.touches[1];
-            const currentPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
-
-            const scale = currentPinchDistance / lastPinchDistance;
-            let inv = invert4(viewMatrix);
-            let zoomAmount = scale > 1 ? 0.2 : -0.2; // Adjust zoom speed here
-            zoomAmount *= 2;
-            inv = translate4(inv, 0, 0, zoomAmount);
-            viewMatrix = invert4(inv);
-
-            const currentRotationAngle = Math.atan2(touch2.clientY - touch1.clientY, touch2.clientX - touch1.clientX);
-            const deltaRotationAngle = currentRotationAngle - lastRotationAngle;
-            viewMatrix = rotateZ(viewMatrix, deltaRotationAngle);
-
-            lastPinchDistance = currentPinchDistance;
-            lastRotationAngle = currentRotationAngle;
+        
         } else if (e.touches.length === 1) {
             // Handle rotation
             const touch = e.touches[0];
