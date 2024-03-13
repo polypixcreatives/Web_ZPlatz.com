@@ -34,7 +34,45 @@ const getImageData = (e) => {
     }
     fileData.innerHTML = fileName;
     console.log(file, fileName);
+
+
+    const reader = new FileReader();
+    reader.onload = function () {
+        const coverPhotoDiv = document.querySelector('.cover-photo');
+        coverPhotoDiv.innerHTML =
+            `<div style="position: relative;">   
+                <button class="close-btn" onclick="removeCoverPhoto()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <img src="${reader.result}" alt="Cover Photo" class="uploaded-image">
+            </div>`;
+
+        // Change button text to "Change Cover Photo"
+        const selectCoverPhotoButton = document.querySelector('.selectImage');
+        selectCoverPhotoButton.innerHTML = `
+            <div class="flex items-center justify-center">
+                <i class="fas fa-file-upload text-gray-300 text-4xl"></i>
+            </div>
+            Change Cover Photo`;
+    }
+
+    reader.readAsDataURL(file);
 };
+
+function removeCoverPhoto() {
+    const coverPhotoDiv = document.querySelector('.cover-photo');
+    coverPhotoDiv.innerHTML = '';
+
+    fileData.textContent = 'No Cover Photo selected';
+
+    // Change button text to "Upload Cover Photo"
+    const selectCoverPhotoButton = document.querySelector('.selectImage');
+    selectCoverPhotoButton.innerHTML = `
+        <div class="flex items-center justify-center">
+            <i class="fas fa-file-upload text-gray-300 text-4xl"></i>
+        </div>
+        Upload Cover Photo`;
+}
 
 // Save URL to Firestore
 async function saveURLtoFirestore(url, fileName, propertyName, customAddress) {
@@ -179,7 +217,44 @@ const getSplatData = (e) => {
     }
     fileDataSplat.innerHTML = fileNameSplat;
     console.log(fileSplat, fileNameSplat);
+
+    const readerSplat = new FileReader();
+    readerSplat.onload = function () {
+        const splatFileDiv = document.querySelector('.splat-file');
+        splatFileDiv.innerHTML =
+            `<div style="position: relative;">   
+                <p><canvas id="canvas" alt="SPLAT File"></canvas></p>
+                <button class="close-btn" onclick="removeSplat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>`;
+
+        // Change button text to "Change SPLAT file"
+        const selectSplatButton = document.querySelector('.selectSplat');
+        selectSplatButton.innerHTML = `
+            <div class="flex items-center justify-center">
+                <i class="fas fa-file-upload text-gray-300 text-4xl"></i>
+            </div>
+            Change SPLAT file`;
+    }
+
+    readerSplat.readAsDataURL(fileSplat);
 };
+
+function removeSplat() {
+    const splatFileDiv = document.querySelector('.splat-file');
+    splatFileDiv.innerHTML = '';
+
+    fileDataSplat.textContent = 'No SPLAT file selected';
+
+    // Change button text to "Upload SPLAT File"
+    const selectSplatButton = document.querySelector('.selectSplat');
+    selectSplatButton.innerHTML = `
+        <div class="flex items-center justify-center">
+            <i class="fas fa-file-upload text-gray-300 text-4xl"></i>
+        </div>
+        Upload SPLAT file`;
+}
 
 // Save URL to Firestore
 async function saveSplatURLtoFirestore(url, fileNameSplat, propertyName, customAddress) {
