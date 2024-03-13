@@ -934,6 +934,7 @@ async function main() {
         }
     };
 
+    // Keyboard and Mouse Controls
     let activeKeys = [];
 
     window.addEventListener("keydown", (e) => {
