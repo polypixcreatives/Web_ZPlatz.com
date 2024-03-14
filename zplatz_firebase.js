@@ -1,11 +1,12 @@
 const firebaseConfig = {
-    apiKey: "AIzaSyBIAg_71Rq-Ma6BZBlaqjZhW4uPfZ254tY",
-    authDomain: "zplatz-database.firebaseapp.com",
-    projectId: "zplatz-database",
-    storageBucket: "zplatz-database.appspot.com",
-    messagingSenderId: "371563563136",
-    appId: "1:371563563136:web:21dab9cd363a2d055dbe65",
-    measurementId: "G-P33J1TQJS3"
+  apiKey: "AIzaSyBIAg_71Rq-Ma6BZBlaqjZhW4uPfZ254tY",
+  authDomain: "zplatz-database.firebaseapp.com",
+  databaseURL: "https://zplatz-database-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "zplatz-database",
+  storageBucket: "zplatz-database.appspot.com",
+  messagingSenderId: "371563563136",
+  appId: "1:371563563136:web:21dab9cd363a2d055dbe65",
+  measurementId: "G-P33J1TQJS3"
 };
 
 const app = firebase.initializeApp(firebaseConfig);
@@ -41,10 +42,10 @@ const getImageData = (e) => {
         const coverPhotoDiv = document.querySelector('.cover-photo');
         coverPhotoDiv.innerHTML =
             `<div style="position: relative;">   
+                <img src="${reader.result}" alt="Cover Photo" class="uploaded-image">
                 <button class="close-btn" onclick="removeCoverPhoto()">
                     <i class="fas fa-times"></i>
                 </button>
-                <img src="${reader.result}" alt="Cover Photo" class="uploaded-image">
             </div>`;
 
         // Change button text to "Change Cover Photo"
@@ -272,6 +273,73 @@ async function saveSplatURLtoFirestore(url, fileNameSplat, propertyName, customA
         console.error("Error saving splat file URL to Firestore:", error);
     }
 }
+
+/*// Render the splat file
+const renderSplat = () => { 
+    console.log("Rendering splat file...");
+    loadingSplat.style.display = "block";
+
+    const customAddressInput = document.getElementById('customAddressInput').querySelector('input');
+    const customAddress = customAddressInput.value; // Get custom address value
+
+    const propertyNameInput = document.getElementById('propertyNameInput');
+    const propertyName = propertyNameInput.value;
+
+    const storageRefSplat = storage.ref().child("SPLAT Render");
+    const folderRefSplat = storageRefSplat.child(fileNameSplat);
+    const uploadtaskSplat = folderRefSplat.put(fileSplat);
+    uploadtaskSplat.on(
+        "state_changed",
+        (snapshot) => {
+            console.log("Splat file Snapshot", snapshot.ref.name);
+            progressSplat = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            progressSplat = Math.round(progressSplat);
+            progressbarSplat.style.width = progressSplat + "%";
+            progressbarSplat.innerHTML = progressSplat + "%";
+            uploadedFileNameSplat = snapshot.ref.name;
+        },
+        (error) => {
+            console.error("Error rendering splat file:", error);
+        },
+        async () => {
+            try {
+                const downloadSplatURL = await storageRefSplat.child(uploadedFileNameSplat).getDownloadURL();
+                console.log("Splat file URL", downloadSplatURL);
+                if (!downloadSplatURL) {
+                    // Handle no URL case
+                } else {
+                    // Save URL to Firestore
+                    await saveSplatURLtoFirestore(downloadSplatURL, uploadedFileNameSplat, propertyName, customAddress);
+                    // Display the canvas
+                    displaySplatCanvas();
+                }
+            } catch (error) {
+                console.error("Error rendering splat file:", error);
+            }
+        }
+    );
+};
+
+const displaySplatCanvas = () => {
+
+    // Display the canvas
+    const splatFileDiv = document.querySelector('.splat-file');
+    splatFileDiv.innerHTML =
+        `<div style="position: relative;">   
+            <iframe id="upload_viewer_frame" src="upload_viewer.html" frameborder="0" style="width: 497px; height: 500px;"></iframe>
+            <button class="close-btn" onclick="removeSplat()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>`;
+
+    // Change button text to "Change SPLAT file"
+    const selectSplatButton = document.querySelector('.selectSplat');
+    selectSplatButton.innerHTML = `
+        <div class="flex items-center justify-center">
+            <i class="fas fa-file-upload text-gray-300 text-4xl"></i>
+        </div>
+        Change SPLAT file`;
+}*/
 
 // Upload the splat file
 const uploadSplatFile = () => {

@@ -61,3 +61,7 @@ latestBtn.addEventListener('click', () => {
 const navigateToUploadPage = () => {
     window.location.href = 'upload_listing.html';
 };
+
+const navigateToLoginPage = () => {
+    window.location.href = 'account.html';
+};
