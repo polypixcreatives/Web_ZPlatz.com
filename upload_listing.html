@@ -17,7 +17,6 @@
         }
     </style>
     <link rel="icon" type="image/png" href="assets/images/logo/Zplatzlogoicon.png">
-    <link rel="stylesheet" href="./assets/css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 </head>
@@ -59,7 +58,7 @@
             width: 50%;
         }
 
-        .upload {
+        .upload, .render {
             background-color: #0074E1;
             color: white;
             padding: 10px 20px;
@@ -361,6 +360,9 @@
                                         Upload SPLAT file
                                     </button>
                                     <span class="filedata-splat">No SPLAT file selected</span>
+                                    <div>
+                                        <button onclick="renderSplat()" class="render">Render & Preview SPLAT File</button>
+                                    </div>
                                     <div class="progressBar">
                                         <div class="progress-splat"></div>
                                     </div>
@@ -461,6 +463,6 @@
     <script src="dashboard.js"></script>
     <script src="zplatz_firebase.js"></script>
     <script src="upload_listing.js"></script>
-    <script src="main.js"></script>
+    <script src="upload_viewer.js"></script>
 </body>
 </html>
