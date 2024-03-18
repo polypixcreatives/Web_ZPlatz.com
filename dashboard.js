@@ -32,6 +32,11 @@ function scrollPlaces(direction) {
     }
 }
 
+// Header
+document.querySelector('.sidebar-toggle-btn').addEventListener('click', function () {
+    document.querySelector('.sidebar').classList.toggle('open');
+});
+
 // Navigation Bar Buttons
 const communityBtn = document.getElementById('communityBtn');
 const trendingBtn = document.getElementById('trendingBtn');
@@ -60,8 +65,4 @@ latestBtn.addEventListener('click', () => {
 // Upload Listing button navigate to the upload_listing.html
 const navigateToUploadPage = () => {
     window.location.href = 'upload_listing.html';
-};
-
-const navigateToLoginPage = () => {
-    window.location.href = 'account.html';
 };

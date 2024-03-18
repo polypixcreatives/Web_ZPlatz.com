@@ -20,9 +20,12 @@
 </head>
 <body>
     <header class="custom-header">
-        <div class="flex items-center flex-grow">
+        <button class="sidebar-toggle-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="flex-container">
+            <img alt="Company logo" class="company-logo" src="assets/images/logo/Zplatzlogo.png" />
             <div class="navigation-menu-container">
-                <img alt="Company logo" class="company-logo" src="assets/images/logo/Zplatzlogo.png" />
                 <nav class="navigation-menu">
                     <a href="#" class="nav-link">Find a Home<span class="underline"></span></a>
                     <a href="#" class="nav-link">Meet a Realtor<span class="underline"></span></a>
@@ -37,70 +40,18 @@
                 </button>
             </div>
         </div>
-        <div class="flex items-center space-x-4 ml-4">
-            <button class="relative hover:bg-gray-700 upload-listing-btn text-white px-4 py-2 rounded-md text-sm font-medium" onclick="navigateToUploadPage()">
+        <div class="main-options">
+            <button class="upload-listing-btn" onclick="navigateToUploadPage()">
                 <i class="fas fa-plus mr-2"></i> Upload Listing
             </button>
-            <button class="relative sign-in-btn text-white px-4 py-2 rounded-md text-sm font-medium" onclick="navigateToLoginPage()">
+            <button class="sign-in-btn" onclick="navigateToLoginPage()">
                 <i class="fas fa-sign-in-alt mr-2"></i> Sign In
             </button>
         </div>
     </header>
 
-    <main class="px-8 py-4">
-        <style>
-            .properties-container {
-                overflow-x: hidden;
-            }
-
-            .scroll-button {
-                width: 30px;
-                height: 30px;
-                border-radius: 100%;
-                background-color: #000000;
-                opacity: 25%;
-                border: none;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-            }
-
-            .scroll-button-category {
-                width: 30px;
-                height: 30px;
-                border-radius: 100%;
-                background-color: #808080;
-                opacity: 25%;
-                border: none;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-            }
-
-            .font-custom-black {
-                font-weight: 900;
-            }
-
-            .places-container {
-                overflow: hidden;
-            }
-
-            .custom-button-category {
-                background-color: #202024;
-            }
-
-            .custom-buttom-category-icon {
-                background-color: #303034;
-            }
-
-            .custom-size-listing {
-                height: 204.5px;
-                width: 204.5px;
-            }
-        </style>
-        <section class="mb-8 relative">
+    <main class="main">
+        <section class="features">
             <div class="flex gap-3 overflow-x-auto properties-container">
                 <div class="bg-gray-800 rounded-lg overflow-hidden relative" style="min-width: 340px; height: 200px;">
                     <img alt="Property-1" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/property-1.jpg" />
@@ -447,6 +398,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
     <script src="dashboard.js"></script>
+    <script src="login.js"></script>
     <script src="zplatz_firebase.js"></script>
 </body>
 </html>

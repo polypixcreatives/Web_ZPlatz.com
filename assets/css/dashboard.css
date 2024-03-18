@@ -7,11 +7,45 @@ body {
 }
 
 /* Header */
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #333;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    padding-top: 60px;
+    transition: left 0.3s ease;
+}
+
+.sidebar-toggle-btn {
+    display: none; /* Initially hide */
+    position: fixed;
+    top: 28px;
+    left: 20px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 999;
+}
+
+    .sidebar-toggle-btn i {
+        color: #fff;
+        font-size: 24px;
+    }
+
 .custom-header {
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.flex-container {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
 }
 
 /* Navigation Bar */
@@ -20,8 +54,8 @@ body {
     align-items: center;
 }
 
-
 .company-logo {
+    margin: 0 auto;
     height: 2.5rem;
 }
 
@@ -30,7 +64,7 @@ body {
     display: none;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1185px) {
     .navigation-menu {
         display: flex;
         margin-left: 1.5rem;
@@ -42,24 +76,24 @@ body {
 }
 
 .nav-link {
-    position: relative; 
-    color: #6b7280; 
-    transition-duration: 0.5s; 
+    position: relative;
+    color: #6b7280;
+    transition-duration: 0.5s;
 }
 
     .nav-link:hover {
-        color: #fff; 
+        color: #fff;
     }
 
 .underline {
-    position: absolute; 
-    left: 0; 
-    top: 100%; 
-    width: 100%; 
-    height: 2px; 
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    height: 2px;
     background-color: #1e40af;
     transform-origin: bottom;
-    transform: scaleX(0); 
+    transform: scaleX(0);
     transition-duration: 0.5s;
 }
 
@@ -108,12 +142,37 @@ body {
 }
 
 /* Upload and Sign-in buttons */
+.main-options {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+}
+
 .upload-listing-btn {
     background-color: #404044;
+    position: relative;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 0.5rem;
 }
 
 .sign-in-btn {
     background-color: #0074E1;
+    position: relative;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .slide-in-text {
@@ -123,4 +182,97 @@ body {
 
 .custom-size-listing:hover .slide-in-text {
     transform: translateX(0);
+}
+
+/* Main */
+.main {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+    .main .properties-container {
+        overflow-x: hidden;
+    }
+
+.scroll-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    background-color: #000000;
+    opacity: 25%;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.scroll-button-category {
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    background-color: #808080;
+    opacity: 25%;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.font-custom-black {
+    font-weight: 900;
+}
+
+.places-container {
+    overflow: hidden;
+}
+
+.custom-button-category {
+    background-color: #202024;
+}
+
+.custom-buttom-category-icon {
+    background-color: #303034;
+}
+
+.custom-size-listing {
+    height: 204.5px;
+    width: 204.5px;
+}
+
+.features {
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+/* Responsive */
+@media (max-width: 1185px) {
+    .sidebar {
+        left: 0;
+    }
+
+    .sidebar-toggle-btn {
+        display: block;
+        position: fixed;
+        top: 20px;
+        left: 30px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        z-index: 999;
+    }
+
+    .flex-container {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .navigation-menu-container,
+    .search-container,
+    .main-options {
+        display: none;
+    }
 }
