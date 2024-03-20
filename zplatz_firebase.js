@@ -384,3 +384,75 @@ const uploadSplatFile = () => {
         }
     );
 };
+// Function to fetch data from both collections and populate the table
+async function fetchAndPopulateMergedData() {
+    const coverPhotosRef = db.collection("cover_photos");
+    const splatFilesRef = db.collection("splat_files");
+    try {
+        const coverPhotosSnapshot = await coverPhotosRef.get();
+        const splatFilesSnapshot = await splatFilesRef.get();
+        const tableBody = document.querySelector("#merged-upload-list tbody");
+        tableBody.innerHTML = ""; // Clear existing table rows
+        // Process cover photos data
+        coverPhotosSnapshot.forEach(doc => {
+            const data = doc.data();
+            const propertyName = data['Property Name'];
+            const fileName = data['Image Name'];
+            const timestamp = data['Timestamp'].toDate(); // Convert Firebase timestamp to Date object
+            const formattedTimestamp = timestamp.toLocaleString(); // Format timestamp as per your requirement
+            // Create table row and cells for cover photos
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                    <td class="px-4 py-4 whitespace-nowrap">
+                        <input type="checkbox">
+                    </td>
+                    <td class="px-4 py-4 whitespace-nowrap">Cover Photo</td>
+                    <td class="px-4 py-4 whitespace-nowrap">${propertyName}</td>
+                    <td class="px-4 py-4 whitespace-nowrap">${fileName}</td>
+                    <td class="px-4 py-4 whitespace-nowrap">${formattedTimestamp}</td>
+                    <td class="px-4 py-4 whitespace-nowrap">
+                        <button class="text-red-600">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="text-red-600">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>`;
+            tableBody.appendChild(row); // Append row to table body
+        });
+        // Process splat files data
+        splatFilesSnapshot.forEach(doc => {
+            const data = doc.data();
+            const propertyName = data['Property Name'];
+            const fileNameSplat = data['File Name'];
+            const timestamp = data['Timestamp'].toDate(); // Convert Firebase timestamp to Date object
+            const formattedTimestamp = timestamp.toLocaleString(); // Format timestamp as per your requirement
+            // Create table row and cells for splat files
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                    <td class="px-4 py-4 whitespace-nowrap">
+                        <input type="checkbox">
+                    </td>
+                    <td class="px-4 py-4 whitespace-nowrap">Splat File</td>
+                    <td class="px-4 py-4 whitespace-nowrap">${propertyName}</td>
+                    <td class="px-4 py-4 whitespace-nowrap">${fileNameSplat}</td>
+                    <td class="px-4 py-4 whitespace-nowrap">${formattedTimestamp}</td>
+                    <td class="px-4 py-4 whitespace-nowrap">
+                        <button class="text-red-600">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="text-red-600">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>`;
+            tableBody.appendChild(row); // Append row to table body
+        });
+    } catch (error) {
+        console.error("Error fetching data from Firestore:", error);
+    }
+}
+
+// Call fetchAndPopulateMergedData when the page loads
+window.addEventListener('load', () => {
+    fetchAndPopulateMergedData();
+});

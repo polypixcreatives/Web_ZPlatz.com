@@ -41,10 +41,24 @@
             </div>
         </div>
         <div class="main-options">
+            <!-- Upload Listing button -->
             <button class="upload-listing-btn" onclick="navigateToUploadPage()">
                 <i class="fas fa-plus mr-2"></i> Upload Listing
             </button>
-            <button class="sign-in-btn" onclick="navigateToLoginPage()">
+
+            <!-- Profile picture container -->
+            <div id="profile-picture-container" style="position: relative;">
+                <!-- Profile picture, initially hidden -->
+                <img src="assets/images/users/Punay, Ella Venice C 2x2 ID Picture.png" id="profile-picture" alt="Profile Picture" class="h-10 w-10 rounded-full bg-gray-700" onclick="navigateToUploadListPage()" style="display:none" />
+
+                <!-- Logout button -->
+                <button id="logout-button" class="bg-white p-2 rounded-full text-gray-600 border border-gray-300 absolute bottom-0 left-0 transform translate-x-1/2 -translate-y-1/2 transition duration-300 ease-in-out opacity-0">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+
+            <!--Sign-in button-->
+            <button class="sign-in-btn" id="sign-in-btn" onclick="navigateToLoginPage()">
                 <i class="fas fa-sign-in-alt mr-2"></i> Sign In
             </button>
         </div>
@@ -393,12 +407,19 @@
         </div>
     </footer>
 
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+
+    <!-- SDKs for Firebase products -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+
+    <!-- Our script must be loaded after firebase references -->
     <script src="dashboard.js"></script>
-    <script src="login.js"></script>
     <script src="zplatz_firebase.js"></script>
+    <script src="zplatz_firebase_auth.js"></script>
 </body>
 </html>
