@@ -722,12 +722,13 @@ void main () {
 
 `.trim();
 
-let defaultViewMatrix = [-0.36,0.11,0.93,0,0,0.99,-0.1,0,-0.94,-0.04,-0.36,0,-0.87,-0.55,7,1];
-let viewMatrix = defaultViewMatrix;
-
 async function main() {
-    let carousel = true;
+    let carousel = false;
     const params = new URLSearchParams(location.search);
+
+    let defaultViewMatrix = [-0.42, 0.07, 0.91, 0, 0.01, 0.99, -0.05, 0, -0.91, -0.02, -0.43, 0, -0.02, 0.45, 9.91, 1];
+    let viewMatrix = defaultViewMatrix;
+
     try {
         viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
         carousel = false;
