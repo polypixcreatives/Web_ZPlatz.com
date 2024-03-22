@@ -205,6 +205,7 @@ let fileNameSplat;
 let progressSplat;
 let isLoadingSplat = false;
 let uploadedFileNameSplat;
+let documentId;
 
 const selectSplatfile = () => {
     inpSplat.click();
@@ -220,34 +221,34 @@ const getSplatData = (e) => {
     console.log(fileSplat, fileNameSplat);
 
     const readerSplat = new FileReader();
-    readerSplat.onload = function () {
-        const splatFileDiv = document.querySelector('.splat-file');
-        splatFileDiv.innerHTML =
-            `<div style="position: relative;">   
-                <p><canvas id="canvas" alt="SPLAT File"></canvas></p>
-                <button class="close-btn" onclick="removeSplat()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>`;
 
-        // Change button text to "Change SPLAT file"
-        const selectSplatButton = document.querySelector('.selectSplat');
-        selectSplatButton.innerHTML = `
-            <div class="flex items-center justify-center">
-                <i class="fas fa-file-upload text-gray-300 text-4xl"></i>
-            </div>
-            Change SPLAT file`;
+    showProgress();
+
+    readerSplat.onload = function () {
+        // Upload the splat file to Firebase Firestore
+        uploadSplatFile();
     }
 
     readerSplat.readAsDataURL(fileSplat);
 };
 
+function hideProgress() {
+    const progressBar = document.querySelector('.progress-splat');
+    progressBar.style.display = 'none';
+    
+    const loadingSpan = document.querySelector('.loading-splat');
+    loadingSpan.style.display = 'none';
+}
+
+function showProgress() {
+    const progressBar = document.querySelector('.progress-splat');
+    progressBar.style.display = 'block';
+    
+    const loadingSpan = document.querySelector('.loading-splat');
+    loadingSpan.style.display = 'block';
+}
+
 function removeSplat() {
-    const splatFileDiv = document.querySelector('.splat-file');
-    splatFileDiv.innerHTML = '';
-
-    fileDataSplat.textContent = 'No SPLAT file selected';
-
     // Change button text to "Upload SPLAT File"
     const selectSplatButton = document.querySelector('.selectSplat');
     selectSplatButton.innerHTML = `
@@ -255,6 +256,31 @@ function removeSplat() {
             <i class="fas fa-file-upload text-gray-300 text-4xl"></i>
         </div>
         Upload SPLAT file`;
+        
+    const splatFileDiv = document.querySelector('.splat-file');
+    splatFileDiv.innerHTML = '';
+
+    fileDataSplat.textContent = 'No SPLAT file selected';
+
+    // Hide progress bar
+    hideProgress();
+
+    // Delete SPLAT File from Firestore
+    deleteSplatFile();
+}
+
+// Delete SPLAT File
+async function deleteSplatFile() {
+    try {
+        const collectionRef = db.collection("splat_files");
+        const querySnapshot = await collectionRef.where("File Name", "==", fileNameSplat).get();
+        querySnapshot.forEach(async (doc) => {
+            await doc.ref.delete();
+            console.log("Document deleted successfully from Firestore:", doc.id);
+        });
+    } catch (error) {
+        console.error("Error deleting document from Firestore:", error);
+    }
 }
 
 // Save URL to Firestore
@@ -274,72 +300,38 @@ async function saveSplatURLtoFirestore(url, fileNameSplat, propertyName, customA
     }
 }
 
-/*// Render the splat file
-const renderSplat = () => { 
-    console.log("Rendering splat file...");
-    loadingSplat.style.display = "block";
+// Listen for the custom event dispatched from upload_viewer.js
+document.addEventListener('updateViewMatrix', async function (event) {
+    const { docId, viewMatrixJSON } = event.detail;
+    console.log('Received documentId:', docId);
+    console.log('Received viewMatrixJSON:', viewMatrixJSON);
 
-    const customAddressInput = document.getElementById('customAddressInput').querySelector('input');
-    const customAddress = customAddressInput.value; // Get custom address value
-
-    const propertyNameInput = document.getElementById('propertyNameInput');
-    const propertyName = propertyNameInput.value;
-
-    const storageRefSplat = storage.ref().child("SPLAT Render");
-    const folderRefSplat = storageRefSplat.child(fileNameSplat);
-    const uploadtaskSplat = folderRefSplat.put(fileSplat);
-    uploadtaskSplat.on(
-        "state_changed",
-        (snapshot) => {
-            console.log("Splat file Snapshot", snapshot.ref.name);
-            progressSplat = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            progressSplat = Math.round(progressSplat);
-            progressbarSplat.style.width = progressSplat + "%";
-            progressbarSplat.innerHTML = progressSplat + "%";
-            uploadedFileNameSplat = snapshot.ref.name;
-        },
-        (error) => {
-            console.error("Error rendering splat file:", error);
-        },
-        async () => {
-            try {
-                const downloadSplatURL = await storageRefSplat.child(uploadedFileNameSplat).getDownloadURL();
-                console.log("Splat file URL", downloadSplatURL);
-                if (!downloadSplatURL) {
-                    // Handle no URL case
-                } else {
-                    // Save URL to Firestore
-                    await saveSplatURLtoFirestore(downloadSplatURL, uploadedFileNameSplat, propertyName, customAddress);
-                    // Display the canvas
-                    displaySplatCanvas();
-                }
-            } catch (error) {
-                console.error("Error rendering splat file:", error);
-            }
+    try {
+        // Ensure that documentId is defined
+        if (!docId) {
+            console.error('Document ID is not defined.');
+            return;
         }
-    );
-};
 
-const displaySplatCanvas = () => {
+        if (!viewMatrixJSON) {
+            console.error('View Matrix is not defined.');
+            return;
+        }
 
-    // Display the canvas
-    const splatFileDiv = document.querySelector('.splat-file');
-    splatFileDiv.innerHTML =
-        `<div style="position: relative;">   
-            <iframe id="upload_viewer_frame" src="upload_viewer.html" frameborder="0" style="width: 497px; height: 500px;"></iframe>
-            <button class="close-btn" onclick="removeSplat()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>`;
+        // Identify the document you want to update
+        const docRef = db.collection('splat_files').doc(docId); // Use the received document ID
 
-    // Change button text to "Change SPLAT file"
-    const selectSplatButton = document.querySelector('.selectSplat');
-    selectSplatButton.innerHTML = `
-        <div class="flex items-center justify-center">
-            <i class="fas fa-file-upload text-gray-300 text-4xl"></i>
-        </div>
-        Change SPLAT file`;
-}*/
+        // Update the document with the new field
+        await docRef.update({
+            'View Matrix': viewMatrixJSON
+        });
+
+        console.log('View matrix updated successfully in Firestore.');
+
+    } catch (error) {
+        console.error('Error updating view matrix in Firestore:', error);
+    }
+});
 
 // Upload the splat file
 const uploadSplatFile = () => {
@@ -377,6 +369,29 @@ const uploadSplatFile = () => {
                 } else {
                     // Save URL to Firestore
                     await saveSplatURLtoFirestore(downloadSplatURL, uploadedFileNameSplat, propertyName, customAddress);
+
+                    const splatFileDiv = document.querySelector('.splat-file');
+                    splatFileDiv.innerHTML =
+                        `<div style="position: relative;">
+                        <!-- Display upload_viewer.html content here -->
+                        <iframe id="upload_viewer_frame" src="upload_viewer.html?splatFile=${encodeURIComponent(fileNameSplat)}" frameborder="0" style="width: 497px; height: 297px;"></iframe>
+                            <button class="close-btn" onclick="removeSplat()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>`;
+
+                    // Change button text to "Change SPLAT file"
+                    const selectSplatButton = document.querySelector('.selectSplat');
+                    selectSplatButton.innerHTML =
+                        `<div class="flex items-center justify-center">
+                            <i class="fas fa-file-upload text-gray-300 text-4xl"></i>
+                        </div>
+                        Change SPLAT file`;
+
+                    /*// Added save position button
+                    const savePositionButton = document.querySelector('.savePositionBtn');
+                    savePositionButton.innerHTML =
+                        `<button class="savePosition">Save Position</button>`;*/
                 }
             } catch (error) {
                 console.error("Error uploading splat file:", error);
@@ -384,6 +399,7 @@ const uploadSplatFile = () => {
         }
     );
 };
+
 // Function to fetch data from both collections and populate the table
 async function fetchAndPopulateMergedData() {
     const coverPhotosRef = db.collection("cover_photos");

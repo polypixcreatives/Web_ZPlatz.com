@@ -103,5 +103,4 @@ customAddressCheckbox.addEventListener('change', () => {
 // Upload listing files
 const uploadListingFiles = () => {
     uploadCoverPhoto();
-    uploadSplatFile();
 };
