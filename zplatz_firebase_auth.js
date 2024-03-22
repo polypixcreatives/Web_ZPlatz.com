@@ -15,6 +15,31 @@ const auth = firebase.auth();
 const database = firebase.database();
 const provider = new firebase.auth.GoogleAuthProvider();
 
+// Function to check if a user is signed in
+function checkSignIn() {
+    auth.onAuthStateChanged(function (user) {
+        if (user) {
+            // User is signed in
+            var email = user.email;
+            var profilePicture = user.photoURL; // Assuming you're storing the profile picture URL in user.photoURL
+
+            // Update the HTML to replace sign-in button with profile picture
+            var profilePictureElement = document.getElementById("profile-picture");
+            profilePictureElement.src = profilePicture;
+            profilePictureElement.style.display = "block"; // Show the profile picture
+            var signInButton = document.getElementById("sign-in-btn");
+            signInButton.style.display = "none"; // Hide the sign-in button
+        } else {
+            // User is signed out
+            // Reset the HTML to show the sign-in button
+            var profilePictureElement = document.getElementById("profile-picture");
+            profilePictureElement.style.display = "none"; // Hide the profile picture
+            var signInButton = document.getElementById("sign-in-btn");
+            signInButton.style.display = "block"; // Show the sign-in button
+        }
+    });
+}
+
 // Set up our register function
 function register () {
   // Get all our input fields
@@ -134,54 +159,58 @@ function validate_password(password) {
   }
 }
 
-const googleLogin = document.getElementById("google-login-button");
-googleLogin.addEventListener("click", function(){
-    firebase.auth()
-      .signInWithPopup(provider)
-      .then((result) => {
-        var credential = result.credential;
-        var token = credential.accessToken;
-        var user = result.user;
+// Signing in through Google
+    const googleLogin = document.getElementById("google-login-button");
+    googleLogin.addEventListener("click", function () {
+        firebase.auth()
+            .signInWithPopup(provider)
+            .then((result) => {
+                var credential = result.credential;
+                var user = result.user;
 
-        // Get current date and time
-        var now = new Date();
-        var lastLoginDateTime = now.toLocaleString();
+                // Get current date and time
+                var now = new Date();
+                var lastLoginDateTime = now.toLocaleString();
 
-        // Retrieve email from the signed-in user
-        var email = user.email;
+                // Retrieve email from the signed-in user
+                var email = user.email;
 
-        console.log("User:", user);
-        console.log("Email:", email);
+                console.log("User:", user);
+                console.log("Email:", email);
 
-        // Add this user to Firebase Database
-        var database_ref = database.ref()
+                // Add this user to Firebase Database
+                var database_ref = database.ref()
 
-        // Create User data
-        var user_data = {
-          email : email,
-          last_login: lastLoginDateTime
-        }
+                // Create User data
+                var user_data = {
+                    email: email,
+                    last_login: lastLoginDateTime
+                }
 
-        console.log("User Data:", user_data);
+                console.log("User Data:", user_data);
 
-        // Push to Firebase Database
-        database_ref.child('users/' + user.uid).set(user_data)
+                // Push to Firebase Database
+                return database_ref.child('users/' + user.uid).set(user_data)
+                    .then(() => {
+                        // Done
+                        alert('ZPlatz account successfully logged in!');
 
-        // Done
-        alert('ZPlatz account successfully logged in!')
+                        // Store email securely in localStorage
+                        localStorage.setItem('userEmail', email);
 
-        // Redirect to dashboard after successful account creation
-        // window.location.href = 'dashboard.html';
+                        // Redirect to dashboard after successful logging in 
+                        window.location.href = 'dashboard.html';
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                    });
 
-
-      }).catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        var email = error.email;
-        var credential = error.credential;
-
-      });
-})
+            })
+            .catch((error) => {
+                var errorMessage = error.message;
+                console.error("Error:", errorMessage);
+            });
+    });
 
 const googleCreate = document.getElementById("google-create-button");
 googleCreate.addEventListener("click", function(){
@@ -189,7 +218,6 @@ googleCreate.addEventListener("click", function(){
       .signInWithPopup(provider)
       .then((result) => {
         var credential = result.credential;
-        var token = credential.accessToken;
         var user = result.user;
 
         // Get current date and time
@@ -211,23 +239,28 @@ googleCreate.addEventListener("click", function(){
           last_login: lastLoginDateTime
         }
 
-        console.log("User Data:", user_data);
+         console.log("User Data:", user_data);
 
-        // Push to Firebase Database
-        database_ref.child('users/' + user.uid).set(user_data)
+          // Push to Firebase Database
+          return database_ref.child('users/' + user.uid).set(user_data);
+      })
+        .then(() => {
+            // Done
+            alert('ZPlatz account created!');
 
-        // Done
-        alert('ZPlatz account created!')
+            // Store email securely in localStorage
+            localStorage.setItem('userEmail', email);
 
-        // Redirect to dashboard after successful account creation
-        // window.location.href = 'dashboard.html';
+            // Redirect to dashboard after successful logging in 
+            window.location.href = 'dashboard.html';
+        })
+        .catch((error) => {
+            var errorMessage = error.message;
+            console.error("Error:", errorMessage);
+        });
 
-      }).catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        var email = error.email;
-        var credential = error.credential;
+}).catch((error) => {
+    var errorMessage = error.message;
 
         console.error("Error:", errorMessage);
-      });
-})
+});

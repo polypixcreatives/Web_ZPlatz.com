@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta hhtp-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>
         Upload Listing - ZPlatz.com
@@ -17,7 +17,6 @@
         }
     </style>
     <link rel="icon" type="image/png" href="assets/images/logo/Zplatzlogoicon.png">
-    <link rel="stylesheet" href="./assets/css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 </head>
@@ -59,7 +58,7 @@
             width: 50%;
         }
 
-        .upload {
+        .upload, .savePosition {
             background-color: #0074E1;
             color: white;
             padding: 10px 20px;
@@ -198,6 +197,19 @@
                     background-color: red;
                     color: white;
                 }
+
+            .button-container {
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .savePositionBtn {
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
         </style>
         <div class="flex-1 p-8">
             <div class="grid grid-cols-10 gap-8">
@@ -303,13 +315,6 @@
                         <input class="w-full bg-gray-800 p-2 rounded" type="text" placeholder="Enter your custom address">
                     </div>
 
-                    <!-- Input field for description -->
-                    <div class="mb-6">
-                        <label class="block mb-2">
-                            Description
-                        </label>
-                        <textarea class="w-full bg-gray-800 p-2 rounded h-32"></textarea>
-                    </div>
                     <div class="mb-6 grid grid-cols-2 gap-4">
                         <!-- First column -->
                         <div>
@@ -354,12 +359,15 @@
                                         <!-- Initially empty, will be filled with selected splat file -->
                                     </div>
                                     <input type="file" class="inp-splat hide-input" onchange="getSplatData(event)" />
-                                    <button onclick="selectSplatfile()" class="selectSplat">
-                                        <div class="flex items-center justify-center">
-                                            <i class="fas fa-file-upload text-gray-300 text-4xl"></i>
-                                        </div>
-                                        Upload SPLAT file
-                                    </button>
+                                    <div class="button-container">
+                                        <button onclick="selectSplatfile()" class="selectSplat">
+                                            <div class="flex items-center justify-center">
+                                                <i class="fas fa-file-upload text-gray-300 text-4xl"></i>
+                                            </div>
+                                            Upload SPLAT file
+                                        </button>
+                                        <div class="savePositionBtn"></div>
+                                    </div>
                                     <span class="filedata-splat">No SPLAT file selected</span>
                                     <div class="progressBar">
                                         <div class="progress-splat"></div>
@@ -369,6 +377,15 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Input field for description -->
+                    <div class="mb-6">
+                        <label class="block mb-2">
+                            Description
+                        </label>
+                        <textarea class="w-full bg-gray-800 p-2 rounded h-32"></textarea>
+                    </div>
+
                     <div>
                         <button onclick="uploadListingFiles()" class="upload">Upload</button>
                     </div>
@@ -461,6 +478,6 @@
     <script src="dashboard.js"></script>
     <script src="zplatz_firebase.js"></script>
     <script src="upload_listing.js"></script>
-    <script src="main.js"></script>
+    <script src="upload_viewer.js"></script>
 </body>
 </html>

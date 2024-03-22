@@ -20,9 +20,12 @@
 </head>
 <body>
     <header class="custom-header">
-        <div class="flex items-center flex-grow">
+        <button class="sidebar-toggle-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="flex-container">
+            <img alt="Company logo" class="company-logo" src="assets/images/logo/Zplatzlogo.png" />
             <div class="navigation-menu-container">
-                <img alt="Company logo" class="company-logo" src="assets/images/logo/Zplatzlogo.png" />
                 <nav class="navigation-menu">
                     <a href="#" class="nav-link">Find a Home<span class="underline"></span></a>
                     <a href="#" class="nav-link">Meet a Realtor<span class="underline"></span></a>
@@ -37,70 +40,32 @@
                 </button>
             </div>
         </div>
-        <div class="flex items-center space-x-4 ml-4">
-            <button class="relative hover:bg-gray-700 upload-listing-btn text-white px-4 py-2 rounded-md text-sm font-medium" onclick="navigateToUploadPage()">
+        <div class="main-options">
+            <!-- Upload Listing button -->
+            <button class="upload-listing-btn" onclick="navigateToUploadPage()">
                 <i class="fas fa-plus mr-2"></i> Upload Listing
             </button>
-            <button class="relative sign-in-btn text-white px-4 py-2 rounded-md text-sm font-medium" onclick="navigateToLoginPage()">
+
+            <!-- Profile picture container -->
+            <div id="profile-picture-container" style="position: relative;">
+                <!-- Profile picture, initially hidden -->
+                <img src="assets/images/users/Punay, Ella Venice C 2x2 ID Picture.png" id="profile-picture" alt="Profile Picture" class="h-10 w-10 rounded-full bg-gray-700" onclick="navigateToUploadListPage()" style="display:none" />
+
+                <!-- Logout button -->
+                <button id="logout-button" class="bg-white p-2 rounded-full text-gray-600 border border-gray-300 absolute bottom-0 left-0 transform translate-x-1/2 -translate-y-1/2 transition duration-300 ease-in-out opacity-0">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+
+            <!--Sign-in button-->
+            <button class="sign-in-btn" id="sign-in-btn" onclick="navigateToLoginPage()">
                 <i class="fas fa-sign-in-alt mr-2"></i> Sign In
             </button>
         </div>
     </header>
 
-    <main class="px-8 py-4">
-        <style>
-            .properties-container {
-                overflow-x: hidden;
-            }
-
-            .scroll-button {
-                width: 30px;
-                height: 30px;
-                border-radius: 100%;
-                background-color: #000000;
-                opacity: 25%;
-                border: none;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-            }
-
-            .scroll-button-category {
-                width: 30px;
-                height: 30px;
-                border-radius: 100%;
-                background-color: #808080;
-                opacity: 25%;
-                border: none;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-            }
-
-            .font-custom-black {
-                font-weight: 900;
-            }
-
-            .places-container {
-                overflow: hidden;
-            }
-
-            .custom-button-category {
-                background-color: #202024;
-            }
-
-            .custom-buttom-category-icon {
-                background-color: #303034;
-            }
-
-            .custom-size-listing {
-                height: 204.5px;
-                width: 204.5px;
-            }
-        </style>
-        <section class="mb-8 relative">
+    <main class="main">
+        <section class="features">
             <div class="flex gap-3 overflow-x-auto properties-container">
                 <div class="bg-gray-800 rounded-lg overflow-hidden relative" style="min-width: 340px; height: 200px;">
                     <img alt="Property-1" class="w-full h-full object-cover rounded-lg hover:transform hover:scale-110 transition-transform duration-700 ease-in-out" src="assets/images/property-1.jpg" />
@@ -297,28 +262,6 @@
                 All Listings
             </h2>
             <ul class="flex flex-wrap gap-1">
-                <li class="relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing" id="listingItem">
-                    <img alt="Property 1" class="w-full h-full object-cover" src="assets/images/Fatima Subdivision.png" />
-                    <div class="absolute bottom-0 left-0 w-full p-1 slide-in-text">
-                        <h3 class="text-lg font-semibold text-white ml-1">
-                            Fatima Subdivision
-                        </h3>
-                        <p class="text-white text-sm flex items-center ml-1">
-                            Cebu City, Cebu
-                        </p>
-                    </div>
-                </li>
-                <li class="relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
-                    <img alt="Property 2" class="w-full h-full object-cover" src="assets/images/property-2.jpg" />
-                    <div class="absolute bottom-0 left-0 w-full p-1 slide-in-text">
-                        <h3 class="text-lg font-semibold text-white ml-1">
-                            Deca Homes
-                        </h3>
-                        <p class="text-white text-sm flex items-center ml-1">
-                            Lapu-Lapu City, Cebu
-                        </p>
-                    </div>
-                </li>
                 <li class="relative bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
                     <img alt="Property 3" class="w-full h-full object-cover" src="assets/images/property-3.jpg" />
                     <div class="absolute bottom-0 left-0 w-full p-1 slide-in-text">
@@ -349,9 +292,6 @@
                 </li>
                 <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
                     <img alt="Places-Cebu" class="w-full h-full object-cover" src="assets/images/places-cebu.jpg" />
-                </li>
-                <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
-                    <img alt="Property 2" class="w-full h-full object-cover" src="assets/images/property-2.jpg" />
                 </li>
                 <li class="bg-gray-700 rounded-lg overflow-hidden custom-size-listing">
                     <img alt="Property 3" class="w-full h-full object-cover" src="assets/images/property-3.jpg" />
@@ -442,11 +382,19 @@
         </div>
     </footer>
 
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+
+    <!-- SDKs for Firebase products -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+
+    <!-- Our script must be loaded after firebase references -->
     <script src="dashboard.js"></script>
     <script src="zplatz_firebase.js"></script>
+    <script src="zplatz_firebase_auth.js"></script>
 </body>
 </html>

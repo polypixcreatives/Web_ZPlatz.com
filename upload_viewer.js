@@ -561,9 +561,9 @@ function createWorker(self) {
             if (types["scale_0"]) {
                 const qlen = Math.sqrt(
                     attrs.rot_0 ** 2 +
-                        attrs.rot_1 ** 2 +
-                        attrs.rot_2 ** 2 +
-                        attrs.rot_3 ** 2,
+                    attrs.rot_1 ** 2 +
+                    attrs.rot_2 ** 2 +
+                    attrs.rot_3 ** 2,
                 );
 
                 rot[0] = (attrs.rot_0 / qlen) * 128 + 128;
@@ -722,56 +722,68 @@ void main () {
 
 `.trim();
 
+let defaultViewMatrix = [-0.36, 0.11, 0.93, 0, 0, 0.99, -0.1, 0, -0.94, -0.04, -0.36, 0, -0.87, -0.55, 7, 1];
+let viewMatrix = defaultViewMatrix;
+
 async function main() {
-    let carousel = false;
+    let carousel = true;
     const params = new URLSearchParams(location.search);
-
-    let defaultViewMatrix = [-0.42, 0.07, 0.91, 0, 0.01, 0.99, -0.05, 0, -0.91, -0.02, -0.43, 0, -0.02, 0.45, 9.91, 1];
-    let viewMatrix = defaultViewMatrix;
-
     try {
         viewMatrix = JSON.parse(decodeURIComponent(location.hash.slice(1)));
         carousel = false;
     } catch (err) { }
 
-    // Get the property name from the query parameter
-    const propertyName = params.get("propertyName");
+    // Get the SPLAT file name from the query parameter
+    const splatFileName = params.get("splatFile");
 
-    // Add console.log to check if propertyName is extracted correctly
-    console.log("Property Name:", propertyName);
+    // Add console.log to check if splatFileName is extracted correctly
+    console.log("SPLAT File Name:", splatFileName);
 
-    // Function to fetch the splat file URL from Firestore based on the property name
-    const getSplatFileUrl = async (propertyName) => {
+    // Function to fetch the SPLAT file URL from Firestore based on the SPLAT file name
+    const getSplatFileUrl = async (splatFileName) => {
         try {
             // Add console.log to indicate the start of the function
-            console.log("Fetching splat file URL for Property Name:", propertyName);
+            console.log("Fetching SPLAT file URL for SPLAT File Name:", splatFileName);
 
             // Reference to the splat_files collection
             const splatFilesRef = db.collection("splat_files");
 
-            // Query for documents with matching property name field
-            const querySnapshot = await splatFilesRef.where("Property Name", "==", propertyName).get();
+            // Query for documents with matching SPLAT file name field
+            const querySnapshot = await splatFilesRef.where("File Name", "==", splatFileName).get();
 
             // Check if any documents were found
             if (!querySnapshot.empty) {
-                // Get the file URL from the first matching document
-                const splatFileData = querySnapshot.docs[0].data();
-                return splatFileData["File URL"];
+                // Get the first matching document
+                const doc = querySnapshot.docs[0];
+                // Get the document ID
+                const docId = doc.id;
+                // Get the file URL from the document data
+                const splatFileData = doc.data();
+                // Get the file URL
+                const splatFileUrl = splatFileData["File URL"];
+
+                // Add console.log to indicate successful fetching and log the document ID
+                console.log("SPLAT file found. Document ID:", docId);
+
+                // Return both document ID and file URL
+                return { docId, splatFileUrl };
             } else {
-                console.error("No splat file found for the given property name:", propertyName);
+                console.error("No SPLAT file found for the given SPLAT file name:", splatFileName);
                 return null;
             }
         } catch (error) {
-            console.error("Error fetching splat file URL from Firestore:", error);
+            console.error("Error fetching SPLAT file URL from Firestore:", error);
             return null;
         }
     };
 
     // Construct the URL using the fetched file URL or a default value if not found
-    const splatFileUrl = await getSplatFileUrl(propertyName);
+    const { docId, splatFileUrl } = await getSplatFileUrl(splatFileName);
+
+    // Log the document ID
+    console.log("Document ID of the fetched SPLAT file:", docId);
 
     const url = new URL(params.get("url") || splatFileUrl);
-    
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
         credentials: "omit", // include, *same-origin, omit
@@ -947,16 +959,32 @@ async function main() {
             camera = cameras[parseInt(e.key)];
             viewMatrix = getViewMatrix(camera);
         }
-        if (e.code == "KeyV") {
-            location.hash =
-                "#" +
-                JSON.stringify(
-                    viewMatrix.map((k) => Math.round(k * 100) / 100),
-                );
-        } else if (e.code === "KeyP") {
+        else if (e.code === "KeyP") {
             carousel = false;
         }
     });
+
+    // Event listener for "Save Position" button
+    const savePositionButton = document.querySelector(".savePosition");
+    savePositionButton.addEventListener("click", function () {
+        viewMatrixJSON =
+            JSON.stringify(
+                viewMatrix.map((k) => Math.round(k * 100) / 100),
+            );
+        console.log("Updated view matrix location:", viewMatrixJSON);
+
+        // Pass viewMatrixJSON and documentId to zplatz_firebase.js
+        uploadViewMatrixToFirebase(viewMatrixJSON, docId); // Pass documentId here
+    });
+
+    function uploadViewMatrixToFirebase(viewMatrixJSON, docId) { // Define documentId here
+        // Create a custom event with both viewMatrixJSON and documentId
+        const viewMatrixEvent = new CustomEvent('updateViewMatrix', { detail: { docId, viewMatrixJSON } });
+
+        // Dispatch the custom event to notify zplatz_firebase.js
+        document.dispatchEvent(viewMatrixEvent);
+    }
+
     window.addEventListener("keyup", (e) => {
         activeKeys = activeKeys.filter((k) => k !== e.code);
     });
@@ -973,8 +1001,8 @@ async function main() {
                 e.deltaMode == 1
                     ? lineHeight
                     : e.deltaMode == 2
-                        ? innerHeight
-                        : 1;
+                    ? innerHeight
+                    : 1;
             let inv = invert4(viewMatrix);
             if (e.shiftKey) {
                 inv = translate4(
@@ -1002,7 +1030,7 @@ async function main() {
                     zoomAmount * 10 // Adjust the zoom speed as needed
                 );
             }
-
+    
             viewMatrix = invert4(inv);
         },
         { passive: false },
@@ -1068,104 +1096,155 @@ async function main() {
     });
 
     // Touch Screen Buttons
-    let altX = 0,
-        altY = 0;
-    canvas.addEventListener(
-        "touchstart",
-        (e) => {
-            e.preventDefault();
-            if (e.touches.length === 1) {
-                carousel = false;
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-                down = 1;
-            } else if (e.touches.length === 2) {
-                // console.log('beep')
-                carousel = false;
-                startX = e.touches[0].clientX;
-                altX = e.touches[1].clientX;
-                startY = e.touches[0].clientY;
-                altY = e.touches[1].clientY;
-                down = 1;
+    let lastPinchDistance = 0;
+    let lastSwipeX = 0;
+    let lastSwipeY = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    const sensitivity = 0.005;
+    const rotationSensitivity = 0.001;
+    let lastRotationAngle = 0;
+
+    canvas.addEventListener("touchstart", (e) => {
+        if (e.touches.length === 2) {
+            // Set the initial positions for potential dragging
+            isDragging = true;
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            dragStartX = (touch1.clientX + touch2.clientX) / 2;
+            dragStartY = (touch1.clientY + touch2.clientY) / 2;
+            lastPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+            lastRotationAngle = Math.atan2(touch2.clientY - touch1.clientY, touch2.clientX - touch1.clientX);
+        } else if (e.touches.length === 1) {
+            lastSwipeX = e.touches[0].clientX;
+            lastSwipeY = e.touches[0].clientY;
+        }
+    });
+
+    canvas.addEventListener("touchmove", (e) => {
+        e.preventDefault();
+        if (e.touches.length === 2 && isDragging) {
+            // Perform dragging behavior if two fingers are used
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            const currentX = (touch1.clientX + touch2.clientX) / 2;
+            const currentY = (touch1.clientY + touch2.clientY) / 2;
+            const deltaX = currentX - dragStartX;
+            const deltaY = currentY - dragStartY;
+
+            let inv = invert4(viewMatrix);
+            inv = translate4(inv, deltaX * sensitivity, -deltaY * sensitivity, 0); 
+            viewMatrix = invert4(inv);
+
+            dragStartX = currentX;
+            dragStartY = currentY;
+
+            const currentPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+
+            const scale = currentPinchDistance / lastPinchDistance;
+            let zoomAmount = scale > 1 ? 0.1 : -0.1;
+            zoomAmount *= 2;
+            inv = translate4(inv, 0, 0, zoomAmount);
+            viewMatrix = invert4(inv);
+
+            const currentRotationAngle = Math.atan2(touch2.clientY - touch1.clientY, touch2.clientX - touch1.clientX);
+            const deltaRotationAngle = currentRotationAngle - lastRotationAngle;
+            viewMatrix = rotateZ(viewMatrix, deltaRotationAngle);
+
+            lastPinchDistance = currentPinchDistance;
+            lastRotationAngle = currentRotationAngle;
+        
+        } else if (e.touches.length === 1) {
+            // Handle rotation
+            const touch = e.touches[0];
+            const currentX = touch.clientX;
+            const currentY = touch.clientY;
+            const deltaX = -(currentX - lastSwipeX);
+            const deltaY = currentY - lastSwipeY;
+
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                // Swiping horizontally
+                // Rotate the viewMatrix around the Y-axis
+                const angleY = deltaX * rotationSensitivity;
+                viewMatrix = rotateY(viewMatrix, angleY);
+            } else {
+                // Swiping vertically
+                // Invert deltaY to reverse the direction of rotation around the X-axis
+                const angleX = -deltaY * rotationSensitivity;
+                viewMatrix = rotateX(viewMatrix, angleX);
             }
-        },
-        { passive: false },
-    );
-    canvas.addEventListener(
-        "touchmove",
-        (e) => {
-            e.preventDefault();
-            if (e.touches.length === 1 && down) {
-                let inv = invert4(viewMatrix);
-                let dx = (4 * (e.touches[0].clientX - startX)) / innerWidth;
-                let dy = (4 * (e.touches[0].clientY - startY)) / innerHeight;
 
-                let d = 4;
-                inv = translate4(inv, 0, 0, d);
-                // inv = translate4(inv,  -x, -y, -z);
-                // inv = translate4(inv,  x, y, z);
-                inv = rotate4(inv, dx, 0, 1, 0);
-                inv = rotate4(inv, -dy, 1, 0, 0);
-                inv = translate4(inv, 0, 0, -d);
+            lastSwipeX = currentX;
+            lastSwipeY = currentY;
+        }
+    });
 
-                viewMatrix = invert4(inv);
+    canvas.addEventListener("touchend", (e) => {
+        // Reset dragging state
+        isDragging = false;
+    });
 
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-            } else if (e.touches.length === 2) {
-                // alert('beep')
-                const dtheta =
-                    Math.atan2(startY - altY, startX - altX) -
-                    Math.atan2(
-                        e.touches[0].clientY - e.touches[1].clientY,
-                        e.touches[0].clientX - e.touches[1].clientX,
-                    );
-                const dscale =
-                    Math.hypot(startX - altX, startY - altY) /
-                    Math.hypot(
-                        e.touches[0].clientX - e.touches[1].clientX,
-                        e.touches[0].clientY - e.touches[1].clientY,
-                    );
-                const dx =
-                    (e.touches[0].clientX +
-                        e.touches[1].clientX -
-                        (startX + altX)) /
-                    2;
-                const dy =
-                    (e.touches[0].clientY +
-                        e.touches[1].clientY -
-                        (startY + altY)) /
-                    2;
-                let inv = invert4(viewMatrix);
-                // inv = translate4(inv,  0, 0, d);
-                inv = rotate4(inv, dtheta, 0, 0, 1);
+    // Function to rotate the viewMatrix around the Y-axis
+    function rotateY(matrix, angle) {
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
 
-                inv = translate4(inv, -dx / innerWidth, -dy / innerHeight, 0);
+        const rotationMatrix = [
+            cos, 0, sin, 0,
+            0, 1, 0, 0,
+            -sin, 0, cos, 0,
+            0, 0, 0, 1
+        ];
 
-                // let preY = inv[13];
-                inv = translate4(inv, 0, 0, 3 * (1 - dscale));
-                // inv[13] = preY;
+        return multiplyMatrices(matrix, rotationMatrix);
+    }
 
-                viewMatrix = invert4(inv);
+    // Function to rotate the viewMatrix around the X-axis
+    function rotateX(matrix, angle) {
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
 
-                startX = e.touches[0].clientX;
-                altX = e.touches[1].clientX;
-                startY = e.touches[0].clientY;
-                altY = e.touches[1].clientY;
+        const rotationMatrix = [
+            1, 0, 0, 0,
+            0, cos, -sin, 0,
+            0, sin, cos, 0,
+            0, 0, 0, 1
+        ];
+
+        return multiplyMatrices(matrix, rotationMatrix);
+    }
+
+    // Function to rotate the viewMatrix around the Z-axis
+    function rotateZ(matrix, angle) {
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+
+        const rotationMatrix = [
+            cos, -sin, 0, 0,
+            sin, cos, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        ];
+
+        return multiplyMatrices(matrix, rotationMatrix);
+    }
+
+    // Function to multiply two 4x4 matrices
+    function multiplyMatrices(m1, m2) {
+        const result = [];
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                let sum = 0;
+                for (let k = 0; k < 4; k++) {
+                    sum += m1[i * 4 + k] * m2[k * 4 + j];
+                }
+                result.push(sum);
             }
-        },
-        { passive: false },
-    );
-    canvas.addEventListener(
-        "touchend",
-        (e) => {
-            e.preventDefault();
-            down = false;
-            startX = 0;
-            startY = 0;
-        },
-        { passive: false },
-    );
+        }
+        return result;
+    }
+
 
     let jumpDelta = 0;
     let vertexCount = 0;
@@ -1281,7 +1360,7 @@ async function main() {
             }
         }
 
-
+     
         viewMatrix = invert4(inv);
 
         if (carousel) {
@@ -1317,7 +1396,7 @@ async function main() {
             gl.clear(gl.COLOR_BUFFER_BIT);
             gl.drawArraysInstanced(gl.TRIANGLE_FAN, 0, 4, vertexCount);
         } else {
-            gl.clear(gl.COLOR_BUFFER_BIT);
+            gl.clear(gl.COLOR_BUFFER_BITply);
             document.getElementById("spinner").style.display = "";
             start = Date.now() + 2000;
         }
@@ -1455,7 +1534,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Back to Dashboard
-const backToDashboard = () => {
-    window.location.href = 'dashboard.html';
-};
+main().catch((err) => {
+    document.getElementById("spinner").style.display = "none";
+    document.getElementById("message").innerText = err.toString();
+});
