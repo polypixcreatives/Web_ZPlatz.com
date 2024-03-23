@@ -129,6 +129,8 @@ const uploadCoverPhoto = () => {
                     // Save URL to Firestore
                     await saveURLtoFirestore(downloadURL, uploadedFileName, propertyName, customAddress);
                 }
+
+                window.location.href = `dashboard.html`;
             } catch (error) {
                 console.error("Error uploading file:", error);
             }
