@@ -13,13 +13,6 @@ const app = firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
 const db = firebase.firestore();
 
-
-// Function to check if property name is entered
-const isPropertyNameEntered = () => {
-    const propertyNameInput = document.getElementById('propertyNameInput');
-    return propertyNameInput.value.trim() !== ''; // Checking if property name input is not empty
-};
-
 // Upload Cover Photo
 const inp = document.querySelector(".inp");
 const progressbar = document.querySelector(".progress");
@@ -31,18 +24,10 @@ let progress;
 let uploadedFileName;
 
 const selectCoverPhoto = () => {
-    if (!isPropertyNameEntered()) {
-        alert('Please enter a property name before selecting/uploading a SPLAT file.');
-        return; // Stop further execution if property name is not entered
-    }
     inp.click();
 };
 
 const getImageData = (e) => {
-    if (!isPropertyNameEntered()) {
-        alert('Please enter a property name before selecting/uploading a SPLAT file.');
-        return; // Stop further execution if property name is not entered
-    }
     file = e.target.files[0];
     fileName = file.name;
     if (fileName) {
@@ -115,8 +100,7 @@ const uploadCoverPhoto = () => {
     const customAddressInput = document.getElementById('customAddressInput').querySelector('input');
     const customAddress = customAddressInput.value;
 
-    const propertyNameInput = document.getElementById('propertyNameInput');
-    const propertyName = propertyNameInput.value;
+    const propertyName = getPropertyName();
 
     const storageRef = storage.ref().child("Cover Photos");
     const folderRef = storageRef.child(fileName);
@@ -143,9 +127,12 @@ const uploadCoverPhoto = () => {
                 } else {
                     // Save URL to Firestore
                     await saveURLtoFirestore(downloadURL, uploadedFileName, propertyName, customAddress);
+
+                    // Update the property name of the corresponding SPLAT file
+                    updateSplatFilePropertyName(propertyName); // Call the function to update SPLAT file property name
                 }
 
-                window.location.href = `dashboard.html`;
+               window.location.href = `dashboard.html`;
             } catch (error) {
                 console.error("Error uploading file:", error);
             }
@@ -225,18 +212,10 @@ let uploadedFileNameSplat;
 let documentId;
 
 const selectSplatfile = () => {
-    if (!isPropertyNameEntered()) {
-        alert('Please enter a property name before selecting/uploading a SPLAT file.');
-        return; // Stop further execution if property name is not entered
-    }
     inpSplat.click();
 };
 
 const getSplatData = (e) => {
-    if (!isPropertyNameEntered()) {
-        alert('Please enter a property name before selecting/uploading a SPLAT file.');
-        return; // Stop further execution if property name is not entered
-    }
     fileSplat = e.target.files[0];
     fileNameSplat = fileSplat.name;
     if (fileNameSplat) {
@@ -412,11 +391,6 @@ const uploadSplatFile = () => {
                             <i class="fas fa-file-upload text-gray-300 text-4xl"></i>
                         </div>
                         Change SPLAT file`;
-
-                    /*// Added save position button
-                    const savePositionButton = document.querySelector('.savePositionBtn');
-                    savePositionButton.innerHTML =
-                        `<button class="savePosition">Save Position</button>`;*/
                 }
             } catch (error) {
                 console.error("Error uploading splat file:", error);
@@ -424,6 +398,38 @@ const uploadSplatFile = () => {
         }
     );
 };
+
+// Function to update the property name of the corresponding SPLAT file
+async function updateSplatFilePropertyName(propertyName) {
+    // Log the propertyName when the function is called
+    console.log("Updating SPLAT file property name:", propertyName);
+
+    try {
+        // Query for the SPLAT file by its fileName
+        const querySnapshot = await db.collection("splat_files").where("File Name", "==", fileNameSplat).get();
+
+        // Iterate over each document in the query result
+        querySnapshot.forEach(async (doc) => {
+            // Get the document ID
+            const docId = doc.id;
+
+            // Log the document ID
+            console.log("Document ID for SPLAT file:", docId);
+
+            // Identify the document you want to update
+            const docRef = db.collection('splat_files').doc(docId);
+
+            // Update the document with the new Property Name
+            await docRef.update({
+                'Property Name': propertyName
+            });
+
+            console.log('Property Name updated successfully for SPLAT file in Firestore.');
+        });
+    } catch (error) {
+        console.error("Error updating Property Name for SPLAT file in Firestore:", error);
+    }
+}
 
 // Function to fetch data from both collections and populate the table
 async function fetchAndPopulateMergedData() {
@@ -497,3 +503,55 @@ async function fetchAndPopulateMergedData() {
 window.addEventListener('load', () => {
     fetchAndPopulateMergedData();
 });
+
+                        
+// Function to generate a random property name
+const generateRandomPropertyName = () => {
+    const letters = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
+    const numbers = '0123456789';
+    let randomName = 'Untitled-';
+
+    for (let i = 0; i < 3; i++) {
+        randomName += letters.charAt(Math.floor(Math.random() * letters.length));
+    }
+
+    for (let i = 0; i < 3; i++) {
+        randomName += numbers.charAt(Math.floor(Math.random() * numbers.length));
+    }
+
+    return randomName;
+};
+
+// Function to check if property name is entered or generate a random one
+const getPropertyName = () => {
+    const propertyNameInput = document.getElementById('propertyNameInput');
+    return propertyNameInput.value.trim() !== '' ? propertyNameInput.value.trim() : generateRandomPropertyName();
+};
+
+// Upload listing files
+const uploadListingFiles = () => {
+    // Retrieve file names (fileName and fileNameSplat)
+    const coverPhotoFileName = fileName;
+    const splatFileFileName = fileNameSplat;
+
+    // Check if both cover photo and SPLAT file are uploaded
+    if (!coverPhotoFileName && !splatFileFileName) {
+        alert('Please upload a cover photo and a SPLAT file.');
+        return; // Stop further execution if both cover photo and SPLAT file are empty
+    }
+
+    // Check if cover photo is uploaded
+    if (!coverPhotoFileName) {
+        alert('Please upload a cover photo.');
+        return; // Stop further execution if cover photo is not uploaded
+    }
+
+    // Check if SPLAT file is uploaded
+    if (!splatFileFileName) {
+        alert('Please upload a SPLAT file.');
+        return; // Stop further execution if SPLAT file is not uploaded
+    }
+
+    // Both files are uploaded, proceed with uploading cover photo
+    uploadCoverPhoto();
+};

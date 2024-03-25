@@ -99,8 +99,3 @@ customAddressCheckbox.addEventListener('change', () => {
         customAddressInput.style.display = 'none';
     }
 });
-
-// Upload listing files
-const uploadListingFiles = () => {
-    uploadCoverPhoto();
-};
