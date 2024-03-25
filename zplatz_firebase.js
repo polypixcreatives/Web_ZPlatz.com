@@ -31,20 +31,18 @@ let progress;
 let uploadedFileName;
 
 const selectCoverPhoto = () => {
-    handleCoverPhotoFile();
+    if (!isPropertyNameEntered()) {
+        alert('Please enter a property name before selecting/uploading a SPLAT file.');
+        return; // Stop further execution if property name is not entered
+    }
     inp.click();
 };
 
-// Function to handle SPLAT file selection/upload
-const handleCoverPhotoFile = () => {
+const getImageData = (e) => {
     if (!isPropertyNameEntered()) {
-        alert('Please enter a property name before selecting/uploading a Cover Photo.');
+        alert('Please enter a property name before selecting/uploading a SPLAT file.');
         return; // Stop further execution if property name is not entered
     }
-};
-
-const getImageData = (e) => {
-    handleCoverPhotoFile();
     file = e.target.files[0];
     fileName = file.name;
     if (fileName) {
@@ -227,21 +225,18 @@ let uploadedFileNameSplat;
 let documentId;
 
 const selectSplatfile = () => {
-    handleSplatFile();
-    inpSplat.click();
-};
-
-
-// Function to handle SPLAT file selection/upload
-const handleSplatFile = () => {
     if (!isPropertyNameEntered()) {
         alert('Please enter a property name before selecting/uploading a SPLAT file.');
         return; // Stop further execution if property name is not entered
     }
+    inpSplat.click();
 };
 
 const getSplatData = (e) => {
-    handleSplatFile();
+    if (!isPropertyNameEntered()) {
+        alert('Please enter a property name before selecting/uploading a SPLAT file.');
+        return; // Stop further execution if property name is not entered
+    }
     fileSplat = e.target.files[0];
     fileNameSplat = fileSplat.name;
     if (fileNameSplat) {
