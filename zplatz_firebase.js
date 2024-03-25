@@ -210,7 +210,24 @@ let uploadedFileNameSplat;
 let documentId;
 
 const selectSplatfile = () => {
+    handleSplatFile();
     inpSplat.click();
+};
+
+// Function to check if property name is entered
+const isPropertyNameEntered = () => {
+    const propertyNameInput = document.getElementById('propertyNameInput');
+    return propertyNameInput.value.trim() !== ''; // Checking if property name input is not empty
+};
+
+// Function to handle SPLAT file selection/upload
+const handleSplatFile = () => {
+    if (!isPropertyNameEntered()) {
+        alert('Please enter a property name before selecting/uploading a SPLAT file.');
+        return; // Stop further execution if property name is not entered
+    }
+
+    // Continue with SPLAT file selection/upload logic here
 };
 
 const getSplatData = (e) => {
