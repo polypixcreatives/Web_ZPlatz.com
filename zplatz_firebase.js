@@ -44,6 +44,7 @@ const handleCoverPhotoFile = () => {
 };
 
 const getImageData = (e) => {
+    handleCoverPhotoFile();
     file = e.target.files[0];
     fileName = file.name;
     if (fileName) {
@@ -240,6 +241,7 @@ const handleSplatFile = () => {
 };
 
 const getSplatData = (e) => {
+    handleSplatFile();
     fileSplat = e.target.files[0];
     fileNameSplat = fileSplat.name;
     if (fileNameSplat) {
