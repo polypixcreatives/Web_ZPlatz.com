@@ -226,8 +226,6 @@ const handleSplatFile = () => {
         alert('Please enter a property name before selecting/uploading a SPLAT file.');
         return; // Stop further execution if property name is not entered
     }
-
-    // Continue with SPLAT file selection/upload logic here
 };
 
 const getSplatData = (e) => {
