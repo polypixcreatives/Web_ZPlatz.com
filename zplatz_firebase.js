@@ -13,6 +13,13 @@ const app = firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
 const db = firebase.firestore();
 
+
+// Function to check if property name is entered
+const isPropertyNameEntered = () => {
+    const propertyNameInput = document.getElementById('propertyNameInput');
+    return propertyNameInput.value.trim() !== ''; // Checking if property name input is not empty
+};
+
 // Upload Cover Photo
 const inp = document.querySelector(".inp");
 const progressbar = document.querySelector(".progress");
@@ -24,7 +31,16 @@ let progress;
 let uploadedFileName;
 
 const selectCoverPhoto = () => {
+    handleCoverPhotoFile();
     inp.click();
+};
+
+// Function to handle SPLAT file selection/upload
+const handleCoverPhotoFile = () => {
+    if (!isPropertyNameEntered()) {
+        alert('Please enter a property name before selecting/uploading a Cover Photo.');
+        return; // Stop further execution if property name is not entered
+    }
 };
 
 const getImageData = (e) => {
@@ -129,6 +145,8 @@ const uploadCoverPhoto = () => {
                     // Save URL to Firestore
                     await saveURLtoFirestore(downloadURL, uploadedFileName, propertyName, customAddress);
                 }
+
+                window.location.href = `dashboard.html`;
             } catch (error) {
                 console.error("Error uploading file:", error);
             }
@@ -208,7 +226,17 @@ let uploadedFileNameSplat;
 let documentId;
 
 const selectSplatfile = () => {
+    handleSplatFile();
     inpSplat.click();
+};
+
+
+// Function to handle SPLAT file selection/upload
+const handleSplatFile = () => {
+    if (!isPropertyNameEntered()) {
+        alert('Please enter a property name before selecting/uploading a SPLAT file.');
+        return; // Stop further execution if property name is not entered
+    }
 };
 
 const getSplatData = (e) => {
