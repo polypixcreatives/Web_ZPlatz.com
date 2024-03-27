@@ -1471,12 +1471,12 @@ let logoOpacity = 1;
 const toggleLogoVisibility = () => {
     if (logoContainer.style.display === 'none') {
         logoContainer.style.display = 'block';
-        hideButton.querySelector('i').classList.remove('fa-eye-slash');
-        hideButton.querySelector('i').classList.add('fa-eye');
-    } else {
-        logoContainer.style.display = 'none';
         hideButton.querySelector('i').classList.remove('fa-eye');
         hideButton.querySelector('i').classList.add('fa-eye-slash');
+    } else {
+        logoContainer.style.display = 'none';
+        hideButton.querySelector('i').classList.remove('fa-eye-slash');
+        hideButton.querySelector('i').classList.add('fa-eye');
     }
 };
 
