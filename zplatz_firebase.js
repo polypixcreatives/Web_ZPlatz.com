@@ -579,21 +579,30 @@ const uploadListingFiles = () => {
     const propertyNameInput = document.getElementById('propertyNameInput');
     const propertyName = propertyNameInput.value;
     // Log the property name 
-    console.log("Property Name:", propertyName)
+    console.log("Property Name:", propertyName);
 
-    const splatFilePropertyName = getSplatFilePropertyName();
-    // Log the property name of the SPLAT file 
-    console.log("SPLAT File Property Name:", splatFilePropertyName);
+    (async () => {
+        // Check if the entered property name already exists in the database
+        const propertyNameExists = await checkPropertyNameExists(propertyName);
+        if (propertyNameExists) {
+            // Property name already exists, show error message and stop upload
+            alert('Property name already exists. You cannot upload the listing with an existing property name.');
+        } else {
+            const splatFilePropertyName = getSplatFilePropertyName();
+            // Log the property name of the SPLAT file 
+            console.log("SPLAT File Property Name:", splatFilePropertyName);
 
-    // Check if the property names match
-    if (propertyName === splatFilePropertyName) {
-        // Both property names match, proceed with uploading the SPLAT file
-        uploadCoverPhoto();
-    } else {
-        // Property names don't match, update the property name of the SPLAT file
-        updateSplatFilePropertyName(propertyName);
-        uploadCoverPhoto();
-    }
+            // Check if the property names match
+            if (propertyName === splatFilePropertyName) {
+                // Both property names match, proceed with uploading the SPLAT file
+                uploadCoverPhoto();
+            } else {
+                // Property names don't match, update the property name of the SPLAT file
+                updateSplatFilePropertyName(propertyName);
+                uploadCoverPhoto();
+            }
+        }
+    })();
 };
 
 // Function to check if the property name exists in the database
@@ -625,7 +634,7 @@ const updatePropertyNameValidation = async () => {
         if (propertyNameExists) {
             // Property name exists in the database
             propertyNameValidationIcon.innerHTML = '<i class="fas fa-times text-red-500"></i>';
-            propertyNameValidationText.textContent = 'Property name exists';
+            propertyNameValidationText.textContent = 'Property name already exists';
         } else {
             // Property name is available
             propertyNameValidationIcon.innerHTML = '<i class="fas fa-check text-green-500"></i>';
