@@ -137,7 +137,7 @@ const uploadCoverPhoto = () => {
                     updateSplatFile(propertyName, logoVisibility); // Call the function to update SPLAT file property name
                 }
 
-               //window.location.href = `dashboard.html`;
+               window.location.href = `dashboard.html`;
             } catch (error) {
                 console.error("Error uploading file:", error);
             }
