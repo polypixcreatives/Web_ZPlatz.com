@@ -140,3 +140,28 @@ p {
     height: 100%;
     touch-action: none;
 }
+
+.eye-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #0074E1;
+    border: none;
+    color: white;
+    cursor: pointer;
+    z-index: 1;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .eye-icon:hover {
+        opacity: 0.7;
+    }
+
+    .eye-icon i {
+        font-size: 12px;
+    }

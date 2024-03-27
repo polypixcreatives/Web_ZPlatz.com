@@ -1459,3 +1459,53 @@ document.addEventListener('DOMContentLoaded', function () {
 const backToDashboard = () => {
     window.location.href = 'dashboard.html';
 };
+
+// Hide or Unhide Logo Container
+const logoContainer = document.getElementById('logo');
+const hideButton = document.getElementById('hideButton');
+
+// Set initial opacity value
+let logoOpacity = 1;
+
+// Function to toggle logo visibility and eye icon
+const toggleLogoVisibility = () => {
+    if (logoContainer.style.display === 'none') {
+        logoContainer.style.display = 'block';
+        hideButton.querySelector('i').classList.remove('fa-eye-slash');
+        hideButton.querySelector('i').classList.add('fa-eye');
+    } else {
+        logoContainer.style.display = 'none';
+        hideButton.querySelector('i').classList.remove('fa-eye');
+        hideButton.querySelector('i').classList.add('fa-eye-slash');
+    }
+};
+
+// Function to toggle logo opacity and eye icon opacity
+const toggleOpacity = () => {
+    if (logoOpacity === 1) {
+        logoOpacity = 0.5;
+        hideButton.style.opacity = '0.5';
+    } else {
+        logoOpacity = 1;
+        hideButton.style.opacity = '1';
+    }
+    logoContainer.style.opacity = logoOpacity;
+};
+
+// Set eye icon opacity to 30% by default
+hideButton.style.opacity = '0.3';
+
+// Toggle logo visibility and opacity on button click
+hideButton.addEventListener('click', function () {
+    toggleLogoVisibility();
+    toggleOpacity();
+});
+
+// Change eye icon opacity when hovered
+hideButton.addEventListener('mouseenter', function () {
+    hideButton.style.opacity = '1';
+});
+
+hideButton.addEventListener('mouseleave', function () {
+    hideButton.style.opacity = '0.3';
+});
