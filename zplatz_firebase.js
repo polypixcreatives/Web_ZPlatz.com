@@ -431,6 +431,30 @@ async function updateSplatFilePropertyName(propertyName) {
     }
 }
 
+// Function to get the property name of the SPLAT file
+const getSplatFilePropertyName = async () => {
+    try {
+        // Assuming you have a collection in Firestore named 'splat_files'
+        const splatFilesRef = db.collection("splat_files");
+
+        // Query for the SPLAT file with the corresponding fileNameSplat
+        const querySnapshot = await splatFilesRef.where("File Name", "==", fileNameSplat).get();
+
+        // Assuming there's only one SPLAT file with this name, so taking the first document
+        if (!querySnapshot.empty) {
+            const doc = querySnapshot.docs[0];
+            const data = doc.data();
+            return data['Property Name']; // Return the property name
+        } else {
+            console.log("No SPLAT file found with the given name.");
+            return null; // Return null if no SPLAT file found
+        }
+    } catch (error) {
+        console.error("Error getting SPLAT file property name:", error);
+        return null;
+    }
+};
+
 // Function to fetch data from both collections and populate the table
 async function fetchAndPopulateMergedData() {
     const coverPhotosRef = db.collection("cover_photos");
@@ -552,6 +576,22 @@ const uploadListingFiles = () => {
         return; // Stop further execution if SPLAT file is not uploaded
     }
 
-    // Both files are uploaded, proceed with uploading cover photo
-    uploadCoverPhoto();
+    const propertyNameInput = document.getElementById('propertyNameInput');
+    const propertyName = propertyNameInput.value;
+    // Log the property name 
+    console.log("Property Name:", propertyName)
+
+    const splatFilePropertyName = getSplatFilePropertyName();
+    // Log the property name of the SPLAT file 
+    console.log("SPLAT File Property Name:", splatFilePropertyName);
+
+    // Check if the property names match
+    if (propertyName === splatFilePropertyName) {
+        // Both property names match, proceed with uploading the SPLAT file
+        uploadCoverPhoto();
+    } else {
+        // Property names don't match, update the property name of the SPLAT file
+        updateSplatFilePropertyName(propertyName);
+        uploadCoverPhoto();
+    }
 };
