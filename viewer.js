@@ -740,11 +740,11 @@ async function main() {
     // Add console.log to check if propertyName is extracted correctly
     console.log("Property Name:", propertyName);
 
-    // Function to fetch the splat file URL from Firestore based on the property name
-    const getSplatFileUrl = async (propertyName) => {
+    // Function to fetch the splat file URL and document ID from Firestore based on the property name
+    const getSplatFileData = async (propertyName) => {
         try {
             // Add console.log to indicate the start of the function
-            console.log("Fetching splat file URL for Property Name:", propertyName);
+            console.log("Fetching splat file data for Property Name:", propertyName);
 
             // Reference to the splat_files collection
             const splatFilesRef = db.collection("splat_files");
@@ -754,22 +754,34 @@ async function main() {
 
             // Check if any documents were found
             if (!querySnapshot.empty) {
-                // Get the file URL from the first matching document
-                const splatFileData = querySnapshot.docs[0].data();
-                return splatFileData["File URL"];
+                // Get the data and document ID from the first matching document
+                const splatFileDoc = querySnapshot.docs[0];
+                const splatFileData = splatFileDoc.data();
+
+                const docId = splatFileDoc.id;
+                // Log the document ID
+                console.log("Document ID for SPLAT file:", docId);
+
+                const logoVisibility = splatFileData["Logo Visibility"];
+                // Log the Logo Visibility
+                console.log("Logo Visibility:", logoVisibility);
+
+                // Call the function to toggle logo visibility based on the retrieved value
+                toggleLogoVisibility(logoVisibility);
+
+                return { url: splatFileData["File URL"], docId };
             } else {
                 console.error("No splat file found for the given property name:", propertyName);
                 return null;
             }
         } catch (error) {
-            console.error("Error fetching splat file URL from Firestore:", error);
+            console.error("Error fetching splat file data from Firestore:", error);
             return null;
         }
     };
 
-    // Construct the URL using the fetched file URL or a default value if not found
-    const splatFileUrl = await getSplatFileUrl(propertyName);
-
+    // Construct the URL and get document ID using the fetched file data or a default value if not found
+    const { url: splatFileUrl, docId } = await getSplatFileData(propertyName);
     const url = new URL(params.get("url") || splatFileUrl);
     
     const req = await fetch(url, {
@@ -1464,12 +1476,9 @@ const backToDashboard = () => {
 const logoContainer = document.getElementById('logo');
 const hideButton = document.getElementById('hideButton');
 
-// Set initial opacity value
-let logoOpacity = 1;
-
-// Function to toggle logo visibility and eye icon
-const toggleLogoVisibility = () => {
-    if (logoContainer.style.display === 'none') {
+// Function to toggle logo visibility and eye icon based on visibility value
+const toggleLogoVisibility = (isVisible) => {
+    if (isVisible) {
         logoContainer.style.display = 'block';
         hideButton.querySelector('i').classList.remove('fa-eye');
         hideButton.querySelector('i').classList.add('fa-eye-slash');
@@ -1480,28 +1489,18 @@ const toggleLogoVisibility = () => {
     }
 };
 
-// Function to toggle logo opacity and eye icon opacity
-const toggleOpacity = () => {
-    if (logoOpacity === 1) {
-        logoOpacity = 0.5;
-        hideButton.style.opacity = '0.5';
-    } else {
-        logoOpacity = 1;
-        hideButton.style.opacity = '1';
-    }
-    logoContainer.style.opacity = logoOpacity;
-};
-
 // Set eye icon opacity to 30% by default
 hideButton.style.opacity = '0.3';
 
-// Toggle logo visibility and opacity on button click
+// Toggle logo visibility on button click
 hideButton.addEventListener('click', function () {
-    toggleLogoVisibility();
-    toggleOpacity();
+    // Check the current visibility state of the logo
+    const isVisible = logoContainer.style.display !== 'none';
+    // Pass the opposite visibility state to toggleLogoVisibility function
+    toggleLogoVisibility(!isVisible);
 });
 
-// Change eye icon opacity when hovered
+// Change eye icon button opacity when hovered
 hideButton.addEventListener('mouseenter', function () {
     hideButton.style.opacity = '1';
 });
@@ -1509,3 +1508,18 @@ hideButton.addEventListener('mouseenter', function () {
 hideButton.addEventListener('mouseleave', function () {
     hideButton.style.opacity = '0.3';
 });
+
+
+// Check logo visibility from Firebase
+async function checkLogoVisibilityFromFirebase() {
+    try {
+        // Assume you have a reference to Firebase and a document containing logo visibility
+        const docSnapshot = await firebase.firestore().collection('settings').doc('logoVisibility').get();
+        const logoVisibility = docSnapshot.data().visible;
+
+        // Toggle logo visibility based on the value retrieved from Firebase
+        toggleLogoVisibility(logoVisibility);
+    } catch (error) {
+        console.error('Error checking logo visibility from Firebase:', error);
+    }
+}

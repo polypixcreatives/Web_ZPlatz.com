@@ -99,3 +99,19 @@ customAddressCheckbox.addEventListener('change', () => {
         customAddressInput.style.display = 'none';
     }
 });
+
+// Function to toggle logo visibility in UI
+function toggleLogoVisibility() {
+    const description = document.querySelector('.mini-description');
+    const button = document.querySelector('.eye-icon-buttons button');
+
+    if (description.textContent === "ZPlatz logo will be visible in the viewer.") {
+        description.textContent = "ZPlatz logo will be hidden in the viewer.";
+        button.innerHTML = '<i class="fas fa-eye"></i> Show ZPlatz logo';
+        return true; 
+    } else {
+        description.textContent = "ZPlatz logo will be visible in the viewer.";
+        button.innerHTML = '<i class="fas fa-eye-slash"></i> Hide ZPlatz logo';
+        return false; 
+    }
+}

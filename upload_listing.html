@@ -74,13 +74,13 @@
         }
 
         .progress {
-            background: linear-gradient(12deg, red, blue);
+            background-color: #0074E1;
             height: 25px;
             width: 0%;
         }
 
         .progress-splat {
-            background: linear-gradient(12deg, red, blue);
+            background-color: #0074E1;
             height: 25px;
             width: 0%;
         }
@@ -339,9 +339,6 @@
                                         Upload Cover Photo
                                     </button>
                                     <span class="filedata">No Cover Photo selected</span>
-                                    <div class="progressBar">
-                                        <div class="progress"></div>
-                                    </div>
                                     <span class="loading"></span>
                                 </div>
                             </div>
@@ -371,10 +368,28 @@
                                         <div class="savePositionBtn"></div>
                                     </div>
                                     <span class="filedata-splat">No SPLAT file selected</span>
+
                                     <div class="progressBar">
                                         <div class="progress-splat"></div>
                                     </div>
                                     <span class="loading-splat"></span>
+
+                                    <!-- Eye icon buttons -->   
+                                    <div class="eye-icon-buttons">
+                                        <style>
+                                            .mini-description {
+                                                font-style: italic;
+                                                margin-bottom: 5px;
+                                                font-size: 12px;
+                                                margin-top: 6px;
+                                            }
+                                        </style>
+
+                                        <p class="mini-description">ZPlatz logo will be visible in the viewer.</p>
+                                        <button onclick="toggleLogoVisibility()">
+                                            <i class="fas fa-eye-slash"></i> Hide ZPlatz Logo
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -390,6 +405,9 @@
 
                     <div>
                         <button onclick="uploadListingFiles()" class="upload">Upload</button>
+                    </div>
+                    <div class="progressBar">
+                        <div class="progress"></div>
                     </div>
                 </div>
                 <!-- Right Column -->

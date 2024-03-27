@@ -22,6 +22,7 @@ let file;
 let fileName;
 let progress;
 let uploadedFileName;
+let logoVisibility = true;
 
 const selectCoverPhoto = () => {
     inp.click();
@@ -128,11 +129,15 @@ const uploadCoverPhoto = () => {
                     // Save URL to Firestore
                     await saveURLtoFirestore(downloadURL, uploadedFileName, propertyName, customAddress);
 
+                    // Get logo visibility status from UI description
+                    const logoVisibility = toggleLogoVisibility(); // Use toggleLogoVisibility to get the visibility state
+                    console.log("Logo Visibility:", logoVisibility);
+
                     // Update the property name of the corresponding SPLAT file
-                    updateSplatFilePropertyName(propertyName); // Call the function to update SPLAT file property name
+                    updateSplatFile(propertyName, logoVisibility); // Call the function to update SPLAT file property name
                 }
 
-               window.location.href = `dashboard.html`;
+               //window.location.href = `dashboard.html`;
             } catch (error) {
                 console.error("Error uploading file:", error);
             }
@@ -400,9 +405,10 @@ const uploadSplatFile = () => {
 };
 
 // Function to update the property name of the corresponding SPLAT file
-async function updateSplatFilePropertyName(propertyName) {
+async function updateSplatFile(propertyName, logoVisibility) {
     // Log the propertyName when the function is called
     console.log("Updating SPLAT file property name:", propertyName);
+    console.log("Updating SPLAT file logo visibility:", logoVisibility);
 
     try {
         // Query for the SPLAT file by its fileName
@@ -421,13 +427,14 @@ async function updateSplatFilePropertyName(propertyName) {
 
             // Update the document with the new Property Name
             await docRef.update({
-                'Property Name': propertyName
+                'Property Name': propertyName,
+                'Logo Visibility': logoVisibility
             });
 
-            console.log('Property Name updated successfully for SPLAT file in Firestore.');
+            console.log('Property Name and Logo Visibility updated successfully for SPLAT file in Firestore.');
         });
     } catch (error) {
-        console.error("Error updating Property Name for SPLAT file in Firestore:", error);
+        console.error("Error updating Property Name and Logo Visibility for SPLAT file in Firestore:", error);
     }
 }
 
@@ -591,7 +598,7 @@ const uploadListingFiles = () => {
         uploadCoverPhoto();
     } else {
         // Property names don't match, update the property name of the SPLAT file
-        updateSplatFilePropertyName(propertyName);
+        updateSplatFile(propertyName, logoVisibility);
         uploadCoverPhoto();
     }
 };
