@@ -236,9 +236,13 @@
                     </div>
                     <div class="mb-6">
                         <label class="block mb-2">
-                            Property Name (required)
+                            Property Name
                         </label>
-                        <input id="propertyNameInput" class="w-full bg-gray-800 p-2 rounded" type="text" placeholder="Enter property name">
+                        <div class="relative">
+                            <input id="propertyNameInput" class="w-full bg-gray-800 p-2 rounded" type="text" placeholder="Enter property name">
+                            <span id="propertyNameValidationIcon" class="absolute inset-y-0 right-0 flex items-center pr-3"></span>
+                        </div>
+                        <div id="propertyNameValidationText" class="text-sm mt-1"></div>
                     </div>
                     <div class="mb-6">
                         <!-- Address Section -->

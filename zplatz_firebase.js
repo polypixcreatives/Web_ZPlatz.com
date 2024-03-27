@@ -595,3 +595,44 @@ const uploadListingFiles = () => {
         uploadCoverPhoto();
     }
 };
+
+// Function to check if the property name exists in the database
+const checkPropertyNameExists = async (propertyName) => {
+    try {
+        const snapshot = await db.collection("cover_photos").where("Property Name", "==", propertyName).get();
+        return !snapshot.empty; // Return true if any document with the given property name exists
+    } catch (error) {
+        console.error("Error checking property name:", error);
+        return false; // Return false in case of an error
+    }
+};
+
+// Function to update the UI based on property name validation
+const updatePropertyNameValidation = async () => {
+    const propertyNameInput = document.getElementById('propertyNameInput');
+    const propertyNameValidationIcon = document.getElementById('propertyNameValidationIcon');
+    const propertyNameValidationText = document.getElementById('propertyNameValidationText');
+
+    const propertyName = propertyNameInput.value.trim();
+
+    if (propertyName === '') {
+        // Property name is empty
+        propertyNameValidationIcon.innerHTML = '';
+        propertyNameValidationText.textContent = ''; // Clear validation text
+    } else {
+        // Check if the property name exists in the database
+        const propertyNameExists = await checkPropertyNameExists(propertyName);
+        if (propertyNameExists) {
+            // Property name exists in the database
+            propertyNameValidationIcon.innerHTML = '<i class="fas fa-times text-red-500"></i>';
+            propertyNameValidationText.textContent = 'Property name exists';
+        } else {
+            // Property name is available
+            propertyNameValidationIcon.innerHTML = '<i class="fas fa-check text-green-500"></i>';
+            propertyNameValidationText.textContent = 'Property name is available';
+        }
+    }
+};
+
+// Event listener for input change to trigger validation
+document.getElementById('propertyNameInput').addEventListener('input', updatePropertyNameValidation);
