@@ -470,7 +470,6 @@ async function fetchAndPopulateMergedData() {
         const coverPhotosSnapshot = await coverPhotosRef.get();
         const splatFilesSnapshot = await splatFilesRef.get();
         const tableBody = document.querySelector("#merged-upload-list tbody");
-        tableBody.innerHTML = ""; // Clear existing table rows
         // Process cover photos data
         coverPhotosSnapshot.forEach(doc => {
             const data = doc.data();

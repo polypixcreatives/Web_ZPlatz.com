@@ -877,9 +877,38 @@ async function main() {
     gl.vertexAttribIPointer(a_index, 1, gl.INT, false, 0, 0);
     gl.vertexAttribDivisor(a_index, 1);
 
+    // Initialize camera.fov_y with a default value of 90 if it's initially null
+    if (camera.fov_y === null || camera.fov_y === undefined) {
+        camera.fov_y = 90;
+    }
+
+    // Define a function to update the FOV in the viewer
+    const updateFOV = (fovValue) => {
+        // Update the FOV value in the camera object or wherever you store it
+        camera.fov_y = fovValue;
+
+        // Log the updated FOV value
+        console.log("Updated FOV value:", fovValue);
+
+        // Call the resize function to apply the updated FOV
+        resize();
+    };
+
     const resize = () => {
+        // Calculate the half of the field of view angle in radians
+        const halfFovRadians = (camera.fov_y * Math.PI / 180) / 2;
+
+        // Calculate the new focal length using the formula
+        camera.fx = (0.5 * innerHeight) / Math.tan(halfFovRadians);
+        camera.fy = (0.3 * innerWidth) / Math.tan(halfFovRadians);
+
+        // Log to check the current value of the focal length
+        console.log("Current focal length (fx):", camera.fx);
+
+        // Update the focal length uniform in the shader
         gl.uniform2fv(u_focal, new Float32Array([camera.fx, camera.fy]));
 
+        // Update the projection matrix using the new focal length
         projectionMatrix = getProjectionMatrix(
             camera.fx,
             camera.fy,
@@ -887,14 +916,28 @@ async function main() {
             innerHeight,
         );
 
+        // Update the viewport size
         gl.uniform2fv(u_viewport, new Float32Array([innerWidth, innerHeight]));
 
+        // Adjust the canvas size based on downsample
         gl.canvas.width = Math.round(innerWidth / downsample);
         gl.canvas.height = Math.round(innerHeight / downsample);
+
+        // Set the viewport to the new canvas size
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
+        // Update the projection matrix in the shader
         gl.uniformMatrix4fv(u_projection, false, projectionMatrix);
     };
+
+    // Get the FOV slider element from the HTML
+    const fovSlider = document.getElementById("fov-slider");
+
+    // Add an event listener to the FOV slider
+    fovSlider.addEventListener("input", () => {
+        // Call the function to update the FOV in the viewer
+        updateFOV(parseFloat(fovSlider.value));
+    });
 
     window.addEventListener("resize", resize);
     resize();
@@ -1523,3 +1566,10 @@ async function checkLogoVisibilityFromFirebase() {
         console.error('Error checking logo visibility from Firebase:', error);
     }
 }
+
+const slider = document.getElementById('fov-slider');
+const sliderValue = document.getElementById('slider-value');
+
+slider.addEventListener('input', function () {
+    sliderValue.innerText = slider.value;
+});

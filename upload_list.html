@@ -17,19 +17,61 @@
         }
     </style>
     <link rel="icon" type="image/png" href="assets/images/logo/Zplatzlogoicon.png">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 </head>
 <body class="bg-gray-200">
-    <header class="px-8 py-4 flex justify-between items-center">
+    <header class="px-8 py-4 flex justify-between it    s-center">
+        <style>
+            .main-options {
+                display: flex;
+                align-items: center;
+                margin-left: 1rem;
+            }
+
+            .sign-in-btn {
+                background-color: #0074E1;
+                position: relative;
+                color: white;
+                padding: 0.5rem 1rem;
+                border-radius: 0.375rem;
+                font-size: 0.875rem;
+                font-weight: 500;
+                border: none;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+        </style>
+
         <!-- Logo on the left -->
         <div>
             <img alt="Company logo" class="h-10" src="assets/images/logo/Zplatzlogo.png" onclick="backToDashboard()" />
         </div>
 
-        <!-- Profile Picture on the right -->
-        <div class="flex items-center">
-            <img src="assets/images/users/Punay, Ella Venice C 2x2 ID Picture.png" alt="Profile Picture" class="h-10 w-10 rounded-full">
+        <!-- Search in the center of the screen -->
+        <div class="flex items-center justify-center flex-grow">
+            <div class="relative">
+                <div class="absolute inset-y-0 left-2 flex items-center pl-3 pointer-events-none">
+                    <i class="fas fa-search text-gray-500"></i>
+                </div>
+                <input class="hover:border-gray-400 transition duration-500 h-10 pl-11 pr-10 rounded-full text-sm border border-gray-500 border-solid border-2 focus:outline-none bg-transparent w-72 md:w-96" placeholder="Search across your listings" type="text" />
+            </div>
+        </div>
+
+        <div class="main-options">
+            <!-- Profile picture container -->
+            <div id="profile-picture-container" style="position: relative;">
+                <!-- Profile picture, initially hidden -->
+                <img src="assets/images/users/Punay, Ella Venice C 2x2 ID Picture.png" id="profile-picture" alt="Profile Picture" class="h-10 w-10 rounded-full bg-gray-700" onclick="navigateToProfilePage()" style="display:none" />
+
+                <!-- Logout button -->
+                <button id="logout-button" class="bg-white p-2 rounded-full text-gray-600 border border-gray-300 absolute bottom-0 left-0 transform translate-x-1/2 -translate-y-1/2 transition duration-300 ease-in-out opacity-0">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+
+            <!--Sign-in button-->
+            <button class="sign-in-btn" id="sign-in-btn" onclick="navigateToLoginPage()">
+                <i class="fas fa-sign-in-alt mr-2"></i> Sign In
+            </button>
         </div>
     </header>
 
@@ -117,12 +159,10 @@
     <!-- SDKs for Firebase products -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
 
     <!-- Our script must be loaded after firebase references -->
     <script src="upload_list.js"></script>
     <script src="zplatz_firebase.js"></script>
-    <script src="zplatz_firebase_auth.js"></script>
 </body>
 </html>
