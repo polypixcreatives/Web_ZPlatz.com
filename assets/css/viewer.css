@@ -165,3 +165,39 @@ p {
     .eye-icon i {
         font-size: 12px;
     }
+
+#fov-slider {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    width: 150px;
+    height: 10px;
+    z-index: 1;
+    -webkit-appearance: none;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+    #fov-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #0074E1;
+        cursor: pointer;
+        position: relative;
+    }
+
+#slider-value {
+    position: absolute;
+    top: 66px; 
+    right: 175px; 
+    font-size: 12px;
+    z-index: 9;
+    font-weight: bold;
+}
