@@ -879,7 +879,7 @@ async function main() {
 
     // Initialize camera.fov_y with a default value of 90 if it's initially null
     if (camera.fov_y === null || camera.fov_y === undefined) {
-        camera.fov_y = 90;
+        camera.fov_y = 60;
     }
 
     // Define a function to update the FOV in the viewer
