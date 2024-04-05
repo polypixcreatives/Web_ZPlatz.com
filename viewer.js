@@ -757,6 +757,13 @@ async function main() {
                 // Get the data and document ID from the first matching document
                 const splatFileDoc = querySnapshot.docs[0];
                 const splatFileData = splatFileDoc.data();
+                
+                //Recieve ViewMatrix in Firebase DataBase
+                const newViewMatrixJSON = splatFileData["View Matrix"];
+                const newViewMatrix = JSON.parse(newViewMatrixJSON);
+                //Change Value of viewMatrix
+                viewMatrix = newViewMatrix;
+                console.log("New View Matrix:", newViewMatrixJSON);
 
                 const docId = splatFileDoc.id;
                 // Log the document ID
