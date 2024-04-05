@@ -758,12 +758,18 @@ async function main() {
                 const splatFileDoc = querySnapshot.docs[0];
                 const splatFileData = splatFileDoc.data();
                 
-                //Recieve ViewMatrix in Firebase DataBase
-                const newViewMatrixJSON = splatFileData["View Matrix"];
-                const newViewMatrix = JSON.parse(newViewMatrixJSON);
-                //Change Value of viewMatrix
-                viewMatrix = newViewMatrix;
-                console.log("New View Matrix:", newViewMatrixJSON);
+                //Check if DataBase has "ViewMatrix"
+                if(splatFileData.hasOwnProperty("View Matrix")) {
+                    //Recieve ViewMatrix in Firebase DataBase
+                    const newViewMatrixJSON = splatFileData["View Matrix"];
+                    const newViewMatrix = JSON.parse(newViewMatrixJSON);
+                    //Change Value of viewMatrix
+                    viewMatrix = newViewMatrix;
+                    console.log("New View Matrix:", newViewMatrixJSON);
+                } else {
+                    console.log("No View Matrix");
+                    viewMatrix = defaultViewMatrix;
+                }
 
                 const docId = splatFileDoc.id;
                 // Log the document ID
