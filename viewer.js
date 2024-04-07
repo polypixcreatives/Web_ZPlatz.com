@@ -725,7 +725,7 @@ void main () {
 async function main() {
     let carousel = false;
     const params = new URLSearchParams(location.search);
-
+    //Something
     let defaultViewMatrix = [-0.42, 0.07, 0.91, 0, 0.01, 0.99, -0.05, 0, -0.91, -0.02, -0.43, 0, -0.02, 0.45, 9.91, 1];
     let viewMatrix = defaultViewMatrix;
 
@@ -757,6 +757,19 @@ async function main() {
                 // Get the data and document ID from the first matching document
                 const splatFileDoc = querySnapshot.docs[0];
                 const splatFileData = splatFileDoc.data();
+                
+                //Check if DataBase has "ViewMatrix"
+                if(splatFileData.hasOwnProperty("View Matrix")) {
+                    //Recieve ViewMatrix in Firebase DataBase
+                    const newViewMatrixJSON = splatFileData["View Matrix"];
+                    const newViewMatrix = JSON.parse(newViewMatrixJSON);
+                    //Change Value of viewMatrix
+                    viewMatrix = newViewMatrix;
+                    console.log("New View Matrix:", newViewMatrixJSON);
+                } else {
+                    console.log("No View Matrix");
+                    viewMatrix = defaultViewMatrix;
+                }
 
                 const docId = splatFileDoc.id;
                 // Log the document ID
