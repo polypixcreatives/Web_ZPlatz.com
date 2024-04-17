@@ -773,7 +773,7 @@ async function main() {
     console.log("Cover Photo Image URL:", coverPhotoUrl);
 
     // Update the og:image meta tag with the fetched cover photo URL
-    const ogImageMetaTag = document.querySelector('meta[property="og:image"]');
+    const ogImageMetaTag = document.getElementById('ogImageTag');
     if (ogImageMetaTag) {
         ogImageMetaTag.setAttribute("content", coverPhotoUrl);
     } else {
