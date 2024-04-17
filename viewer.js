@@ -752,34 +752,6 @@ async function main() {
             // Query for documents with matching property name field
             const querySnapshot = await splatFilesRef.where("Property Name", "==", propertyName).get();
 
-
-            //ImageURL and photo
-            try{
-                const coverPhotoRef = db.collection("cover_photos");
-                const queryPhoto = await coverPhotoRef.where("Property Name", "==", propertyName).get();
-                if(!queryPhoto.empty){
-                    const coverPhotoDoc = queryPhoto.docs[0];
-                    const coverPhotoData = coverPhotoDoc.data();
-
-                    if(coverPhotoData.hasOwnProperty("Image URL")){
-                        const ImageURL = coverPhotoData["Image URL"];
-                        //Create and display the image element
-                        const img = document.createElement('img');
-                        img.src = ImageURL;
-                        document.body.appendChild(img);
-                        console.log('append');
-                    } else {
-                        console.error("No Image URL found in the splat file data.");
-                    }
-                } else {
-                    console.error("No file found for property name: ", propertyName);
-                }
-
-            } catch(error) {
-                console.error("Error in fetching imageURL from Firestore: ", error);
-            }
-
-
             // Check if any documents were found
             if (!querySnapshot.empty) {
                 // Get the data and document ID from the first matching document
@@ -824,7 +796,7 @@ async function main() {
     // Construct the URL and get document ID using the fetched file data or a default value if not found
     const { url: splatFileUrl, docId } = await getSplatFileData(propertyName);
     const url = new URL(params.get("url") || splatFileUrl);
-
+    
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
         credentials: "omit", // include, *same-origin, omit
@@ -920,7 +892,7 @@ async function main() {
 
     // Initialize camera.fov_y with a default value of 90 if it's initially null
     if (camera.fov_y === null || camera.fov_y === undefined) {
-        camera.fov_y = 90;
+        camera.fov_y = 50;
     }
 
     // Define a function to update the FOV in the viewer
@@ -939,9 +911,16 @@ async function main() {
         // Calculate the half of the field of view angle in radians
         const halfFovRadians = (camera.fov_y * Math.PI / 180) / 2;
 
-        // Calculate the new focal length using the formula
-        camera.fx = (0.5 * innerHeight) / Math.tan(halfFovRadians);
-        camera.fy = (0.3 * innerWidth) / Math.tan(halfFovRadians);
+        // Check if the viewport width is greater than the height
+        if (window.innerWidth > window.innerHeight) {
+            // For desktop (16:9) aspect ratio
+            camera.fx = (0.5 * window.innerHeight) / Math.tan(halfFovRadians);
+            camera.fy = (0.3 * window.innerWidth) / Math.tan(halfFovRadians);
+        } else {
+            // For mobile (9:16) aspect ratio
+            camera.fx = (0.5 * window.innerWidth) / Math.tan(halfFovRadians);
+            camera.fy = (0.3 * window.innerHeight) / Math.tan(halfFovRadians);
+        }
 
         // Log to check the current value of the focal length
         console.log("Current focal length (fx):", camera.fx);
@@ -1592,21 +1571,6 @@ hideButton.addEventListener('mouseenter', function () {
 hideButton.addEventListener('mouseleave', function () {
     hideButton.style.opacity = '0.3';
 });
-
-
-// Check logo visibility from Firebase
-async function checkLogoVisibilityFromFirebase() {
-    try {
-        // Assume you have a reference to Firebase and a document containing logo visibility
-        const docSnapshot = await firebase.firestore().collection('settings').doc('logoVisibility').get();
-        const logoVisibility = docSnapshot.data().visible;
-
-        // Toggle logo visibility based on the value retrieved from Firebase
-        toggleLogoVisibility(logoVisibility);
-    } catch (error) {
-        console.error('Error checking logo visibility from Firebase:', error);
-    }
-}
 
 const slider = document.getElementById('fov-slider');
 const sliderValue = document.getElementById('slider-value');

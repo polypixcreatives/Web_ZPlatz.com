@@ -1507,34 +1507,5 @@ main().catch((err) => {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    var toggleButton = document.getElementById('toggleButton');
-    var cardContainer = document.getElementById('cardContainer');
     var canvas = document.getElementById('canvas');
-
-    cardContainer.style.display = 'none';
-
-    toggleButton.addEventListener('click', function () {
-        if (cardContainer.style.display === 'none') {
-            cardContainer.style.display = 'block';
-            cardContainer.style.width = '300px';
-            canvas.style.width = '';
-            toggleButton.querySelector('i').classList.remove('fa-chevron-left');
-            toggleButton.querySelector('i').classList.add('fa-chevron-right');
-            toggleButton.classList.remove('hover-effect');
-            toggleButton.querySelector('span').textContent = 'Full Screen View';
-        } else {
-            cardContainer.style.display = 'none';
-            cardContainer.style.width = '';
-            canvas.style.width = '';
-            toggleButton.querySelector('i').classList.remove('fa-chevron-right');
-            toggleButton.querySelector('i').classList.add('fa-chevron-left');
-            toggleButton.classList.add('hover-effect');
-            toggleButton.querySelector('span').textContent = 'View Other Listings';
-        }
-    });
-});
-
-main().catch((err) => {
-    document.getElementById("spinner").style.display = "none";
-    document.getElementById("message").innerText = err.toString();
 });
