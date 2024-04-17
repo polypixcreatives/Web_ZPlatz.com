@@ -769,6 +769,9 @@ async function main() {
     // Call the function to fetch the cover photo URL
     const coverPhotoUrl = await getCoverPhotoUrl(propertyName);
 
+    // Log the fetched cover photo URL
+    console.log("Cover Photo URL:", coverPhotoUrl);
+
     // Update the og:image meta tag with the fetched cover photo URL
     const ogImageMetaTag = document.querySelector('meta[property="og:image"]');
     if (ogImageMetaTag) {
