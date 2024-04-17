@@ -752,11 +752,15 @@ async function main() {
             // Query for documents with matching property name field
             const querySnapshot = await splatFilesRef.where("Property Name", "==", propertyName).get();
 
-
             //ImageURL and photo
             try{
+                //DataBase
                 const coverPhotoRef = db.collection("cover_photos");
                 const queryPhoto = await coverPhotoRef.where("Property Name", "==", propertyName).get();
+                //HTML
+                const linkContianer = document.querySelector('.link-container');
+                const imageDisplay = document.getElementById('imgDisplay');
+
                 if(!queryPhoto.empty){
                     const coverPhotoDoc = queryPhoto.docs[0];
                     const coverPhotoData = coverPhotoDoc.data();
@@ -766,7 +770,8 @@ async function main() {
                         //Create and display the image element
                         const img = document.createElement('img');
                         img.src = ImageURL;
-                        document.body.appendChild(img);
+                        imageDisplay.innerHTML ='';
+                        imageDisplay.appendChild(img);
                         console.log('append');
                     } else {
                         console.error("No Image URL found in the splat file data.");
