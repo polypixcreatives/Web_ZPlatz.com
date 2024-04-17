@@ -740,6 +740,43 @@ async function main() {
     // Add console.log to check if propertyName is extracted correctly
     console.log("Property Name:", propertyName);
 
+    // Function to fetch the cover photo URL from Firestore based on the property name
+    const getCoverPhotoUrl = async (propertyName) => {
+        try {
+            // Reference to the cover_photos collection
+            const coverPhotosRef = db.collection("cover_photos");
+
+            // Query for documents with matching property name field
+            const querySnapshot = await coverPhotosRef.where("Property Name", "==", propertyName).get();
+
+            // Check if any documents were found
+            if (!querySnapshot.empty) {
+                // Get the data from the first matching document
+                const coverPhotoData = querySnapshot.docs[0].data();
+
+                // Return the cover photo URL
+                return coverPhotoData["Photo URL"];
+            } else {
+                console.error("No cover photo found for the given property name:", propertyName);
+                return null;
+            }
+        } catch (error) {
+            console.error("Error fetching cover photo URL from Firestore:", error);
+            return null;
+        }
+    };
+
+    // Call the function to fetch the cover photo URL
+    const coverPhotoUrl = await getCoverPhotoUrl(propertyName);
+
+    // Update the og:image meta tag with the fetched cover photo URL
+    const ogImageMetaTag = document.querySelector('meta[property="og:image"]');
+    if (ogImageMetaTag) {
+        ogImageMetaTag.setAttribute("content", coverPhotoUrl);
+    } else {
+        console.error("og:image meta tag not found in the HTML.");
+    }
+
     // Function to fetch the splat file URL and document ID from Firestore based on the property name
     const getSplatFileData = async (propertyName) => {
         try {
@@ -751,39 +788,6 @@ async function main() {
 
             // Query for documents with matching property name field
             const querySnapshot = await splatFilesRef.where("Property Name", "==", propertyName).get();
-
-            // //ImageURL and photo
-            // try{
-            //     //DataBase
-            //     const coverPhotoRef = db.collection("cover_photos");
-            //     const queryPhoto = await coverPhotoRef.where("Property Name", "==", propertyName).get();
-            //     //HTML
-            //     const linkContianer = document.querySelector('.link-container');
-            //     const imageDisplay = document.getElementById('imgDisplay');
-
-            //     if(!queryPhoto.empty){
-            //         const coverPhotoDoc = queryPhoto.docs[0];
-            //         const coverPhotoData = coverPhotoDoc.data();
-
-            //         if(coverPhotoData.hasOwnProperty("Image URL")){
-            //             const ImageURL = coverPhotoData["Image URL"];
-            //             //Create and display the image element
-            //             const img = document.createElement('img');
-            //             img.src = ImageURL;
-            //             imageDisplay.innerHTML ='';
-            //             imageDisplay.appendChild(img);
-            //             console.log('append');
-            //         } else {
-            //             console.error("No Image URL found in the splat file data.");
-            //         }
-            //     } else {
-            //         console.error("No file found for property name: ", propertyName);
-            //     }
-
-            // } catch(error) {
-            //     console.error("Error in fetching imageURL from Firestore: ", error);
-            // }
-
 
             // Check if any documents were found
             if (!querySnapshot.empty) {
