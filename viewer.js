@@ -752,6 +752,34 @@ async function main() {
             // Query for documents with matching property name field
             const querySnapshot = await splatFilesRef.where("Property Name", "==", propertyName).get();
 
+
+            //ImageURL and photo
+            try{
+                const coverPhotoRef = db.collection("cover_photos");
+                const queryPhoto = await coverPhotoRef.where("Property Name", "==", propertyName).get();
+                if(!queryPhoto.empty){
+                    const coverPhotoDoc = queryPhoto.docs[0];
+                    const coverPhotoData = coverPhotoDoc.data();
+
+                    if(coverPhotoData.hasOwnProperty("Image URL")){
+                        const ImageURL = coverPhotoData["Image URL"];
+                        //Create and display the image element
+                        const img = document.createElement('img');
+                        img.src = ImageURL;
+                        document.body.appendChild(img);
+                        console.log('append');
+                    } else {
+                        console.error("No Image URL found in the splat file data.");
+                    }
+                } else {
+                    console.error("No file found for property name: ", propertyName);
+                }
+
+            } catch(error) {
+                console.error("Error in fetching imageURL from Firestore: ", error);
+            }
+
+
             // Check if any documents were found
             if (!querySnapshot.empty) {
                 // Get the data and document ID from the first matching document
@@ -796,7 +824,7 @@ async function main() {
     // Construct the URL and get document ID using the fetched file data or a default value if not found
     const { url: splatFileUrl, docId } = await getSplatFileData(propertyName);
     const url = new URL(params.get("url") || splatFileUrl);
-    
+
     const req = await fetch(url, {
         mode: "cors", // no-cors, *cors, same-origin
         credentials: "omit", // include, *same-origin, omit
