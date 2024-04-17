@@ -752,37 +752,37 @@ async function main() {
             // Query for documents with matching property name field
             const querySnapshot = await splatFilesRef.where("Property Name", "==", propertyName).get();
 
-            //ImageURL and photo
-            try{
-                //DataBase
-                const coverPhotoRef = db.collection("cover_photos");
-                const queryPhoto = await coverPhotoRef.where("Property Name", "==", propertyName).get();
-                //HTML
-                const linkContianer = document.querySelector('.link-container');
-                const imageDisplay = document.getElementById('imgDisplay');
+            // //ImageURL and photo
+            // try{
+            //     //DataBase
+            //     const coverPhotoRef = db.collection("cover_photos");
+            //     const queryPhoto = await coverPhotoRef.where("Property Name", "==", propertyName).get();
+            //     //HTML
+            //     const linkContianer = document.querySelector('.link-container');
+            //     const imageDisplay = document.getElementById('imgDisplay');
 
-                if(!queryPhoto.empty){
-                    const coverPhotoDoc = queryPhoto.docs[0];
-                    const coverPhotoData = coverPhotoDoc.data();
+            //     if(!queryPhoto.empty){
+            //         const coverPhotoDoc = queryPhoto.docs[0];
+            //         const coverPhotoData = coverPhotoDoc.data();
 
-                    if(coverPhotoData.hasOwnProperty("Image URL")){
-                        const ImageURL = coverPhotoData["Image URL"];
-                        //Create and display the image element
-                        // const img = document.createElement('img');
-                        // img.src = ImageURL;
-                        // imageDisplay.innerHTML ='';
-                        // imageDisplay.appendChild(img);
-                        // console.log('append');
-                    } else {
-                        console.error("No Image URL found in the splat file data.");
-                    }
-                } else {
-                    console.error("No file found for property name: ", propertyName);
-                }
+            //         if(coverPhotoData.hasOwnProperty("Image URL")){
+            //             const ImageURL = coverPhotoData["Image URL"];
+            //             //Create and display the image element
+            //             const img = document.createElement('img');
+            //             img.src = ImageURL;
+            //             imageDisplay.innerHTML ='';
+            //             imageDisplay.appendChild(img);
+            //             console.log('append');
+            //         } else {
+            //             console.error("No Image URL found in the splat file data.");
+            //         }
+            //     } else {
+            //         console.error("No file found for property name: ", propertyName);
+            //     }
 
-            } catch(error) {
-                console.error("Error in fetching imageURL from Firestore: ", error);
-            }
+            // } catch(error) {
+            //     console.error("Error in fetching imageURL from Firestore: ", error);
+            // }
 
 
             // Check if any documents were found
