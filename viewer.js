@@ -768,11 +768,11 @@ async function main() {
                     if(coverPhotoData.hasOwnProperty("Image URL")){
                         const ImageURL = coverPhotoData["Image URL"];
                         //Create and display the image element
-                        const img = document.createElement('img');
-                        img.src = ImageURL;
-                        imageDisplay.innerHTML ='';
-                        imageDisplay.appendChild(img);
-                        console.log('append');
+                        // const img = document.createElement('img');
+                        // img.src = ImageURL;
+                        // imageDisplay.innerHTML ='';
+                        // imageDisplay.appendChild(img);
+                        // console.log('append');
                     } else {
                         console.error("No Image URL found in the splat file data.");
                     }
