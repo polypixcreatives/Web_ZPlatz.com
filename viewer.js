@@ -755,7 +755,7 @@ async function main() {
                 const coverPhotoData = querySnapshot.docs[0].data();
 
                 // Return the cover photo URL
-                return coverPhotoData["Photo URL"];
+                return coverPhotoData["Image URL"];
             } else {
                 console.error("No cover photo found for the given property name:", propertyName);
                 return null;
@@ -770,7 +770,7 @@ async function main() {
     const coverPhotoUrl = await getCoverPhotoUrl(propertyName);
 
     // Log the fetched cover photo URL
-    console.log("Cover Photo URL:", coverPhotoUrl);
+    console.log("Cover Photo Image URL:", coverPhotoUrl);
 
     // Update the og:image meta tag with the fetched cover photo URL
     const ogImageMetaTag = document.querySelector('meta[property="og:image"]');
