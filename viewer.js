@@ -775,9 +775,7 @@ async function main() {
     // Update the og:image meta tag with the fetched cover photo URL
     const ogImageMetaTag = document.getElementById('ogImageTag');
     if (ogImageMetaTag) {
-        // Encode the cover photo URL
-        const encodedCoverPhotoUrl = encodeURIComponent(coverPhotoUrl);
-        ogImageMetaTag.setAttribute("content", encodedCoverPhotoUrl);
+        ogImageMetaTag.setAttribute("content", coverPhotoUrl);
     } else {
         console.error("og:image meta tag not found in the HTML.");
     }
