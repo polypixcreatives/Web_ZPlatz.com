@@ -722,10 +722,9 @@ void main () {
 
 `.trim();
 
-let defaultViewMatrix = [-0.36, 0.11, 0.93, 0, 0, 0.99, -0.1, 0, -0.94, -0.04, -0.36, 0, -0.87, -0.55, 7, 1];
-let viewMatrix = defaultViewMatrix;
-
 async function main() {
+    let defaultViewMatrix = [-0.36, 0.11, 0.93, 0, 0, 0.99, -0.1, 0, -0.94, -0.04, -0.36, 0, -0.87, -0.55, 7, 1];
+    let viewMatrix = defaultViewMatrix;
     let carousel = true;
     const params = new URLSearchParams(location.search);
     try {
@@ -948,22 +947,6 @@ async function main() {
         }
     };
 
-    // Keyboard and Mouse Controls
-    let activeKeys = [];
-
-    window.addEventListener("keydown", (e) => {
-        // if (document.activeElement != document.body) return;
-        carousel = false;
-        if (!activeKeys.includes(e.code)) activeKeys.push(e.code);
-        if (/\d/.test(e.key)) {
-            camera = cameras[parseInt(e.key)];
-            viewMatrix = getViewMatrix(camera);
-        }
-        else if (e.code === "KeyP") {
-            carousel = false;
-        }
-    });
-
     // Event listener for "Save Position" button
     const savePositionButton = document.querySelector(".savePosition");
     savePositionButton.addEventListener("click", function () {
@@ -985,6 +968,22 @@ async function main() {
         document.dispatchEvent(viewMatrixEvent);
     }
 
+    // Keyboard and Mouse Controls
+    let activeKeys = [];
+
+    window.addEventListener("keydown", (e) => {
+        // if (document.activeElement != document.body) return;
+        carousel = false;
+        if (!activeKeys.includes(e.code)) activeKeys.push(e.code);
+        if (/\d/.test(e.key)) {
+            camera = cameras[parseInt(e.key)];
+            viewMatrix = getViewMatrix(camera);
+        }
+        else if (e.code === "KeyP") {
+            carousel = false;
+        }
+    });
+
     window.addEventListener("keyup", (e) => {
         activeKeys = activeKeys.filter((k) => k !== e.code);
     });
@@ -995,7 +994,6 @@ async function main() {
         "wheel",
         (e) => {
             carousel = false;
-            e.preventDefault();
             const lineHeight = 10;
             const scale =
                 e.deltaMode == 1
@@ -1039,21 +1037,18 @@ async function main() {
     let startX, startY, down;
     canvas.addEventListener("mousedown", (e) => {
         carousel = false;
-        e.preventDefault();
         startX = e.clientX;
         startY = e.clientY;
         down = e.ctrlKey || e.metaKey ? 2 : 1;
     });
     canvas.addEventListener("contextmenu", (e) => {
         carousel = false;
-        e.preventDefault();
         startX = e.clientX;
         startY = e.clientY;
         down = 2;
     });
 
     canvas.addEventListener("mousemove", (e) => {
-        e.preventDefault();
         if (down == 1) {
             let inv = invert4(viewMatrix);
             let dx = (5 * (e.clientX - startX)) / innerWidth;
@@ -1089,7 +1084,6 @@ async function main() {
         }
     });
     canvas.addEventListener("mouseup", (e) => {
-        e.preventDefault();
         down = false;
         startX = 0;
         startY = 0;
@@ -1123,7 +1117,6 @@ async function main() {
     });
 
     canvas.addEventListener("touchmove", (e) => {
-        e.preventDefault();
         if (e.touches.length === 2 && isDragging) {
             // Perform dragging behavior if two fingers are used
             const touch1 = e.touches[0];
