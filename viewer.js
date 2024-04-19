@@ -930,7 +930,7 @@ async function main() {
     gl.vertexAttribIPointer(a_index, 1, gl.INT, false, 0, 0);
     gl.vertexAttribDivisor(a_index, 1);
 
-    // Initialize camera.fov_y with a default value of 90 if it's initially null
+    // Initialize camera.fov_y with a default value of 50 if it's initially null
     if (camera.fov_y === null || camera.fov_y === undefined) {
         camera.fov_y = 50;
     }
