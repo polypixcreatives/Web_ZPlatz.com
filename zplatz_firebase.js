@@ -13,6 +13,19 @@ const app = firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
 const db = firebase.firestore();
 
+// Generate a single listing ID
+const listingId = generateListingId();
+
+// Function to generate a random listing ID
+function generateListingId() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let listingId = '';
+    for (let i = 0; i < 10; i++) {
+        listingId += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return listingId;
+}
+
 // Upload Cover Photo
 const inp = document.querySelector(".inp");
 const progressbar = document.querySelector(".progress");
@@ -76,20 +89,21 @@ function removeCoverPhoto() {
         Upload Cover Photo`;
 }
 
-// Save URL to Firestore
+// Save URL to Firestore for cover photo
 async function saveURLtoFirestore(url, fileName, propertyName, customAddress) {
     try {
         const collectionRef = db.collection("cover_photos");
-        await collectionRef.add({
+        await collectionRef.doc(listingId).set({
+            'Listing ID': listingId,
             'Image Name': fileName,
             'Image URL': url,
             'Timestamp': firebase.firestore.FieldValue.serverTimestamp(),
             'Property Name': propertyName,
             'Custom Address': customAddress
         });
-        console.log("URL saved to Firestore successfully:", url);
+        console.log("Cover photo URL saved to Firestore successfully:", url);
     } catch (error) {
-        console.error("Error saving URL to Firestore:", error);
+        console.error("Error saving cover photo URL to Firestore:", error);
     }
 }
 
@@ -292,20 +306,21 @@ async function deleteSplatFile() {
     }
 }
 
-// Save URL to Firestore
+// Save URL to Firestore for SPLAT file
 async function saveSplatURLtoFirestore(url, fileNameSplat, propertyName, customAddress) {
     try {
         const collectionRef = db.collection("splat_files");
-        await collectionRef.add({
+        await collectionRef.doc(listingId).set({
+            'Listing ID': listingId,
             'File Name': fileNameSplat,
             'File URL': url,
             'Timestamp': firebase.firestore.FieldValue.serverTimestamp(),
             'Property Name': propertyName,
             'Custom Address': customAddress
         });
-        console.log("Splat file URL saved to Firestore successfully:", url);
+        console.log("SPLAT file URL saved to Firestore successfully:", url);
     } catch (error) {
-        console.error("Error saving splat file URL to Firestore:", error);
+        console.error("Error saving SPLAT file URL to Firestore:", error);
     }
 }
 
@@ -348,7 +363,7 @@ const uploadSplatFile = () => {
     loadingSplat.style.display = "block";
 
     const customAddressInput = document.getElementById('customAddressInput').querySelector('input');
-    const customAddress = customAddressInput.value; // Get custom address value
+    const customAddress = customAddressInput.value; 
 
     const propertyNameInput = document.getElementById('propertyNameInput');
     const propertyName = propertyNameInput.value;
