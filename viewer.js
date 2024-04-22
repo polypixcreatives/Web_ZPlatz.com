@@ -772,31 +772,17 @@ async function main() {
     // Log the fetched cover photo URL
     console.log("Cover Photo Image URL:", coverPhotoUrl);
 
-    // Function to download the cover photo image from Firebase Storage
-    const downloadCoverPhoto = async (coverPhotoUrl) => {
-        try {
-            const response = await fetch(coverPhotoUrl);
-            if (response.ok) {
-                const blob = await response.blob();
-                // Create a local URL for the downloaded image
-                const localImageUrl = URL.createObjectURL(blob);
-                // Update the og:image meta tag with the local image URL
-                const ogImageMetaTag = document.getElementById('ogImageTag');
-                if (ogImageMetaTag) {
-                    ogImageMetaTag.setAttribute("content", localImageUrl);
-                } else {
-                    console.error("og:image meta tag not found in the HTML.");
-                }
-            } else {
-                console.error("Failed to download cover photo image from Firebase Storage.");
-            }
-        } catch (error) {
-            console.error("Error downloading cover photo image:", error);
+    // Update the og:image meta tag with the fetched cover photo URL
+    const ogImageMetaTag = document.getElementById('ogImageTag');
+    if (ogImageMetaTag) {
+        if (coverPhotoUrl) {
+            ogImageMetaTag.setAttribute("content", coverPhotoUrl);
+        } else {
+            console.error("Failed to fetch cover photo URL or cover photo URL not found.");
         }
-    };
-
-    // Call the function to download the cover photo image
-    downloadCoverPhoto(coverPhotoUrl);
+    } else {
+        console.error("og:image meta tag not found in the HTML.");
+    }
 
     // Function to fetch the splat file URL and document ID from Firestore based on the property name
     const getSplatFileData = async (propertyName) => {
