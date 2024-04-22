@@ -772,17 +772,20 @@ async function main() {
     // Log the fetched cover photo URL
     console.log("Cover Photo Image URL:", coverPhotoUrl);
 
-    /*// Update the og:image meta tag with the fetched cover photo URL
+    // Remove the token from the URL
+    const modifiedCoverPhotoUrl = coverPhotoUrl ? coverPhotoUrl.split('?')[0] + '?alt=media' : null;
+
+    // Update the og:image meta tag with the fetched cover photo URL (without token)
     const ogImageMetaTag = document.getElementById('ogImageTag');
     if (ogImageMetaTag) {
-        if (coverPhotoUrl) {
-            ogImageMetaTag.setAttribute("content", coverPhotoUrl);
+        if (modifiedCoverPhotoUrl) {
+            ogImageMetaTag.setAttribute("content", modifiedCoverPhotoUrl);
         } else {
             console.error("Failed to fetch cover photo URL or cover photo URL not found.");
         }
     } else {
         console.error("og:image meta tag not found in the HTML.");
-    }*/
+    }
 
     // Function to fetch the splat file URL and document ID from Firestore based on the property name
     const getSplatFileData = async (propertyName) => {
