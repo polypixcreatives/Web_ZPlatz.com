@@ -776,24 +776,7 @@ async function main() {
     const ogImageMetaTag = document.getElementById('ogImageTag');
     if (ogImageMetaTag) {
         if (coverPhotoUrl) {
-            // Extract file extension
-            const fileExtension = coverPhotoUrl.split('.').pop().toLowerCase();
-
-            // Set content based on file type
             ogImageMetaTag.setAttribute("content", coverPhotoUrl);
-
-            // Set type attribute based on file extension
-            switch (fileExtension) {
-                case 'jpg':
-                case 'jpeg':
-                    ogImageMetaTag.setAttribute("type", "image/jpeg");
-                    break;
-                case 'png':
-                    ogImageMetaTag.setAttribute("type", "image/png");
-                    break;
-                default:
-                    console.error("Unsupported image format:", fileExtension);
-            }
         } else {
             console.error("Failed to fetch cover photo URL or cover photo URL not found.");
         }
