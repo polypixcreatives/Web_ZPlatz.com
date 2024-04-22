@@ -772,13 +772,13 @@ async function main() {
     // Log the fetched cover photo URL
     console.log("Cover Photo Image URL:", coverPhotoUrl);
 
-    // Update the og:image meta tag with the fetched cover photo URL
+    /*// Update the og:image meta tag with the fetched cover photo URL
     const ogImageMetaTag = document.getElementById('ogImageTag');
     if (ogImageMetaTag) {
         ogImageMetaTag.setAttribute("content", coverPhotoUrl);
     } else {
         console.error("og:image meta tag not found in the HTML.");
-    }
+    }*/
 
     // Function to fetch the splat file URL and document ID from Firestore based on the property name
     const getSplatFileData = async (propertyName) => {
