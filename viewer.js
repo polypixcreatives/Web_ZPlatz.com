@@ -740,6 +740,50 @@ async function main() {
     // Add console.log to check if propertyName is extracted correctly
     console.log("Property Name:", propertyName);
 
+    // Function to fetch the cover photo URL from Firestore based on the property name
+    const getCoverPhotoUrl = async (propertyName) => {
+        try {
+            // Reference to the cover_photos collection
+            const coverPhotosRef = db.collection("cover_photos");
+
+            // Query for documents with matching property name field
+            const querySnapshot = await coverPhotosRef.where("Property Name", "==", propertyName).get();
+
+            // Check if any documents were found
+            if (!querySnapshot.empty) {
+                // Get the data from the first matching document
+                const coverPhotoData = querySnapshot.docs[0].data();
+
+                // Return the cover photo URL
+                return coverPhotoData["Image URL"];
+            } else {
+                console.error("No cover photo found for the given property name:", propertyName);
+                return null;
+            }
+        } catch (error) {
+            console.error("Error fetching cover photo URL from Firestore:", error);
+            return null;
+        }
+    };
+
+    // Call the function to fetch the cover photo URL
+    const coverPhotoUrl = await getCoverPhotoUrl(propertyName);
+
+    // Log the fetched cover photo URL
+    console.log("Cover Photo Image URL:", coverPhotoUrl);
+
+    // Update the og:image meta tag with the fetched cover photo URL
+    const ogImageMetaTag = document.getElementById('ogImageTag');
+    if (ogImageMetaTag) {
+        if (coverPhotoUrl) {
+            ogImageMetaTag.setAttribute("content", coverPhotoUrl);
+        } else {
+            console.error("Failed to fetch cover photo URL or cover photo URL not found.");
+        }
+    } else {
+        console.error("og:image meta tag not found in the HTML.");
+    }
+
     // Function to fetch the splat file URL and document ID from Firestore based on the property name
     const getSplatFileData = async (propertyName) => {
         try {
@@ -751,39 +795,6 @@ async function main() {
 
             // Query for documents with matching property name field
             const querySnapshot = await splatFilesRef.where("Property Name", "==", propertyName).get();
-
-            // //ImageURL and photo
-            // try{
-            //     //DataBase
-            //     const coverPhotoRef = db.collection("cover_photos");
-            //     const queryPhoto = await coverPhotoRef.where("Property Name", "==", propertyName).get();
-            //     //HTML
-            //     const linkContianer = document.querySelector('.link-container');
-            //     const imageDisplay = document.getElementById('imgDisplay');
-
-            //     if(!queryPhoto.empty){
-            //         const coverPhotoDoc = queryPhoto.docs[0];
-            //         const coverPhotoData = coverPhotoDoc.data();
-
-            //         if(coverPhotoData.hasOwnProperty("Image URL")){
-            //             const ImageURL = coverPhotoData["Image URL"];
-            //             //Create and display the image element
-            //             const img = document.createElement('img');
-            //             img.src = ImageURL;
-            //             imageDisplay.innerHTML ='';
-            //             imageDisplay.appendChild(img);
-            //             console.log('append');
-            //         } else {
-            //             console.error("No Image URL found in the splat file data.");
-            //         }
-            //     } else {
-            //         console.error("No file found for property name: ", propertyName);
-            //     }
-
-            // } catch(error) {
-            //     console.error("Error in fetching imageURL from Firestore: ", error);
-            // }
-
 
             // Check if any documents were found
             if (!querySnapshot.empty) {
@@ -923,9 +934,9 @@ async function main() {
     gl.vertexAttribIPointer(a_index, 1, gl.INT, false, 0, 0);
     gl.vertexAttribDivisor(a_index, 1);
 
-    // Initialize camera.fov_y with a default value of 90 if it's initially null
+    // Initialize camera.fov_y with a default value of 50 if it's initially null
     if (camera.fov_y === null || camera.fov_y === undefined) {
-        camera.fov_y = 90;
+        camera.fov_y = 50;
     }
 
     // Define a function to update the FOV in the viewer
@@ -944,9 +955,16 @@ async function main() {
         // Calculate the half of the field of view angle in radians
         const halfFovRadians = (camera.fov_y * Math.PI / 180) / 2;
 
-        // Calculate the new focal length using the formula
-        camera.fx = (0.5 * innerHeight) / Math.tan(halfFovRadians);
-        camera.fy = (0.3 * innerWidth) / Math.tan(halfFovRadians);
+        // Check if the viewport width is greater than the height
+        if (window.innerWidth > window.innerHeight) {
+            // For desktop (16:9) aspect ratio
+            camera.fx = (0.5 * window.innerHeight) / Math.tan(halfFovRadians);
+            camera.fy = (0.3 * window.innerWidth) / Math.tan(halfFovRadians);
+        } else {
+            // For mobile (9:16) aspect ratio
+            camera.fx = (0.5 * window.innerWidth) / Math.tan(halfFovRadians);
+            camera.fy = (0.3 * window.innerHeight) / Math.tan(halfFovRadians);
+        }
 
         // Log to check the current value of the focal length
         console.log("Current focal length (fx):", camera.fx);
